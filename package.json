@@ -1,6 +1,9 @@
 {
   "name": "pokedex-express",
   "version": "1.0.0",
+  "scripts": {
+    "start": "node index.js"
+  },
   "main": "index.js",
   "repository": "https://github.com/wdi-sg/pokedex-express",
   "author": "Nick Ang <nickangtc@gmail.com>",
