@@ -2,7 +2,7 @@
 
 We will build our first web app using Node.js and Express - a Pokedex app.
 
-For this exercise, we will be setting up express to intercept incoming requests on certain routes, reading data from a JSON file, and sending HTTP responses with data payloads like JSON or HTML.
+For this exercise, we will be setting up express to intercept incoming requests on certain routes, reading data from a JSON file, and responding to HTTP requests with simple strings, JSON, or full HTML pages.
 
 ## Getting Started
 
