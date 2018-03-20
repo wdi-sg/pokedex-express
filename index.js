@@ -48,7 +48,7 @@ jsonfile.readFile(FILE, function (err, obj) {
 let requestLocation = '/*';
 
 let handleRequest = function (request, response) {
-  let input = request.params[0].split('/');
+  let input = request.params[0].split('/').map(function(word){return word.toLowerCase()});
 
   switch(input[0]){
 	case '':
