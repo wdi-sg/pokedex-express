@@ -27,6 +27,7 @@ app.set('view engine', 'handlebars');
  //when we get a request to requestLocation, do something
  let requestLocation = '/:name';
 
+let content = {};
 
 //handling my request
 let handleRequest = (request, response) => {
@@ -40,15 +41,28 @@ let handleRequest = (request, response) => {
 		//obj is the pokedex.json file
 		var pokemons = obj.pokemon;
 
-		let content = {}
+		
 		let canFind = false;
-		let weigh = [];
 		for (let index in pokemons) {
 			if (pokemons[index].name === name){
 				content.name = pokemons[index].name;
-				weigh.push(pokemons[index].weight);
-				content.weight = weigh;
-				response.render('home', content);
+				content.id = pokemons[index].id;
+				content.num = pokemons[index].num;
+				content.type = pokemons[index].type;
+				content.img = pokemons[index].img;
+				content.height = pokemons[index].height;
+				content.weight = pokemons[index].weight;
+				content.candy = pokemons[index].candy;
+				content.candy_count = pokemons[index].candy_count;
+				content.egg = pokemons[index].egg;
+				content.spawn_chance = pokemons[index].spawn_chance;
+				content.avg_spawn = pokemons[index].avg_spawn;
+				content.spawn_time = pokemons[index].spawn_time;
+				content.multipliers = pokemons[index].multipliers;
+				content.weakness = pokemons[index].weakness;
+				content.next_evolution = pokemons[index].next_evolution;
+
+				response.render('pokepage', content);
 				canFind = true;
 			}
 
@@ -65,15 +79,13 @@ app.get('/', (request, response) => {
 	let nameList = [];
 	jsonfile.readFile(FILE, (err, obj) => {
 	
-		for (var i = 0; i < obj.pokemon.length; i++) {
+		for (let i = 0; i < obj.pokemon.length; i++) {
 			nameList.push(obj.pokemon[i].name);
 		}
 	});
-
-	let content = {
-		title: "Welcome to the online Pokedex!",
-		weight: nameList
-	};
+	content.title = "Welcome to the online Pokedex!";
+	content.weight = nameList;
+	
 	// send response with some data (a HTML file)
 	response.render('home', content);
 });
