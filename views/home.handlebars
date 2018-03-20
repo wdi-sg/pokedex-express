@@ -7,11 +7,16 @@
   <body>
     <h1>"Welcome to the online Pokedex!"</h1>
 
-    <p>"Could not find information about {{invalid_pokemon}} - Is that a new pokemon? Gotta catch em' all!"</p>
+    <p>"Could not find information about <b>{{invalid_pokemon}}</b> - Is that a new pokemon? Gotta catch em' all!"</p>
 
-    <h1> {{pokemon_name}} </h1>
+    <h1> {{pokemon_name}} Stats</h1>
     <ul>
+  		{{#each pokemon}}
+  		  <li>{{this}}</li>
+  		{{/each}}
+		</ul>
+    <!-- <ul>
       <li> Weight: {{pokemon_weight}} </li>
-    </ul>
+    </ul> -->
   </body>
 </html>
