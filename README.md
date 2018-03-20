@@ -40,7 +40,7 @@ Use the data in `pokedex.json` and return a response with details about the requ
 
 ## Further
 
-* Handle the case where an invalid pokemon name is provided (eg. `/names/Deadpool`). Return a HTML page with a `p` tag that says "Could not find information about `<pokemon_name>` - Is that a new pokemon? Gotta catch em' all!" (replace `<pokemon_name>` with the requested for pokemon name)
+* Handle the case where an invalid pokemon name is provided (eg. `/names/Deadpool`). Return a HTML page with a `p` tag that says "Could not find information about `<pokemon_ncreaturesame>` - Is that a new pokemon? Gotta catch em' all!" (replace `<pokemon_name>` with the requested for pokemon name)
 
 * Modify your response for `/` (homepage) to return a HTML page with a `h1` tag saying "Welcome to the online Pokdex!" and a `ul` displaying _all_ the pokemon that exist in the pokedex
 
