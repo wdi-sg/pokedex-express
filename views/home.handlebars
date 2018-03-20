@@ -8,11 +8,43 @@
     <ul>
       {{ weight }}
     </ul>
-    <ul>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Picture</th>
+        <th>Type</th>
+        <th>Height</th>
+        <th>Weight</th>
+        <th>Candy</th>
+        <th>Candy Count</th>
+        <th>Egg</th>
+        <th>Spwan Chance</th>
+        <th>Avg Spawns</th>
+        <th>Spawn Time</th>
+        <th>Multipliers</th>
+        <th>Weaknesses</th>
+        <th>Evolution</th>
+      </tr>
       {{#each pokedex}}
-        <li>{{this.name}}</li>
+      <tr>
+        <td>{{this.id}}</td>
+        <td>{{this.name}}</td>
+        <td><img src="{{this.img}}"></td>
+        <td>{{this.type}}</td>
+        <td>{{this.height}}</td>
+        <td>{{this.weight}}</td>
+        <td>{{this.candy}}</td>
+        <td>{{this.candy_count}}</td>
+        <td>{{this.egg}}</td>
+        <td>{{this.spawn_chance}}</td>
+        <td>{{this.avg_spawns}}</td>
+        <td>{{this.spawn_time}}</td>
+        <td>{{this.multipliers}}</td>
+        <td>{{this.weaknesses}}</td>
+        <td>{{#each this.next_evolution}}{{this.name}}<br>{{/each}}</td>
+      </tr>
       {{/each}}
-
-    </ul>
+    </table>
   </body>
 </html>
