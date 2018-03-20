@@ -60,6 +60,22 @@ app.get('/names/:name', (request, response) => {
 	});
 });
 
+app.get('/types/:type', (request, response) => {
+  let context = {
+    type: request.params.type.toLowerCase(),
+    pokemon: []
+  }
+  jsonfile.readFile(POKEDEX_FILE, function(err, obj) {
+    for (var i = 0; i < obj.pokemon.length; i++) {
+      if (obj.pokemon[i].type.includes(request.params.type)) {
+        context.pokemon.push(obj.pokemon[i].name);
+      }
+    }
+    // Render html based on the keys specified in home.handlebars
+    response.render('type', context);
+  });
+});
+
 app.get('/', (request, response) => {
   let context = {
     pokemon: []
