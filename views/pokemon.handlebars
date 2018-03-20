@@ -1,0 +1,68 @@
+<h1>Pokemon details here</h1>
+<h2>{{name}}</h2>
+<table style="border: 1px solid black;">
+  <tr>
+    <td>Type</td>
+    {{#each type}}
+    <td>
+      <a href="/types/{{this}}">{{this}}</a>
+    </td>
+    {{/each}}
+  </tr>
+  <tr>
+    <td>Height</td>
+    <td>{{height}}</td>
+  </tr>
+  <tr>
+    <td>Weight</td>
+    <td>{{weight}}</td>
+  </tr>
+  <tr>
+    <td>Weaknesses</td>
+    <td>{{weaknesses}}</td>
+  </tr>
+  <tr>
+    <td>Candy</td>
+    <td>{{candy}}</td>
+  </tr>
+  <tr>
+    <td>Candy Count</td>
+    {{#if candy_count}}
+    <td>{{candy_count}}</td>
+    {{/if}}
+
+    {{#unless candy_count}}
+    <td>-</td>
+    {{/unless}}
+  </tr>
+  <tr>
+    <td>Egg</td>
+    <td>{{egg}}</td>
+  </tr>
+  <tr>
+    <td>Spawn Chance</td>
+    <td>{{spawn_chance}}</td>
+  </tr>
+  <tr>
+    <td>Average Spawn</td>
+    <td>{{avg_spawns}}</td>
+  </tr>
+  <tr>
+    <td>Spawn Time</td>
+    <td>{{spawn_time}}</td>
+  </tr>
+  <tr>
+    <td>Multiplers</td>
+    <td>{{multiplers}}</td>
+  </tr>
+  <tr>
+    <td>Next Evolution</td>
+    <td>
+      <ul>
+         {{#each next_evolution}}
+         <li>{{this.name}}</li>
+         {{/each}}
+      </ul>
+    </td>
+  </tr>
+</table>
