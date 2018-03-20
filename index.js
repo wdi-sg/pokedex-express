@@ -56,10 +56,10 @@ let handleRequest = (request, response) => {
 				content.candy_count = pokemons[index].candy_count;
 				content.egg = pokemons[index].egg;
 				content.spawn_chance = pokemons[index].spawn_chance;
-				content.avg_spawn = pokemons[index].avg_spawn;
+				content.avg_spawn = pokemons[index].avg_spawns;
 				content.spawn_time = pokemons[index].spawn_time;
 				content.multipliers = pokemons[index].multipliers;
-				content.weakness = pokemons[index].weakness;
+				content.weakness = pokemons[index].weaknesses;
 				content.next_evolution = pokemons[index].next_evolution;
 
 				response.render('pokepage', content);
