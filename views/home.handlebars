@@ -1,9 +1,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Testing a View</title>
+    <title>Online pokedex</title>
   </head>
   <body>
-    <h1>Hello, welcome to the homepage</h1>
+  	{{#if type}}
+  		<h1>{{typeName}}</h1>
+  			<ul>
+				{{#each typeList}}
+				  <li>{{this}}</li>
+				{{/each}}
+			</ul>
+  	{{else}}
+	  	{{#if show}}
+	  		<h1>Welcome to the online Pokedex!</h1>
+		    <ul>
+				{{#each pokeList}}
+				  <li>{{this}}</li>
+				{{/each}}
+			</ul>
+		{{else}}
+		  	{{#if wrong}}
+		    	<p>Could not find information about {{name}} - Is that a new pokemon? Gotta catch em' all!</p>
+		    {{else}}
+		    	<h1>{{name}}</h1>
+			    <ul>
+			    	<!-- <li>Weight: {{weight}}</li> -->
+			    	{{#each details}}
+					  <li>{{this}}</li>
+					{{/each}}
+
+					{{#each nxtEvo}}
+					  <li>evolution: {{this}}</li>
+					{{/each}}
+			    </ul>
+		    {{/if}}
+	    {{/if}}
+	{{/if}}
   </body>
 </html>
