@@ -35,7 +35,7 @@ app.set('view engine', 'handlebars');
 app.get('/names/:name', (request, response) => {
   let context = {
     pokemon_name: "",
-    pokemon_weight: "NIL",
+    pokemon: "",
     invalid_pokemon: "NIL"
   }
   // Read the pokedex json file
@@ -43,8 +43,9 @@ app.get('/names/:name', (request, response) => {
 		// Check whether bulbasaur exist in the request parameter
     for (var i = 0; i < obj.pokemon.length; i++) {
       if (obj.pokemon[i].name === request.params.name) {
+        console.log(Object.entries(obj.pokemon[i]));
         context.pokemon_name = request.params.name;
-        context.pokemon_weight = obj.pokemon[i].weight;
+        context.pokemon = Object.entries(obj.pokemon[i]);
         break;
       }
       // Invalid pokemon requested, populate cannot find text
