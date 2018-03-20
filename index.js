@@ -1,5 +1,5 @@
 const express = require('express');
-const exphbs = require('express-handlebars');
+const handlebars = require('express-handlebars');
 
 // const jsonfile = require('jsonfile');
 
@@ -13,7 +13,7 @@ const exphbs = require('express-handlebars');
 const app = express();
 
 // Set handlebars to be the default view engine
-app.engine('handlebars', exphbs.create().engine);
+app.engine('handlebars', handlebars.create().engine);
 app.set('view engine', 'handlebars');
 
 /**
@@ -22,14 +22,14 @@ app.set('view engine', 'handlebars');
  * ===================================
  */
 
-app.get('/names/:pokemon', (req, res) => {
+app.get('/names/:pokemon', (request, response) => {
   // send response with some data (a string)
-  res.send(req.params.pokemon);
+  response.send(request.params.pokemon);
 });
 
-app.get('/', (req, res) => {
+app.get('/', (request, response) => {
   // send response with some data (a HTML file)
-  res.render('home');
+  response.render('home');
 });
 
 /**
