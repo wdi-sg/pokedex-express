@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Testing a View</title>
-  </head>
-  <body>
-    <h1>Hello, welcome to the homepage</h1>
-  </body>
+<head>
+	<title>Testing a View</title>
+</head>
+<body>
+	<h1>{{message}}</h1>
+	<ul>
+		{{#each pokelist}}
+		<li>{{this}}</li>
+		{{/each}}
+	</ul>
+</body>
 </html>
