@@ -31,8 +31,10 @@ app.get('/', (request, response) => {
   response.render('home');
 });
 */
+
 const FILE = 'pokedex.json'
 
+// I'm exploiting the fact that the data here is static by reading them all into global variables first. Yeah the data could change at runtime, but fixing that's just a matter of moving the block here down into the callback.
 let pokedata = {}, creatures = [];
 jsonfile.readFile(FILE, function (err, obj) {
 	let tmp = obj["pokemon"];
@@ -47,7 +49,6 @@ let requestLocation = '/*';
 
 let handleRequest = function (request, response) {
   let input = request.params[0].split('/');
-  console.log(input);
 
   switch(input[0]){
 	case '':
@@ -58,9 +59,7 @@ let handleRequest = function (request, response) {
 		if (creature == undefined) {
 			response.render('invalid', {requested: input[1]})
 		} else {
-			// response.send('You asked for ' + creature.name + ' which weighs ' + creature.weight);
 			response.render('singleresult', creature)
-			// response.send(creature)
 		}
 		break;
 	case 'types':
@@ -69,7 +68,6 @@ let handleRequest = function (request, response) {
 		result = creatures.filter(function(creature){
 			return pokedata[creature]["type"].includes(type)
 		})
-		// response.send(result);
 		response.render('types', {type: input[1], creatures: result});
 		break;
 	default:
