@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Result for {{name}}</title>
+  </head>
+  <body>
+    <h1>{{name}}</h1>
+    <img src="{{img}}" alt="">
+    <ul>
+        <li>Type: {{type}}</li>
+        <li>Height: {{height}}</li>
+        <li>Weight: {{weight}}</li>
+        <li>Candy: {{candy}}</li>
+        <li>Candy count: {{candy_count}}</li>
+        <li>Spawn chance: {{spawn_chance}}</li>
+        <li>Average spawns: {{avg_spawns}}</li>
+        <li>Spawn time: {{spawn_time}}</li>
+        <li>Multipliers: {{multipliers}}</li>
+        <li>Weaknesses: {{weaknesses}}</li>
+        <li>Next evolution: <ul>{{#each next_evolution}} <li>{{num}} - {{name}} </li> {{/each}}</ul></li>
+    </ul>
+  </body>
+</html>

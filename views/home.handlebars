@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Testing a View</title>
+    <title>Pokedex Online</title>
   </head>
   <body>
-    <h1>Hello, welcome to the homepage</h1>
+    <h1>Welcome to the online Pokedex!</h1>
+    <ul>
+      {{#each pokemans}}
+        <li><a href="/names/{{this}}">{{this}}</a></li>
+      {{/each}}
+    </ul>
   </body>
 </html>
