@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Testing a View</title>
+    <title>Pokedex</title>
   </head>
   <body>
-    <h1>Hello, welcome to the homepage</h1>
+    <h1>{{ message }}</h1>
+    <ul>
+      {{ weight }}
+    </ul>
+    <ul>
+      {{#each pokedex}}
+        <li>{{this.name}}</li>
+      {{/each}}
+
+    </ul>
   </body>
 </html>
