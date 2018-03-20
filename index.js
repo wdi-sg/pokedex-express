@@ -39,18 +39,15 @@ app.get('/names/:pokemon', (request, response) => {
   }
   // Read the pokedex json file
 	jsonfile.readFile(POKEDEX_FILE, function(err, obj) {
-		// deal with the request
-    console.log("Name of the pokemon is => " + context.pokemon_name);
-
+		// Check whether bulbasaur exist in the request parameter
     for (var i = 0; i < obj.pokemon.length; i++) {
       if (obj.pokemon[i].name === context.pokemon_name) {
         context.pokemon_weight = obj.pokemon[i].weight;
-        console.log("Weight of the pokemon is => " + context.pokemon_weight);
       }
     }
+    // Render html based on the keys specified in home.handlebars
+    response.render('home', context);
 	});
-  // Render html based on the keys specified in home.handlebars
-  response.render('home', context);
 });
 
 app.get('/', (request, response) => {
