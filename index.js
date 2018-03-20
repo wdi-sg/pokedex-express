@@ -36,7 +36,7 @@ app.get('/names/:name', (request, response) => {
   let context = {
     pokemon_name: "",
     pokemon_weight: "NIL",
-    invalid_pokemon: ""
+    invalid_pokemon: "NIL"
   }
   // Read the pokedex json file
 	jsonfile.readFile(POKEDEX_FILE, function(err, obj) {
@@ -60,8 +60,16 @@ app.get('/names/:name', (request, response) => {
 });
 
 app.get('/', (request, response) => {
-  // send response with some data (a HTML file)
-  response.render('home');
+  let context = {
+    pokemon: []
+  }
+  jsonfile.readFile(POKEDEX_FILE, function(err, obj) {
+    for (var i = 0; i < obj.pokemon.length; i++) {
+      context.pokemon.push(obj.pokemon[i].name);
+    }
+    // Render html based on the keys specified in home.handlebars
+    response.render('homepage', context);
+  });
 });
 
 /**
