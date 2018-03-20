@@ -1,40 +1,37 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
+const jsonfile = require('jsonfile');
 
-// const jsonfile = require('jsonfile');
+const FILE = 'pokedex.json'
 
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
+jsonfile.readFile(FILE, function(err, obj) {
+	console.log(obj);
+	var pokedex = obj;
 
-// Init express app
-const app = express();
 
-// Set handlebars to be the default view engine
-app.engine('handlebars', handlebars.create().engine);
-app.set('view engine', 'handlebars');
+// create an instance of the library app server
+const app = express()
+app.engine('handlebars', handlebars());
+// this line sets handlebars to be the default view engine
+app.set('view engine', 'handlebars')
+////////////////////////////////////
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
 
-app.get('/names/:pokemon', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.params.pokemon);
+let handleRequest = (request, response) => {
+  console.log("handling request");
+  let pokemonName = request.params.queryName;
+
+  for (var i=0; i<pokedex.pokemon.length; i++){
+  	if (pokemonName === pokedex.pokemon[i].name){
+		  var content = pokedex.pokemon[i];
+   	}
+  }
+  response.render('home', content );
+};
+
+app.get('/name/:queryName', handleRequest);
+
+app.listen(3000);
+console.log("starting server");
+
 });
-
-app.get('/', (request, response) => {
-  // send response with some data (a HTML file)
-  response.render('home');
-});
-
-/**
- * ===================================
- * Listen to requests on port 3000
- * ===================================
- */
-app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
