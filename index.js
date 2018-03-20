@@ -1,9 +1,8 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
 const jsonfile = require('jsonfile');
-const pokedex = "./pokedex.json";
+const obj = require('./pokedex.json');
 
-// const jsonfile = require('jsonfile');
 
 /**
  * ===================================
@@ -26,8 +25,8 @@ app.set('view engine', 'handlebars');
 
 app.get('/names/:pokemon', (request, response) => {
   // send response with some data (a string)
-  jsonfile.readFile(pokedex, (err, obj) => {
-    console.log(err);
+  // jsonfile.readFile(pokedex, (err, obj) => {
+    // console.log(err);
     let pokemon = request.params.pokemon;
     let pokemons = obj.pokemon
     for (let i in pokemons) {
@@ -47,13 +46,13 @@ app.get('/names/:pokemon', (request, response) => {
     else {
       response.render("home", context);
     }
-  })
+  // })
 });
 
 app.get('/', (request, response) => {
   // send response with some data (a HTML file)
-  jsonfile.readFile(pokedex, (err, obj) => {
-    console.log(err);
+  // jsonfile.readFile(pokedex, (err, obj) => {
+    // console.log(err);
     let pokemonArr = obj.pokemon;
     let pokemons = [];
     for (let i in pokemonArr) {
@@ -64,13 +63,12 @@ app.get('/', (request, response) => {
       pokemons: pokemons
     };
     response.render('home', context);
-  })
+  // })
 });
 
 app.get('/types/:type', (request, response) => {
-  console.log("TYPES");
-  jsonfile.readFile(pokedex, (err, obj) => {
-    console.log(err);
+  // jsonfile.readFile(pokedex, (err, obj) => {
+    // console.log(err);
     let pokemonType = request.params.type;
     let pokemonArr = obj.pokemon;
     let pokemonsByType = {
@@ -87,7 +85,7 @@ app.get('/types/:type', (request, response) => {
       pokemonsByType: pokemonsByType
     };
     response.render('home', context);
-  })
+  // })
 });
 
 /**
