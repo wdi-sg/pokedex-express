@@ -5,7 +5,32 @@
   </head>
   <body>
     <h1>Welcome to the online Pokedex!</h1>
+
+    {{#if pokemons}}
+    <ul>
+      {{#each pokemons}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+
+    {{#if pokemon.name}}
     <h1>{{pokemon.name}}</h1>
     <ul>{{pokemon.weight}}</ul>
+    {{/if}}
+
+    {{#if pokemonsByType}}
+    <h1>{{pokemonsByType.type}}</h1>
+      {{#if pokemonsByType.pokemons}}
+      <ul>
+        {{#each pokemonsByType.pokemons}}
+          <li>{{this.name}}</li>
+        {{/each}}
+      </ul>
+      {{else}}
+      <h1>NO POKEMON OF TYPE {{pokemonsByType.type}}</h1>
+      {{/if}}
+    {{/if}}
+
   </body>
 </html>
