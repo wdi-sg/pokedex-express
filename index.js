@@ -32,10 +32,11 @@ app.set('view engine', 'handlebars');
  * Routes
  * ===================================
  */
-app.get('/names/:pokemon', (request, response) => {
+app.get('/names/:name', (request, response) => {
   let context = {
-    pokemon_name: request.params.pokemon,
-    pokemon_weight: "0kg"
+    pokemon_name: request.params.name,
+    pokemon_weight: "0kg",
+    invalid_pokemon: ""
   }
   // Read the pokedex json file
 	jsonfile.readFile(POKEDEX_FILE, function(err, obj) {
@@ -43,6 +44,13 @@ app.get('/names/:pokemon', (request, response) => {
     for (var i = 0; i < obj.pokemon.length; i++) {
       if (obj.pokemon[i].name === context.pokemon_name) {
         context.pokemon_weight = obj.pokemon[i].weight;
+        break;
+      }
+      // Invalid pokemon requested, populate cannot find text
+      else{
+        console.log("Invalid pokemon found");
+        context.invalid_pokemon = request.params.name;
+        break;
       }
     }
     // Render html based on the keys specified in home.handlebars
