@@ -34,15 +34,16 @@ app.set('view engine', 'handlebars');
  */
 app.get('/names/:name', (request, response) => {
   let context = {
-    pokemon_name: request.params.name,
-    pokemon_weight: "0kg",
+    pokemon_name: "",
+    pokemon_weight: "NIL",
     invalid_pokemon: ""
   }
   // Read the pokedex json file
 	jsonfile.readFile(POKEDEX_FILE, function(err, obj) {
 		// Check whether bulbasaur exist in the request parameter
     for (var i = 0; i < obj.pokemon.length; i++) {
-      if (obj.pokemon[i].name === context.pokemon_name) {
+      if (obj.pokemon[i].name === request.params.name) {
+        context.pokemon_name = request.params.name;
         context.pokemon_weight = obj.pokemon[i].weight;
         break;
       }
