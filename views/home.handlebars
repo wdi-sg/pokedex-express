@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Testing a View</title>
+    <title>Welcome to the online Pokedex!</title>
   </head>
-  <body>
-    <h1>Hello, welcome to the homepage</h1>
+  <body style="background: url('https://wallpapers.walldevil.com/wallpapers/a89/preview/pikachu-pokemon.jpg') no-repeat right bottom fixed; background-size: cover; ">
+	<div class ="listPics" style="max-width: 800px; margin:0 auto;">
+	<h1>Welcome to the online Pokedex!</h1>
+	{{#each pokemons}}
+    <div style= "float:left;margin-right: 10px; text-align: center"><a href = "names/{{this.name}}"><img style = "width: 80px; height: 80px;" src="{{this.img}}"><br><h6 style="margin-top: 5px;" >{{this.name}}</h6></a></div>
+    {{/each}}
+    </div>
   </body>
 </html>
