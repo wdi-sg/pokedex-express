@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testing a View</title>
+  </head>
+  <body>
+     <h1>{{name}}</h1>
+     <img src="{{img}}" alt="{{name}}" />
+     <ul>
+      <li>Id: {{id}}</li>
+      <li>Number: {{num}}</li>
+      <li>Type:<ul>
+        {{#each type}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
+      <li>Height: {{height}}</li>
+      <li>Weight: {{weight}}</li>
+      <li>Candy: {{candy}}</li>
+      <li>Candy Count: {{candy_count}}</li>
+      <li>Egg: {{egg}}</li>
+      <li>Spawn Chance: {{spawn_chance}}</li>
+      <li>Average Spawn: {{avg_spwan}}</li>
+      <li>Spawn Time: {{spawn_time}}</li>
+      <li>Multipliers:<ul>
+        {{#each multipliers}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
+      <li>Weakness:<ul>
+        {{#each weakness}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
+      <li>Next Evolution:<ul>
+        {{#each next_evolution}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </ul>
+  </body>
+</html>
