@@ -1,12 +1,12 @@
 <html>
 	<body>
-		<h1>Welcome to the Online Pokedex</h1>
+		<h1>{{type}} type pokemons:</h1>
 		<h2>List of pokemons</h2>
 
 		<ul class="pokemon_list">
-			{{#each pokemon}}
-    			<li><a href="/name/{{this.name}}">
-    			{{this.name}}
+			{{#each pokemonName}}
+    			<li><a href="/name/{{name}}">
+    			{{name}}
     			</a></li>
   		 	{{/each}}
 		</ul>
