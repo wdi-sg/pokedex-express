@@ -40,7 +40,7 @@ Use the data in `pokedex.json` and return a response with details about the requ
 
 ## Further
 
-* detect if the user didn't put anthing in the path. Return a HTML page with a `h1` tag saying "Welcome to the online Pokdex!" and a `ul` displaying _all_ the pokemon that exist in the pokedex
+* detect if the user didn't put anthing in the path. Return a HTML page with a `h1` tag saying "Welcome to the online Pokedex!" and a `ul` displaying _all_ the pokemon that exist in the pokedex
 
 * Instead of showing just the weight, show all the details of the requested pokemon for `/some-name` route, adding each detail as a `li` to the `ul`
 
