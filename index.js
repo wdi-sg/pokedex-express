@@ -34,7 +34,7 @@ app.get('*', (request, response) => {
     		if ('/' + obj.pokemon[i].name == searchedPokemon) {  		
     		var heading = '<h1>' + obj.pokemon[i].name + '</h1>'
     		var	description = '<ul>' + 'Weight: '+ obj.pokemon[i].weight + '</ul>'
-    		result.push('<html> <body>' + heading + description + '</body> </html>');
+    		search.push('<html> <body>' + heading + description + '</body> </html>');
  
     		}
   		}
