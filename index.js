@@ -21,14 +21,16 @@ const app = express();
  * ===================================
  */
 
- // Modify your response for /some-name to return a HTML page (instead of just a string) with a h1 tag 
- // that displays the name of the pokemon being requested, and a ul displaying its weight (eg. "Weight: 10 kg")
-
 app.get('*', (request, response) => {
 	// send response with some data (a string)
 	let pokeName = request.path.substring(1).toLowerCase(); // using substring(1) gets rid of the slash in request.path. index(0) is dropped.
 	let pokemon = findPokemon(pokeName);
-	response.send(findPokemonNameWeight(pokemon));
+	if (pokemon == undefined) {
+		response.status(404);
+		response.send('<html><body><p>Could not find information about ' + pokeName + ' - Is that a new pokemon? Gotta catch em\' all!<p/></body></html>');
+	} else {
+		response.send(findPokemonNameWeight(pokemon));
+	}
 });
 
 var findPokemon = (pokemon) => {
@@ -40,11 +42,11 @@ var findPokemon = (pokemon) => {
 		}
 	}
 	return undefined;
-}
+};
 
 var findPokemonNameWeight = (pokemon) => {
 	return ('<html><body><h1>' + pokemon.name + '</h1><ul>' + pokemon.weight + '</ul></body></html>');
-}
+};
 
 /**
  * ===================================
