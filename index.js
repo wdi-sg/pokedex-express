@@ -3,9 +3,11 @@ const handlebars = require('express-handlebars');
 const myjsonfile = require('jsonfile');
 const pokedexPath = "./pokedex.json";
 let pokemonDetails = {};
+let pokemonArray;
 
 myjsonfile.readFile(pokedexPath, function(errorMessage, pokedexObj) {
 
+    pokemonArray = pokedexObj.pokemon;
     pokedexObj.pokemon.forEach( pokemon => { pokemonDetails[pokemon.name.toLowerCase()] = pokemon } );
 
 });
@@ -19,6 +21,7 @@ myjsonfile.readFile(pokedexPath, function(errorMessage, pokedexObj) {
 // Init express app
 const app = express();
 
+app.set('view engine', 'jade');
 
 /**
  * ===================================
@@ -26,26 +29,45 @@ const app = express();
  * ===================================
  */
 
-// route ALL requests (because of '*'), to the specified callback
-app.get('*', (request, response) => {
+app.get('/', (request, response) => {
 
-    // remove the '/' from the string of request.path
-    let requestedName = request.path.replace('/','').toLowerCase();
+    let context = { "names": Object.keys(pokemonDetails).map( name => pokemonDetails[name].name ) };
+    response.render('home', context);
+})
+
+app.get('/type/:type', (request, response) => {
+
+    const originalRequest = request.params.type;
+    let requestedType = originalRequest.toLowerCase();
+
+    let filteredPokemonArray = pokemonArray.filter( currentPokemon => currentPokemon.type.map( element => element.toLowerCase() ).includes(requestedType) );
+
+    let context = { "descriptions": filteredPokemonArray };
+    response.render('type', context);
+
+})
+
+// route ALL requests (because of '*'), to the specified callback
+app.get('/pokemon/:name', (request, response) => {
+
+    const originalRequest = request.params.name;
+    let requestedName = originalRequest.toLowerCase();
 
     // check if the requested name exists in the database
     if (Object.keys(pokemonDetails).includes(requestedName)) {
 
-        console.log(pokemonDetails[requestedName].weight);
-    } else {
-        console.error(requestedName, "doesnt exist");
+        let context = { "descriptions": pokemonDetails[requestedName], "name": pokemonDetails[requestedName].name };
+        response.render('description', context);
+
+    } else if (!Object.keys(pokemonDetails).includes(requestedName)) {
+
+        let context = { "name": originalRequest };
+        response.status(404);
+        response.render('error', context);
+
     }
 
 })
-
-// app.get('*', (request, response) => {
-//   let pokeDetails = {};
-//   response.render('home');
-// });
 
 /**
  * ===================================

@@ -1,0 +1,10 @@
+doctype html
+html(lang="en")
+  head
+    title Pokemon Found
+  body
+    h1 Pokemon: #{name}
+    ul
+      each value, key in descriptions
+        if key != "next_evolution"
+          li #{key}: #{value}
