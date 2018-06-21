@@ -1,21 +1,21 @@
+
+//Global Declarations
 const express = require('express');
-
-// const jsonfile = require('jsonfile');
-
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
+const jsonfile = require('jsonfile');
+const file = 'pokedex.json';
 
 // Init express app
 const app = express();
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
+jsonfile.readFile(file, (err, obj) => {
+    let pokedex = obj.pokemon
+    let result = []
+    for (var i=0; i<obj.pokemon.length; i++) {
+        result.push(pokedex[i].name + "Weight: " + pokedex[i].weight);            
+    }
+})
+
+
 
 app.get('*', (request, response) => {
   // send response with some data (a string)
