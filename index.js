@@ -1,27 +1,32 @@
-const express = require('express');
-
-// const jsonfile = require('jsonfile');
-
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
+const express = require('express');   //requiring node express
+const jsonfile = require('jsonfile'); //requiring the jsonfile that is npm init
+// const myFunction = require('my_modules'); //the modules of function that user creates with pokedex
+const pokedex = 'pokedex.json'; //pokedex library
 
 // Init express app
 const app = express();
+
+jsonfile.readFile(pokedex, function(err, obj) { //READ FILE
+	//items=obj[0].name;
+	// console.log(obj.pokemon[2]); 
+});
 
 /**
  * ===================================
  * Routes
  * ===================================
  */
+var responseCallback = (request, response) => {
+	console.log(request.path);
+// send response with some data (a string) 
+	if ( request.path == "/bulbasaur" ){
+		response.send('6.9kg');
+	}else{
+  		response.send(';)');
+	}
+};
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
-});
-
+app.get('*', responseCallback);
 /**
  * ===================================
  * Listen to requests on port 3000
