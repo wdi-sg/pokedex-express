@@ -32,18 +32,16 @@ Use the data in `pokedex.json` and return a response with details about the requ
 
 * Go through `pokedex.json` to understand how the data is structured. Where are all the pokemon data stored? (As usual, using a JSON parser for human-readable JSON is a good idea. There are many, [here](http://jsonprettyprint.com/) is one.)
 
-* Return a string response "Welcome to the online Pokedex!" when a request for the root route (`/`) is received
-
 * Return a string response with the requested pokemon's information when a request comes with matching the route `/some-name` (eg. `localhost:3000/bulbasaur` should show Bulbasaur's information - for now, show only its weight value)
 
-* Modify your response for `/somename` to return a HTML page (instead of just a string) with a `h1` tag that displays the name of the pokemon being requested, and a `ul` displaying its weight (eg. "Weight: 10 kg")
+* Modify your response for `/some-name` to return a HTML page (instead of just a string) with a `h1` tag that displays the name of the pokemon being requested, and a `ul` displaying its weight (eg. "Weight: 10 kg")
+
+* Handle the case where an invalid pokemon name is provided (eg. `/some-name`). Return a HTML page with a `p` tag that says "Could not find information about `<pokemon_name>` - Is that a new pokemon? Gotta catch em' all!" (replace `<pokemon_name>` with the requested for pokemon name) Set the status code to 404.
 
 ## Further
 
-* Handle the case where an invalid pokemon name is provided (eg. `/somename`). Return a HTML page with a `p` tag that says "Could not find information about `<pokemon_name>` - Is that a new pokemon? Gotta catch em' all!" (replace `<pokemon_name>` with the requested for pokemon name)
+* detect if the user didn't put anthing in the path. Return a HTML page with a `h1` tag saying "Welcome to the online Pokdex!" and a `ul` displaying _all_ the pokemon that exist in the pokedex
 
-* Modify your response for `/homepage` (homepage) to return a HTML page with a `h1` tag saying "Welcome to the online Pokdex!" and a `ul` displaying _all_ the pokemon that exist in the pokedex
-
-* Instead of showing just the weight, show all the details of the requested pokemon for `/somename` route, adding each detail as a `li` to the `ul`
+* Instead of showing just the weight, show all the details of the requested pokemon for `/some-name` route, adding each detail as a `li` to the `ul`
 
 * Expose a new route for `/type/some-type` that returns a HTML page with a `ul` listing the names of all pokemon that have the specified type (eg. `/type/grass` should show a page with names of all pokemon of grass type). Format it however you like on the page.
