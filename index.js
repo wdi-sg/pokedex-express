@@ -40,7 +40,7 @@ app.get('*', (request, response) => {
   		}
 
   		if (search.length == 1) {
-  		response.send(result.join());
+  		response.send(search.join());
   		
   		}
 
