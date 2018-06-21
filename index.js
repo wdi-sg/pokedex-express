@@ -21,10 +21,6 @@ const app = express();
  * ===================================
  */
 
- // detect if the user didn't put anthing in the path. 
- // Return a HTML page with a h1 tag saying "Welcome to the online Pokdex!" 
- // and a ul displaying all the pokemon that exist in the pokedex
-
 app.get('*', (request, response) => {
 	// send response with some data (a string)
 	if (request.path == '/') {
@@ -36,7 +32,7 @@ app.get('*', (request, response) => {
 			response.status(404);
 			response.send('<html><body><p>Could not find information about ' + pokeName + ' - Is that a new pokemon? Gotta catch em\' all!<p/></body></html>');
 		} else {
-			response.send(findPokemonNameWeight(pokemon));
+			response.send(pokemonDetails(pokemon));
 		}
 	}	
 });
@@ -56,6 +52,22 @@ var findPokemonNameWeight = (pokemon) => {
 	return ('<html><body><h1>' + pokemon.name + '</h1><ul>' + pokemon.weight + '</ul></body></html>');
 };
 
+var pokemonDetails = (pokemon) => {
+	let htmlString = '<html><body><h1>' + pokemon.name + '</h1><ul>';
+	let keys = Object.keys(pokemon); // The Object.keys() method returns an array of a given object's property names
+	for (let i = 0; i < keys.length; i++) {
+		let key = keys[i];
+		let value = JSON.stringify(pokemon[key]);
+		let itemString = '<li>' + key + ':' + value + '</li>';
+		htmlString = htmlString + itemString; // append all the <ul>s 1 by 1 to the html
+	}
+	htmlString = htmlString + '</ul></body></html>';
+	return htmlString;
+};
+
+// detect if the user didn't put anthing in the path. 
+ // Return a HTML page with a h1 tag saying "Welcome to the online Pokdex!" 
+ // and a ul displaying all the pokemon that exist in the pokedex
 var listPokemons = () => {
 	let htmlString = '<html><body><h1>Welcome to the online Pokdex!</h1>';
 	let pokeArr = pokedex.pokemon;
