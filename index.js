@@ -21,6 +21,12 @@ const app = express();
  * ===================================
  */
 
+
+app.get('/type/*', (request, response) => {
+	let type = request.path.substring(6);
+	response.send(listSameTypePokemons(type));
+});
+
 app.get('*', (request, response) => {
 	// send response with some data (a string)
 	if (request.path == '/') {
@@ -36,6 +42,7 @@ app.get('*', (request, response) => {
 		}
 	}	
 });
+
 
 var findPokemon = (pokemon) => {
 	let pokeArr = pokedex.pokemon;
@@ -74,6 +81,20 @@ var listPokemons = () => {
 	for (var i = 0; i < pokeArr.length; i++) {
 		let ul = '<ul>' + pokeArr[i].name + '</ul>';
 		htmlString = htmlString + ul;	
+	}
+	htmlString = htmlString + '</body></html>';
+	return htmlString;
+};
+
+var listSameTypePokemons = (type) => {
+	let htmlString = '<html><body><h1>' + type.toUpperCase() + ' Type Pokemons!</h1>';
+	let pokeArr = pokedex.pokemon;
+	for (var i = 0; i < pokeArr.length; i++) {
+		let typeArray = pokeArr[i].type;
+		if (typeArray.indexOf(type) > -1) {
+			let ul = '<ul>' + pokeArr[i].name + '</ul>';
+			htmlString = htmlString + ul;	
+		}
 	}
 	htmlString = htmlString + '</body></html>';
 	return htmlString;
