@@ -7,7 +7,7 @@ For this exercise, we will be setting up express to intercept incoming requests 
 ## Getting Started
 
 1.  Fork and clone this repository to your computer
-2.  Run `yarn install` to install dependencies
+2.  Run `npm install` to install dependencies
 3.  Look in the starter file called `index.js`. This will be the entry-point to your app
 4.  Run `node index.js` to start a local server on port 3000
 5.  Open `localhost:3000` on your browser and see the home page
@@ -16,7 +16,7 @@ Additionally, to improve your workflow, install the `nodemon` package. Nodemon h
 
 ```
 # install nodemon in Terminal
-yarn global add nodemon
+npm install -g nodemon
 
 # run nodemon to start server
 nodemon index.js
@@ -34,16 +34,16 @@ Use the data in `pokedex.json` and return a response with details about the requ
 
 * Return a string response "Welcome to the online Pokedex!" when a request for the root route (`/`) is received
 
-* Return a string response with the requested pokemon's information when a request comes with matching the route `/names/:name` (eg. `localhost:3000/names/Bulbasaur` should show Bulbasaur's information - for now, show only its weight value)
+* Return a string response with the requested pokemon's information when a request comes with matching the route `/names/:name` (eg. `localhost:3000/Bulbasaur` should show Bulbasaur's information - for now, show only its weight value)
 
-* Modify your response for `/names/:name` to return a HTML page (instead of just a string) with a `h1` tag that displays the name of the pokemon being requested, and a `ul` displaying its weight (eg. "Weight: 10 kg")
+* Modify your response for `/somename` to return a HTML page (instead of just a string) with a `h1` tag that displays the name of the pokemon being requested, and a `ul` displaying its weight (eg. "Weight: 10 kg")
 
 ## Further
 
-* Handle the case where an invalid pokemon name is provided (eg. `/names/Deadpool`). Return a HTML page with a `p` tag that says "Could not find information about `<pokemon_name>` - Is that a new pokemon? Gotta catch em' all!" (replace `<pokemon_name>` with the requested for pokemon name)
+* Handle the case where an invalid pokemon name is provided (eg. `/somename`). Return a HTML page with a `p` tag that says "Could not find information about `<pokemon_name>` - Is that a new pokemon? Gotta catch em' all!" (replace `<pokemon_name>` with the requested for pokemon name)
 
 * Modify your response for `/` (homepage) to return a HTML page with a `h1` tag saying "Welcome to the online Pokdex!" and a `ul` displaying _all_ the pokemon that exist in the pokedex
 
-* Instead of showing just the weight, show all the details of the requested pokemon for `/names/:name` route, adding each detail as a `li` to the `ul`
+* Instead of showing just the weight, show all the details of the requested pokemon for `/somename` route, adding each detail as a `li` to the `ul`
 
-* Expose a new route for `/types/:type` that returns a HTML page with a `ul` listing the names of all pokemon that have the specified type (eg. `/types/grass` should show a page with names of all pokemon of grass type). Format it however you like on the page.
+* Expose a new route for `/some-type` that returns a HTML page with a `ul` listing the names of all pokemon that have the specified type (eg. `/type/grass` should show a page with names of all pokemon of grass type). Format it however you like on the page.
