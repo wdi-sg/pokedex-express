@@ -4,27 +4,44 @@ const app = express();
 const jsonfile = require('jsonfile');
 const pokedex = 'pokedex.json'
 var result = {};	 
-var ulList = '';
+var ulNameList = '';
 
 //read file function
 jsonfile.readFile(pokedex, (err, obj) => { 
 	
 	// loops through the length of the pokemon file  	
  	for (let i = 0; i<obj.pokemon.length; i++) {
+
+ 		//put pokeUlList in the for loop so that it resets for each pokemon
+		var pokeUlList = '';
 		
  		//pulls out the names and sets it to variable
 		let pokeName = (obj.pokemon[i].name);
-		
+
 		//pulls out the weight and sets it to variable
 		let pokeWeight = (obj.pokemon[i].weight);
-		
-		//pushes the name and weight as key and values into results object
-		result[pokeName] = pokeWeight;
-		
-		//adds each pokemon between li tags so it can be plugged into the HTML variable later
-		ulList += '<li>'+pokeName+'</li>'
 
+		//adds each pokemon between li tags so it can be plugged into the HTML variable later
+		ulNameList += '<li>'+pokeName+'</li>'
+		
+	for (var key in obj.pokemon[i]) {
+	    if (obj.pokemon[i].hasOwnProperty(key)) {
+	        pokeUlList += ('<li>' + key + ': ' + obj.pokemon[i][key] + '</li>').toString();
+	    }
+	}
+			//console.log(i + pokeUlList)
+
+		//pushes the name and weight as key and values into results object
+		//result[pokeName] = pokeWeight;
+		
+		//pushes the LI list into the object
+		result[pokeName] = pokeUlList;
+		
  	}
+console.log(result);
+ 	
+
+ 	// an object with a name, a weight and all of the LI keys
 
 
 	app.get('*', (request, response) => {
@@ -33,19 +50,20 @@ jsonfile.readFile(pokedex, (err, obj) => {
 		let route = request.path
 		let routeWithoutSlash = route.substring(1);
 		let compare = routeWithoutSlash.charAt(0).toUpperCase() + routeWithoutSlash.slice(1);
-		let bodyTags = '<head><title>Look at all them Pokemans!</title><head><body><h1>Welcome to the online Pokerdex!</h1><h2>Woulda look at that, pokermons. Just look at em. They everywhere.</h2><ul>' + ulList + '</ul></body>'
+		let bodyTags = '<head><title>' + compare + '</title><head><body><h1>' + compare + '</h1><ul>' + result[compare] + '</ul></body>'
+		let homepageBodyTags = '<head><title>Look at all them Pokemans!</title><head><body><h1>Welcome to the online Pokerdex!</h1><h2>Woulda look at all those, pokermons. Just look at em. They everywhere.</h2><ul>' + ulNameList + '</ul></body>'
 
 		//if request path is in the object 
 		if (result.hasOwnProperty(compare) === true) {
 
 		//then send the weight of the pokemon
-			response.send(result[compare]);
+			response.send(bodyTags);
 
 		//or if the result path is empty
 		} else if (routeWithoutSlash === '') {
 		
 		//show H1 tag and ul tag 
-			response.send(bodyTags);
+			response.send(homepageBodyTags);
 
 		} else { 
 			response.send('Not here')
