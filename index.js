@@ -1,6 +1,7 @@
 const express = require('express');
+const jsonfile = require('jsonfile');
 
-// const jsonfile = require('jsonfile');
+const file = 'pokedex.json';
 
 /**
  * ===================================
@@ -11,16 +12,48 @@ const express = require('express');
 // Init express app
 const app = express();
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
+app.get('/', (req, res) => {
+  res.send("Welcome!")
+})
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
-});
+app.get('/type/*', (req, res) => {
+  jsonfile.readFile(file, (err, obj) => {
+    let pokedex = obj.pokemon
+    let result = []
+    let format = req.path.split('/type/');
+    let userPath = format[1]
+
+    for (var i = 0; i < pokedex.length; i++) {
+      if (userPath == pokedex[i].type[0].toLowerCase()) {
+        result.push(
+          "<h1>" + pokedex[i].name + "</h1><ul>Weight: " + pokedex[i].weight + "</ul>");
+      }
+    }
+    res.send(result.join())
+  })
+})
+
+app.get('/*', (req, res) => {
+  jsonfile.readFile(file, (err, obj) => {
+    let pokedex = obj.pokemon
+    let result = []
+    let format = req.path.split('/type/');
+    let userPath = format[1]
+
+    for (var i = 0; i < pokedex.length; i++) {
+      if (userPath == pokedex[i].name.toLowerCase()) {
+        result.push(
+          "<h1>" + pokedex[i].name + "</h1><ul>Weight: " + pokedex[i].weight + "</ul>");
+      }
+    }
+    res.send(result.join())
+  })
+})
+
+app.get('*', (req, res) => {
+  res.send("404")
+})
+
 
 /**
  * ===================================
