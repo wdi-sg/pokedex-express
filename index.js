@@ -20,7 +20,7 @@ var responseCallback = (request, response) => {
 	console.log(request.path);
 // send response with some data (a string) 
 	if ( request.path == "/bulbasaur" ){
-		response.send('6.9kg');
+		response.send("<html><body><h1>Bulbasaur</h1><ul>6.9kg</ul></body></html>");
 	}else{
   		response.send(';)');
 	}
