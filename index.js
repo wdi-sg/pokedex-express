@@ -48,7 +48,7 @@ app.get('/*', (req, res) => {
       }
     }
     if (result.length < 1) {
-      res.send("Could not find information about " + userPath + " Is that a new pokemon? Gotta catch em' all!");
+      res.status(404).send("Could not find information about " + userPath + " Is that a new pokemon? Gotta catch em' all!")
       return;
     }
     res.send(result.join())
