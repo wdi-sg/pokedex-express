@@ -28,23 +28,27 @@ app.get('*', (request, response) => {
 
 	jsonfile.readFile(file, (err, obj) => {
 
+		//empty search array
 		let search = []
 		
 		for (var i = 0; i < obj.pokemon.length; i ++) {
+    		//check for match
     		if ('/' + obj.pokemon[i].name == searchedPokemon) {  		
     		var heading = '<h1>' + obj.pokemon[i].name + '</h1>'
-    		var	description = '<ul>' + 'Weight: '+ obj.pokemon[i].weight + '</ul>'
-    		search.push('<html> <body>' + heading + description + '</body> </html>');
+    		var	weight = '<ul>' + 'Weight: '+ obj.pokemon[i].weight + '</ul>'
+    		//if match push into array with relevant html tags
+    		search.push('<html> <body>' + heading + weight + '</body> </html>');
  
     		}
   		}
-
+  		//join the array to return a string
   		if (search.length == 1) {
   		response.send(search.join());
   		
   		}
-
+  		//as there is no result the array is empty, therefore
   		if (search.length < 1) {
+  			searchedPokemon =searchedPokemon.split('/').join('')
   		response.status(404).send("<p>Could not find information about </p> " + searchedPokemon + " <p> Is that a new pokemon? Gotta catch em' all! </p>")
   		}
   				
