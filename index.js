@@ -1,6 +1,14 @@
 const express = require('express');
+const handlebars = require('express-handlebars');
+const myjsonfile = require('jsonfile');
+const pokedexPath = "./pokedex.json";
+let pokemonDetails = {};
 
-// const jsonfile = require('jsonfile');
+myjsonfile.readFile(pokedexPath, function(errorMessage, pokedexObj) {
+
+    pokedexObj.pokemon.forEach( pokemon => { pokemonDetails[pokemon.name.toLowerCase()] = pokemon } );
+
+});
 
 /**
  * ===================================
@@ -11,16 +19,33 @@ const express = require('express');
 // Init express app
 const app = express();
 
+
 /**
  * ===================================
  * Routes
  * ===================================
  */
 
+// route ALL requests (because of '*'), to the specified callback
 app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
-});
+
+    // remove the '/' from the string of request.path
+    let requestedName = request.path.replace('/','').toLowerCase();
+
+    // check if the requested name exists in the database
+    if (Object.keys(pokemonDetails).includes(requestedName)) {
+
+        console.log(pokemonDetails[requestedName].weight);
+    } else {
+        console.error(requestedName, "doesnt exist");
+    }
+
+})
+
+// app.get('*', (request, response) => {
+//   let pokeDetails = {};
+//   response.render('home');
+// });
 
 /**
  * ===================================
