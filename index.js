@@ -4,7 +4,7 @@ const jsonfile = require('jsonfile');
 
 const file = 'pokedex.json';
 
-var pokemonData = [];
+let pokemonData = [];
 
 /**
  * ===================================
@@ -37,7 +37,6 @@ app.get('*', (request, response) => {
   };
 
   var pokemonName = removeSlash();
-  pokemonName.toLowerCase();
 
   // console.log(pokemonName)
 
@@ -46,16 +45,23 @@ app.get('*', (request, response) => {
   // add pokemon names to pokemonData
   for (let i = 0; i < obj.pokemon.length; i++) {
   	pokemonData[obj.pokemon[i].name] = "";
-  	
   }
 
   function pokemonSearch() {
 	  for (let i = 0; i < obj.pokemon.length; i++) {
-	  	if (pokemonName == obj.pokemon[i].name) {
+	  	if (pokemonName == obj.pokemon[i].name.toLowerCase()) {
+	  		pokemonData.push('smth');
 	  		response.send('<html><body><h1>' + obj.pokemon[i].name + '</h1><ul><ol>Weight: ' + obj.pokemon[i].weight + '</ol></ul></body></html>');
 	  		return;
 	  	} 
 	  }
+
+	  if (pokemonData.length < 1) {
+			response.status(404);
+			response.send('<html><body><p>Could not find information about ' + pokemonName + " - Is that a new pokemon? Gotta catch em' all! </p></body></html>");
+			return;
+	  }
+
 	}
 	pokemonSearch();
 	// console.log(obj.pokemon[2].name); 
@@ -64,17 +70,19 @@ app.get('*', (request, response) => {
   	// console.log(Object.keys(pokemonData));
 
 
-  	function invalid() {
-  		let pokeName = Object.keys(pokemonData);
-  		for (let i = 0; i <pokeName.length; i++) {
-  			if (pokemonName !== pokeName[i]) {
-  				response.status(404);
-  				response.send('<html><body><p>Could not find information about ' + pokemonName + " - Is that a new pokemon? Gotta catch em' all! </p></body></html>");
-  			}
-  		}
-  	};
+  	// function invalid() {
+  	// 	let pokeName = Object.keys(pokemonData);
+  	// 	for (let i = 0; i <pokeName.length; i++) {
+  	// 		if (pokemonName !== pokeName[i]) {
+  	// 			response.status(404);
+  	// 			response.send('<html><body><p>Could not find information about ' + pokemonName + " - Is that a new pokemon? Gotta catch em' all! </p></body></html>");
+  	// 		}
+  	// 	}
+  	// };
 
-  	invalid();
+  	// invalid();
+
+
 
 
 });
