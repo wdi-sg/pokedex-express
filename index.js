@@ -4,7 +4,6 @@ const jsonfile = require('jsonfile');
 
 const file = 'pokedex.json';
 
-let pokemonData = [];
 
 /**
  * ===================================
@@ -20,6 +19,29 @@ const app = express();
  * Routes
  * ===================================
  */
+jsonfile.readFile(file, (err, obj) => {
+
+  app.get('', (request, response) => {
+    let welcome = '';
+    let header = '<h1>Welcome to the online Pokedex!</h1>';
+    let subheader = '<h2>We have 151 Pokemon in total!</h2>';
+
+    // adding header, subheader and opening ul tag
+  	welcome = header + subheader + '<ul>';
+
+    
+    // adding pokemon names with li tags
+    for (let i = 0; i < obj.pokemon.length; i++) {
+      welcome += '<li>' + obj.pokemon[i].name + '</li>';
+    }
+
+    // adding closing ul tag
+    welcome += '</ul>';
+
+    response.send(welcome);
+
+  });
+
 
 
 app.get('*', (request, response) => {
@@ -38,22 +60,14 @@ app.get('*', (request, response) => {
 
   var pokemonName = removeSlash();
 
-  // console.log(pokemonName)
-
-  jsonfile.readFile(file, (err, obj) => {
-
-  // add pokemon names to pokemonData
-  for (let i = 0; i < obj.pokemon.length; i++) {
-  	pokemonData[obj.pokemon[i].name] = "";
-  }
-
+ 
   let search = true;
 
   function pokemonSearch() {
 	  for (let i = 0; i < obj.pokemon.length; i++) {
 	  	if (pokemonName == obj.pokemon[i].name.toLowerCase()) {
 	  		search = false;
-	  		response.send('<html><body><h1>' + obj.pokemon[i].name + '</h1><ul><ol>Weight: ' + obj.pokemon[i].weight + '</ol></ul></body></html>');
+	  		response.send('<html><body><h1>' + obj.pokemon[i].name + '</h1><ul><li>Height: ' + obj.pokemon[i].height + '</li><li>Weight: ' + obj.pokemon[i].weight + '</li></ul></body></html>');
 	  		return;
 	  	} 
 	  }
@@ -66,26 +80,7 @@ app.get('*', (request, response) => {
 
 	}
 	pokemonSearch();
-	// console.log(obj.pokemon[2].name); 
-});
-  	// must be Object.keys instead of object.keys
-  	// console.log(Object.keys(pokemonData));
-
-
-  	// function invalid() {
-  	// 	let pokeName = Object.keys(pokemonData);
-  	// 	for (let i = 0; i <pokeName.length; i++) {
-  	// 		if (pokemonName !== pokeName[i]) {
-  	// 			response.status(404);
-  	// 			response.send('<html><body><p>Could not find information about ' + pokemonName + " - Is that a new pokemon? Gotta catch em' all! </p></body></html>");
-  	// 		}
-  	// 	}
-  	// };
-
-  	// invalid();
-
-
-
+  });
 
 });
 
