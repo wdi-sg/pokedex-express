@@ -11,7 +11,9 @@ jsonfile.readFile(file, (err, obj) => {
     let pokedex = obj.pokemon
     let result = []
     for (var i=0; i<obj.pokemon.length; i++) {
-        result.push(pokedex[i].name + "Weight: " + pokedex[i].weight);            
+        if (var userSearch == pokedex[i].name) {
+            console.log(pokedex.[i].name + " Weight: " + pokedex[i].weight);
+        }          
     }
 })
 
