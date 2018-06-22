@@ -47,16 +47,18 @@ app.get('*', (request, response) => {
   	pokemonData[obj.pokemon[i].name] = "";
   }
 
+  let search = true;
+
   function pokemonSearch() {
 	  for (let i = 0; i < obj.pokemon.length; i++) {
 	  	if (pokemonName == obj.pokemon[i].name.toLowerCase()) {
-	  		pokemonData.push('smth');
+	  		search = false;
 	  		response.send('<html><body><h1>' + obj.pokemon[i].name + '</h1><ul><ol>Weight: ' + obj.pokemon[i].weight + '</ol></ul></body></html>');
 	  		return;
 	  	} 
 	  }
 
-	  if (pokemonData.length < 1) {
+	  if (search = true) {
 			response.status(404);
 			response.send('<html><body><p>Could not find information about ' + pokemonName + " - Is that a new pokemon? Gotta catch em' all! </p></body></html>");
 			return;
