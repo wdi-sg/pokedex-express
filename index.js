@@ -28,13 +28,15 @@ function error(name){
 	return html
 };
 
-function mainpage(name, pokemon){
-	let heading = '<h1>Welcome to the online Pokedex!</h1>'
+function mainpage(){
+	let heading = '<h1>Welcome to the online Pokedex!</h1>';
 	let list = '';
+	var pokemon = object.pokemon;
 	for( let i = 0; i<pokemon.length; i++ ){
+		var name = pokemon[i].name;
 		list += "<li>" + name + "</li>";
 	}
-	let data = "<ul>" + list + "</ul>";
+	var data = "<ul>" + list + "</ul>";
 	return heading + data
 }
 function successful(name, pokemon, height, weight){
@@ -54,10 +56,11 @@ function successful(name, pokemon, height, weight){
 var responseCallback = (request, response) => {
 	str = request.path;
 	search = str.slice(1);
-	// console.log(search);
-	let pokemon = object.pokemon;
+	console.log(search);
+
+	var pokemon = object.pokemon;
 	for( let i = 0; i<pokemon.length; i++ ){
-		name = pokemon[i].name.toLowerCase();
+		var name = pokemon[i].name.toLowerCase();
 		var height = pokemon[i].height;
 		var weight = pokemon[i].weight;
 
@@ -65,16 +68,15 @@ var responseCallback = (request, response) => {
 
 		if (search == name){
 			response.send(successful(name, pokemon, height, weight));
-
-    	}else if( search != name ){
-			response.send(error(search));
-			response.status(404);// ###Cant seem to search other things then bbsaur
-
-		}else if( search == false ){
-			response.send(mainpage(name, pokemon)); //###Cant seem to get the main loading page too
 		}
-	}
+	}	
+	response.send(error(search));
+	response.status(404);
 }
+app.get('', (request, response)=>{
+	response.send(mainpage()); //###Cant seem to get the main loading page too
+});
+
 
 app.get('*', responseCallback);
 /**
