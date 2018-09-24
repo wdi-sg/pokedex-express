@@ -30,6 +30,7 @@ app.get('/:name', (request, response) => {
     }
 
     if (i === obj.pokemon.length) {
+      response.status(404);
       response.send(`Could not find information about ${nameRequested} - Is that a new pokemon? Gotta catch em' all!`);
     }
   });
