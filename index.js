@@ -1,12 +1,13 @@
 const express = require('express');
+const jsonfile = require('jsonfile');
 
-// const jsonfile = require('jsonfile');
 
 /**
  * ===================================
  * Configurations and set up
  * ===================================
  */
+const file = 'pokedex.json';
 
 // Init express app
 const app = express();
@@ -19,7 +20,24 @@ const app = express();
 
 app.get('*', (request, response) => {
   // send response with some data (a string)
-  response.send(request.path);
+  jsonfile.readFile(file, (err,obj)=>{
+      const pokemon = obj.pokemon;
+
+      var pokemonWeight = () => {
+        for (let i = 0; i < pokemon.length; i++){
+            return pokemon[i].weight;
+        }
+      }
+
+      var makeHtmlPage = (weight) => {
+        let weightPage = '<ul>' + 'Weight of pokemon is: ' + weight + '</ul>';
+        let htmlPage = '<html><head></head><body>' + weightPage + '</body></html>';
+        return htmlPage;
+      }
+
+      response.send(makeHtmlPage(pokemonWeight()));
+  })
+
 });
 
 /**
