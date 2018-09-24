@@ -35,7 +35,9 @@ Use the data in `pokedex.json` and return a response with details about the requ
 * Return a string response with the requested pokemon's information when a request comes with matching the route `/some-name` (eg. `localhost:3000/bulbasaur` should show Bulbasaur's information - for now, show only its weight value)
 
 ### How to start:
-Start by simply 
+Start by simply reading the pokedex json file (`jsonfile.readFile`), and then sending it in the response of the request. Remember that these are nested asynchronous callbacks, and that the order the code executes in is very important.
+
+After that the deliverables have to do with looping over the pokedex and doing an action depending on a conditional- e.g., what is the name being requested.
 
 ### Further
 
