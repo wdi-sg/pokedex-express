@@ -20,5 +20,6 @@
   "bugs": {
     "url": "https://github.com/wdi-sg/pokedex-express/issues"
   },
-  "homepage": "https://github.com/wdi-sg/pokedex-express#readme"
+  "homepage": "https://github.com/wdi-sg/pokedex-express#readme",
+  "devDependencies": {}
 }
