@@ -9,17 +9,21 @@ jsonfile.readFile('pokedex.json', (err, obj) => {
   else {
     const pokedex = obj.pokemon;
 
-    app.get('*', (request, response) => {
-      const param = request.path.substring(1); // Remove '/' from request
+    app.get('*', (req, res) => {
+      const param = req.path.substring(1); // Remove '/' from req
       const payload = [];
+      let found = false;
       Object.keys(pokedex).forEach((key) => {
         // DELIVERABLE
         if (pokedex[key].name === param) {
           payload.push(pokedex[key].name);
           payload.push(pokedex[key].weight);
-          response.send(payload);
+          res.send(payload);
+          found = true;
         }
       });
+      // FURTHER 1
+      if (found === false) res.status(404).send(`Could not find information about ${param}- Is that a new pokemon? Gotta catch em' all!`);
     });
   }
 });
