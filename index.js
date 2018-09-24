@@ -31,6 +31,18 @@ const checkWeakness = (param, p) => {
   return payload;
 };
 
+const checkEvo = (param, p) => {
+  const payload = [];
+  Object.keys(p).forEach((key) => {
+    const pokemon = p[key];
+    if (pokemon.name === param) {
+      Object.keys(pokemon.prev_evolution).forEach((x) => {
+        payload.push(pokemon.prev_evolution[x].name);
+      });
+    }
+  });
+  return payload;
+};
 
 // MAGIC HAPPENS BELOW
 jsonfile.readFile('pokedex.json', (err, obj) => {
@@ -46,19 +58,20 @@ jsonfile.readFile('pokedex.json', (err, obj) => {
       // FURTHER 2.4
       if (req.path.slice(0, 12) === '/weaknesses/') return res.send(checkWeakness(req.path.substring(12), p));
 
+      // FURTHER 2.5
+      if (req.path.slice(0, 15) === '/nextevolution/') return res.send(checkEvo(req.path.substring(15), p));
+
       const param = req.path.substring(1); // Remove '/' from req
       let found = false;
       Object.keys(p).forEach((key) => {
         // DELIVERABLE
         if (p[key].name === param) {
-          // const payload = [];
-          // payload.push(pokedex[key].name);
-          // payload.push(pokedex[key].weight);
           // FURTHER 2.2
           const types = p[key].type.toString().replace(',', ' & ');
           found = true;
           return res.send(`This is ${p[key].name}, it weighs ${p[key].weight}. It is ${p[key].height} tall. It is of ${types} type.`);
         }
+        return console.log('No match');
       });
       // FURTHER 1
       if (found === false && param.length > 0) {
