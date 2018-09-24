@@ -83,4 +83,28 @@ app.get('/weaknesses/:weakness', (request, response) => {
   });
 });
 
+app.get('/nextevolution/:name', (request, response) => {
+  let name = request.params.name.toLowerCase();
+
+  jsonfile.readFile(file, (err, obj) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    for (let i = 0; i < obj.pokemon.length; i++) {
+      let pokemon = obj.pokemon[i];
+
+      if (name === pokemon.name.toLowerCase() && pokemon.prev_evolution) {
+        let names = [];
+        pokemon.prev_evolution.forEach(pokemonObj => {
+          names.push(pokemonObj.name);
+        });
+
+        response.send(`All pokemon that evolves from ${name}: ${names}.`);
+      }
+    }
+  });
+});
+
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
