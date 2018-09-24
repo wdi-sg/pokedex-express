@@ -20,13 +20,22 @@ const app = express();
 
 app.get('*', (request, response) => {
   // send response with some data (a string)
+  var requestPath = request.path;
+  var nameSearch = requestPath.replace('/','');
+
   jsonfile.readFile(file, (err,obj)=>{
       const pokemon = obj.pokemon;
+      let resultName = [];
+      let resultWeight = [];
+
 
       var pokemonWeight = () => {
         for (let i = 0; i < pokemon.length; i++){
-            return pokemon[i].weight;
+            let pokemonName = pokemon[i].name;
+            let pokemonWeight = pokemon[i].weight;
+            resultName.push('<li>' + pokemonName + ': ' + pokemonWeight + '</li>');
         }
+        return resultName;
       }
 
       var makeHtmlPage = (weight) => {
