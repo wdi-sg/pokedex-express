@@ -56,13 +56,17 @@ jsonfile.readFile('pokedex.json', (err, obj) => {
         return res.send(checkType(req.path.substring(6), p));
       }
       // FURTHER 2.4
-      if (req.path.slice(0, 12) === '/weaknesses/') return res.send(checkWeakness(req.path.substring(12), p));
-
+      if (req.path.slice(0, 12) === '/weaknesses/') {
+        return res.send(checkWeakness(req.path.substring(12), p));
+      }
       // FURTHER 2.5
-      if (req.path.slice(0, 15) === '/nextevolution/') return res.send(checkEvo(req.path.substring(15), p));
+      if (req.path.slice(0, 15) === '/nextevolution/') {
+        return res.send(checkEvo(req.path.substring(15), p));
+      }
 
       const param = req.path.substring(1); // Remove '/' from req
       let found = false;
+
       Object.keys(p).forEach((key) => {
         // DELIVERABLE
         if (p[key].name === param) {
