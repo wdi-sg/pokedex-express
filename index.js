@@ -29,17 +29,30 @@ const app = express();
 
 app.get("*", (request, response) => {
   // send response with some data (a string)
-  let pokeName = request.path.substring(1).toLowerCase(); // using substring(1) gets rid of the slash in request.path. index(0) is dropped.
-  let pokemon = findPokemon(pokeName);
-  response.send(pokemon.name + "'s weight is : " + pokemon.weight);
+  let pokemonName = request.path.substring(1).toLowerCase(); // using substring(1) gets rid of the slash in request.path.
+  let pokemonResult = findPokemon(pokemonName);
+  // Further Part 1
+  // Just needed to add a if/else conditional for Further Part 1.
+  if (pokemonResult) {
+    // This means if pokemon exists. If it doesn't exist, function will return undefined.
+    // Further Part 3. Adding information to the result response.
+    response.send(`This is ${pokemonResult.name}. His weight is : ${pokemonResult.weight}`);
+    // Further Part 2. Just check whether the request path is empty or `not. If empty, welcome user to the Pokedex
+  } else if (pokemonName === "") {
+    response.send("Welcome to the online pokedex.");
+  } else {
+    response.send(
+      `Could not find information about ${pokemonName} - Is that a new pokemon? Gotta catch em' all!`
+    );
+  }
 });
 
-var findPokemon = pokemon => {
+var findPokemon = pokemonResult => {
   let pokeArr = pokedex.pokemon;
   for (var i = 0; i < pokeArr.length; i++) {
-    let poke = pokeArr[i];
-    if (pokemon == poke.name.toLowerCase()) {
-      return poke;
+    let pokemon = pokeArr[i];
+    if (pokemonResult == pokemon.name.toLowerCase()) {
+      return pokemon;
     }
   }
   return undefined;
