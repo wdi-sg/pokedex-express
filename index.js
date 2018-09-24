@@ -4,6 +4,9 @@ const jsonfile = require('jsonfile');
 // Init express app
 const app = express();
 
+// FUNCTIONS
+
+// MAGIC HAPPENS BELOW
 jsonfile.readFile('pokedex.json', (err, obj) => {
   if (err) console.error(err);
   else {
@@ -23,7 +26,12 @@ jsonfile.readFile('pokedex.json', (err, obj) => {
         }
       });
       // FURTHER 1
-      if (found === false) res.status(404).send(`Could not find information about ${param}- Is that a new pokemon? Gotta catch em' all!`);
+      if (found === false && param.length > 0) {
+        res.status(404).send(`Could not find information about ${param}- Is that a new pokemon? Gotta catch em' all!`);
+      } else {
+        // FURTHER 2.1
+        res.send('Welcome to the online pokedex.');
+      }
     });
   }
 });
