@@ -35,4 +35,28 @@ app.get('/:name', (request, response) => {
   });
 });
 
+app.get('/type/:type', (request, response) => {
+  let typeRequested = request.params.type.charAt(0).toUpperCase() +
+    request.params.type.slice(1).toLowerCase();
+
+  jsonfile.readFile(file, (err, obj) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    let names = [];
+
+    for (let i = 0; i < obj.pokemon.length; i++) {
+      let pokemon = obj.pokemon[i];
+
+      if (pokemon.type.includes(typeRequested)) {
+        names.push(pokemon.name);
+      }
+    }
+
+    response.send(`All pokemon that are ${typeRequested} type: ${names}.`);
+  });
+});
+
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
