@@ -36,7 +36,11 @@ app.get("*", (request, response) => {
   if (pokemonResult) {
     // This means if pokemon exists. If it doesn't exist, function will return undefined.
     // Further Part 3. Adding information to the result response.
-    response.send(`This is ${pokemonResult.name}. His weight is : ${pokemonResult.weight}`);
+    response.send(
+      `This is ${pokemonResult.name}. His weight is : ${
+        pokemonResult.weight
+      }. His height is : ${pokemonResult.height}.`
+    );
     // Further Part 2. Just check whether the request path is empty or `not. If empty, welcome user to the Pokedex
   } else if (pokemonName === "") {
     response.send("Welcome to the online pokedex.");
