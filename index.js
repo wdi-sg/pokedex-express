@@ -1,26 +1,47 @@
 const express = require('express');
+const json = require('jsonfile');
 
-// const jsonfile = require('jsonfile');
+const pokedex = 'pokedex.json';
 
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
-
-// Init express app
 const app = express();
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
-
 app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
-});
+
+  let output = [];
+
+  let searchTerm = request.path.toLowerCase();
+
+  while (searchTerm.charAt(0) === '/') {
+    searchTerm = searchTerm.substr(1);
+  }
+
+  if (searchTerm === "") {
+    response.send("Welcome to the online Pokedex!");
+    return;
+  }
+
+  json.readFile(pokedex, function(err, obj) {
+
+    const pokemon = obj.pokemon;
+
+    for (let i in pokemon) {
+      if (pokemon[i].name.toLowerCase().includes(searchTerm)) {
+        output.push(pokemon[i]);
+      }
+    }
+
+    if (output.length > 0) {
+      response.send(output);
+    } else {
+      response.send (`Search for '${searchTerm}' returned no results.`);
+    }
+
+    if (err) {
+      output = err;
+      console.log(err);
+    }
+  })
+})
 
 /**
  * ===================================
