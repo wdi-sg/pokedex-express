@@ -23,7 +23,8 @@ app.get('/:name', (request, response) => {
       let pokemon = obj.pokemon[i];
 
       if (pokemon.name.toLowerCase() === nameRequested) {
-        response.send(pokemon.weight);
+        let message = `This is ${pokemon.name}. His type is ${pokemon.type}. He is ${pokemon.height} in height, and ${pokemon.weight} in weight. His candy is ${pokemon.candy}. His candy count is ${pokemon.candy_count}. His egg is ${pokemon.egg}. His spawn chance is ${pokemon.spawn_chance}. His average spawns is ${pokemon.avg_spawns}. His spawn time is ${pokemon.spawn_time}. His multiplier is ${pokemon.multipliers}. His weakness is ${pokemon.weaknesses}. His next evolution is ${pokemon.next_evolution[0].name}.`;
+        response.send(message);
         break;
       }
     }
