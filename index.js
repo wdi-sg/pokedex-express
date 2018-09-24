@@ -4,6 +4,10 @@ const express = require('express');
 const app = express();
 const file = 'pokedex.json';
 
+app.get('/', (request, response) => {
+  response.send('Welcome to the online Pokdex!');
+});
+
 app.get('/:name', (request, response) => {
   let nameRequested = request.params.name.toLowerCase();
 
