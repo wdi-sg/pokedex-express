@@ -5,18 +5,27 @@ const app = express();
 const file = 'pokedex.json';
 
 app.get('/:name', (request, response) => {
+  let nameRequested = request.params.name.toLowerCase();
+
   jsonfile.readFile(file, (err, obj) => {
     if (err) {
       console.log(err);
       return;
     }
 
-    for (let i = 0; i < obj.pokemon.length; i++) {
+    let i;
+
+    for (i = 0; i < obj.pokemon.length; i++) {
       let pokemon = obj.pokemon[i];
-      let nameRequested = request.params.name.toLowerCase();
+
       if (pokemon.name.toLowerCase() === nameRequested) {
         response.send(pokemon.weight);
+        break;
       }
+    }
+
+    if (i === obj.pokemon.length) {
+      response.send(`Could not find information about ${nameRequested} - Is that a new pokemon? Gotta catch em' all!`);
     }
   });
 });
