@@ -27,6 +27,11 @@ var handleRequest = (request, response) => {
             results = searchForNextRev(obj, routeSplit[2]);
             response.send(results);
         }
+        // landing page
+        else if (request.path === '/' ){
+            response.send('<html><body><h1>Welcome to Pokedex</h1></body></html>');
+            response.status( 404 );
+        }
         // search by name
         else if (routeSplit.length === 2){
         route = route.replace('/', '');
@@ -35,6 +40,7 @@ var handleRequest = (request, response) => {
         if (err){
             console.log(err);
         }
+
         else{
             if( results === 'notFound' ){
             response.send(`Could not find information about ${route} - Is that a new pokemon? Gotta catch em' all!`)
@@ -43,9 +49,7 @@ var handleRequest = (request, response) => {
             response.send(results);
             }
         }
-        if (request.path === '/'){
-            response.send('<html><body><h1>Welcome to Pokedex</h1></body></html>')
-        }}
+    }
     });
 }
 
