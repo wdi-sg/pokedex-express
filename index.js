@@ -10,18 +10,20 @@ const app = express();
 jsonfile.readFile('pokedex.json', (err, obj) => {
   if (err) console.error(err);
   else {
-    const pokedex = obj.pokemon;
+    const p = obj.pokemon;
 
     app.get('*', (req, res) => {
       const param = req.path.substring(1); // Remove '/' from req
-      const payload = [];
       let found = false;
-      Object.keys(pokedex).forEach((key) => {
+      Object.keys(p).forEach((key) => {
         // DELIVERABLE
-        if (pokedex[key].name === param) {
-          payload.push(pokedex[key].name);
-          payload.push(pokedex[key].weight);
-          res.send(payload);
+        if (p[key].name === param) {
+          // const payload = [];
+          // payload.push(pokedex[key].name);
+          // payload.push(pokedex[key].weight);
+          // FURTHER 2.2
+          const types = p[key].type.toString().replace(',', ' & ');
+          res.send(`This is ${p[key].name}, it weighs ${p[key].weight}. It is ${p[key].height} tall. It is of ${types} type.`);
           found = true;
         }
       });
