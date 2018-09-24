@@ -59,4 +59,28 @@ app.get('/type/:type', (request, response) => {
   });
 });
 
+app.get('/weaknesses/:weakness', (request, response) => {
+  let weakness = request.params.weakness.charAt(0).toUpperCase() +
+    request.params.weakness.slice(1).toLowerCase();
+
+  jsonfile.readFile(file, (err, obj) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    let names = [];
+
+    for (let i = 0; i < obj.pokemon.length; i++) {
+      let pokemon = obj.pokemon[i];
+
+      if (pokemon.weaknesses.includes(weakness)) {
+        names.push(pokemon.name);
+      }
+    }
+
+    response.send(`All pokemon that are have weakness ${weakness}: ${names}.`);
+  });
+});
+
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
