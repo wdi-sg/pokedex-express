@@ -5,6 +5,12 @@ const jsonfile = require('jsonfile');
 const app = express();
 
 // FUNCTIONS
+
+const capitalize = (word) => {
+  let capitalized = word.charAt(0).toUpperCase();
+  return capitalized += word.substring(1);
+};
+
 const checkType = (param, p) => {
   const payload = [];
   Object.keys(p).forEach((key) => {
@@ -53,18 +59,18 @@ jsonfile.readFile('pokedex.json', (err, obj) => {
     app.get('*', (req, res) => {
       // FURTHER 2.3
       if (req.path.slice(0, 6) === '/type/') {
-        return res.send(checkType(req.path.substring(6), p));
+        return res.send(checkType(capitalize(req.path.substring(6)), p));
       }
       // FURTHER 2.4
       if (req.path.slice(0, 12) === '/weaknesses/') {
-        return res.send(checkWeakness(req.path.substring(12), p));
+        return res.send(checkWeakness(capitalize(req.path.substring(12)), p));
       }
       // FURTHER 2.5
       if (req.path.slice(0, 15) === '/nextevolution/') {
-        return res.send(checkEvo(req.path.substring(15), p));
+        return res.send(checkEvo(capitalize(req.path.substring(15)), p));
       }
 
-      const param = req.path.substring(1); // Remove '/' from req
+      const param = capitalize(req.path.substring(1)); // Remove '/' from req
       let found = false;
 
       Object.keys(p).forEach((key) => {
