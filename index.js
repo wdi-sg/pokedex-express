@@ -13,8 +13,9 @@ app.get('/', (request, response) => {
     response.send(`Welcome to the online Pokedex!`);
 })
 
+
 //Further Q4: Expose a new route for /type/some-type that returns a message listing the names of all pokemon that have the specified type
-            // (eg. /type/grass should show a page with names of all pokemon of grass type).
+// (eg. /type/grass should show a page with names of all pokemon of grass type).
 app.get('/type/:type', (request, response) => {
     jsonfile.readFile(pokedex, function(error, object) {
         var typeSearched = request.params.type
@@ -30,57 +31,61 @@ app.get('/type/:type', (request, response) => {
     })
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //Question 2: Return a string response with the requested pokemon's information when a request comes with matching the route
 app.get('*', (request, response) => {
     var path = request.path.substring(1);
-    var found = false;
+    var check = false;
     //start by reading the pokedex json file, object can be named anything
     jsonfile.readFile(pokedex, function(error, object) {
+        //create a function that can format the results in HTML
+        const formatResultsInHTML = function (title, pokemon) {
+            let html = '<html>';
+            let body = '<body>';
+            let header = `<h1>${title}</h1>`;
+            let div = '<div>';
+            // FILL <div> with information from Pokemon array using for loop
+            for (i in object.pokemon) {
+                div += object.pokemon[i] + '<br>' // add <br> for next line
+            };
+            let close = '</div></body></html>';
+
+            // Concatenate all strings into one
+            let complete = html + body + header + div + close;
+            console.log(complete);
+
+            //Return the complete string
+            return complete;
+        };
         //and then sending it in the response of the request
         for (i in object.pokemon) {
             var pokemonName = object.pokemon[i].name.toLowerCase();
             if (path.includes(pokemonName)) {
                 //Further Q3: Instead of showing just the weight, show all the details of the requested pokemon for /some-name route, in a full sentence. i.e., "This is Bublasaur, he is 45kg in weight! He also..." etc., etc
-                response.send(`This is ${object.pokemon[i].name}, he is ${object.pokemon[i].weight} in weight! His weaknesses are ${object.pokemon[i].weaknesses}`)
-                //original response.send ==> object.pokemon[i]);
-                found = true;
+                // response.send(`This is ${object.pokemon[i].name}, he is ${object.pokemon[i].weight} in weight! His weaknesses are ${object.pokemon[i].weaknesses}`)
+                response.send(formatResultsInHTML(object.pokemon[i]));
+                check = true;
             }
         }
-        if (found == false) {
-        response.status(404).send(`Could not find information about ${path}. Is that a new pokemon? Gotta catch em' all!`)
+        if (check == false) {
+            response.status(404).send(`Could not find information about ${path}. Is that a new pokemon? Gotta catch em' all!`)
         }
     })
 })
-    //Further Qn 1:
-    //Handle the case where an invalid pokemon name is provided (eg. /some-name).
-    //Return a message that says "Could not find information about <pokemon_name> - Is that a new pokemon? Gotta catch em' all!" (replace <pokemon_name> with the requested for pokemon name)
-    //Set the status code to 404.
+
+//Further Qn 1:
+//Handle the case where an invalid pokemon name is provided (eg. /some-name).
+//Return a message that says "Could not find information about <pokemon_name> - Is that a new pokemon? Gotta catch em' all!" (replace <pokemon_name> with the requested for pokemon name)
+//Set the status code to 404.
 
 
 
 
-    // console.log("PATH: " + request.path);
-    // response.send(object);
+// console.log("PATH: " + request.path);
+// response.send(object);
 
 //run this command to ready your server, by specifying a port to listen on, and you are listening for a request
 //console.log to make sure you know your server is up and running
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
-
 
 
 //LEARNING POINTS:
