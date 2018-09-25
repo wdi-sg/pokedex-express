@@ -1,6 +1,6 @@
 const express = require('express');
 
-// const jsonfile = require('jsonfile');
+const jsonfile = require('jsonfile');
 
 /**
  * ===================================
@@ -17,10 +17,41 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
+const file = "pokedex.json"
+
+//data form the jsonfile provided
+var pokemonObject;
+console.log(pokemonObject)
+
+//Refers to the array in the pokemon key
+//var listOfPokemon = pokemonObject["pokemon"]
+
+function searchName(someObject, referenceName){
+    for (let i = 0; i < someObject.pokemon.length; i++){
+        if (userInputPath === someObject.pokemon.name.toLowerCase()){
+                return someObject.pokemon[i].name
+        }
+    }
+}
+
+
+console.log("testing document")
+//console.log(pokemonObject)
+
+var respondToRequest = function (request, response){
   // send response with some data (a string)
-  response.send(request.path);
-});
+    var userInputPath = request.path.split("/")
+    console.log(userInputPath)
+    jsonfile.readFile (file, function(err, obj){
+
+        var output = searchName(obj, userInputPath)
+
+        response.send("testing");
+
+    })
+}
+app.get('*', respondToRequest)
+
 
 /**
  * ===================================
