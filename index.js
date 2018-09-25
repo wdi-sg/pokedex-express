@@ -69,10 +69,22 @@ const generateHtml = (title, content) => {
   body += `<h1>${title}</h1>`;
   if (typeof content === 'object') {
     body += '<ul style="list-style-type:none; padding:0; margin:0;">';
-    Object.keys(content).forEach((element) => {
-      if (element === 'img') {
-        body += `<img src="${content[element]}">`;
-      } else body += `<li><strong>${capitalize(element)}</strong>: ${content[element]}</li>`;
+
+    Object.keys(content).forEach((key) => {
+      // CHANGE INDEX TO START FROM 1
+      console.log(typeof key);
+      let index = key;
+      if (index.match(/^[0-9]+$/) !== null) {
+        index = parseInt(index, 10) + 1;
+      }
+      // CHECK FOR IMG ELEMENT
+      if (index === 'img') {
+        body += `<img src="${content[key]}">`;
+      } else if (key === 'next_evolution') { // CHECK FOR NEXT EVO OBJECT
+        content[key].forEach((item) => {
+          body += `<li><strong>${capitalize(index.toString())}</strong>: ${item.name}</li>`;
+        });
+      } else body += `<li><strong>${capitalize(index.toString())}</strong>: ${content[key]}</li>`;
     });
     body += '</ul>';
   } else body += content;
