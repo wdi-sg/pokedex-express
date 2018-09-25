@@ -18,27 +18,61 @@ const app = express();
  * ===================================
  */
 
-app.get('/:name', (request, response) => {
-  // send response with some data (a string)
-  // var requestPath = request.path;
-  // var nameSearch = requestPath.replace('/','');
+ var handleRequest = (request, response) =>{
+    console.log("Handling response now...");
+    console.log("request path: "+ request.path );
 
-  jsonfile.readFile(file, (err,obj)=>{
-
-      const pokemonObj = obj.pokemon;
-      let resultName = [];
-      let resultWeight = [];
-
-    for (let i = 0; i < pokemonObj.length; i++){
-        let pokemonName = pokemonObj[i];
-        if (pokemonName.name === request.params.name){
-            response.send(pokemonName.weight);
+    var takingOffSlash = (requestPath) => {
+        if (requestPath.charAt(0) === "/"){
+            requestPath = requestPath.substr(1); //get rid of the first letter
         }
-       // resultName.push('<li>' + pokemonName + ': ' + pokemonWeight + '</li>');
-    }
-  }
-  )
-});
+        if (requestPath.charAt(requestPath.length - 1) === "/"){
+            requestPath = requestPath.substr(0, requestPath.length - 1);
+        }
+        return requestPath; // to take off the slashes so that you can compare with the name
+    };
+
+    jsonfile.readFile(file, (err, obj)=>{
+        if (err){
+            console.log(err);
+        }
+        else{
+            const pokemonObj = obj.pokemon;
+            for (let i = 0; i < pokemonObj.length; i++){
+                if (pokemonObj[i].name.toLowerCase() === takingOffSlash(request.path.toLowerCase())){
+                    response.send(pokemonObj[i].weight);
+                }
+            }
+        }
+
+
+    })
+ }
+
+app.get('*', handleRequest);
+
+
+//(request, response) => {
+//   // send response with some data (a requestPath)
+//   // var requestPath = request.path;
+//   // var nameSearch = requestPath.replace('/','');
+
+//   jsonfile.readFile(file, (err,obj)=>{
+
+//       const pokemonObj = obj.pokemon;
+//       let resultName = [];
+//       let resultWeight = [];
+
+//     for (let i = 0; i < pokemonObj.length; i++){
+//         let pokemonName = pokemonObj[i];
+//         if (pokemonName.name === request.params.name){
+//             response.send(pokemonName.weight);
+//         }
+//        // resultName.push('<li>' + pokemonName + ': ' + pokemonWeight + '</li>');
+//     }
+//   }
+//   )
+// });
 
 
   //     var pokemonWeightFunc = () => {
