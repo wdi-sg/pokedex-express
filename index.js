@@ -227,7 +227,7 @@ var handleRequestSearch = (request, response) => {
         };
 
         let html = "";
-        html += `<html><body style="margin:5vw;"><h1>Pokedex Query</h1><h3 style="color:red;">Pokemon with ${request.params.searchattribute} ${request.query.compare} than ${request.query.amount}:</h3>`;
+        html += `<html><body style="margin:5vw;"><h1>Pokedex Query</h1><h3 style="color:red;">Pokemon with ${request.params.searchattribute.replace('_', ' ')} ${request.query.compare} than ${request.query.amount}:</h3>`;
 
         for (i in pokes) {
 
