@@ -9,6 +9,7 @@ const getHtmlPage = content => {
   html += '<html>';
   html += '<head>';
   html += '<title>Pokemon</title>';
+  html += '<style>* {padding: 0; margin: 0; box-sizing: border-box;} body {padding: 2rem; text-align: center; font-family: sans-serif;} h1 {padding-bottom: 1rem;} h2 {padding: 1rem;} ul {display: inline-block; color: grey;} p {color: grey;} a {text-decoration: none; color: grey; display: inline-block; margin-bottom: 1rem;}</style>';
   html += '</head>';
   html += '<body>';
   html += content;
