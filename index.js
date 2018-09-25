@@ -99,9 +99,9 @@ const generateHtml = (title, pokedex) => {
         body += `<img src="${pokedex[key]}">`;
       } else if (key === 'next_evolution' || key === 'prev_evolution') { // CHECK FOR NEXT/PREV EVO OBJECT
         pokedex[key].forEach((item) => {
-          body += `<li><strong>${capitalize(index.toString())}</strong>: ${item.name}</li>`;
+          body += `<li><strong>${capitalize(index.toString().replace('_', ' '))}</strong>: ${item.name}</li>`;
         });
-      } else body += `<li><strong>${capitalize(index.toString())}</strong>: ${pokedex[key]}</li>`;
+      } else body += `<li><strong>${capitalize(index.toString().replace('_', ' '))}</strong>: ${pokedex[key]}</li>`;
     });
     body += '</ul>';
   } else body += pokedex;
@@ -137,7 +137,9 @@ jsonfile.readFile('pokedex.json', (err, obj) => {
       const param = capitalize(req.params.name);
       const result = checkName(param, pokedex);
       if (result[0] === true) res.send(generateHtml(param, result[1]));
-      res.status(404).send(generateHtml('404', `Could not find information about ${req.params.name}- Is that a new pokemon? Gotta catch em' all!`));
+      else if (!res.headersSent) {
+        res.status(404).send(generateHtml('404', `Could not find information about ${req.params.name}- Is that a new pokemon? Gotta catch em' all!`));
+      }
     });
 
     app.get('/search/:parameter', (req, res) => {
