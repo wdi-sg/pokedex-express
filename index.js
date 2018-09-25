@@ -1,55 +1,46 @@
 const express = require('express');
-
 const jsonfile = require('jsonfile');
-
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
-
-// Init express app
 const app = express();
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
-
+//retrieve data from pokedex.json file
 const file = "pokedex.json"
 
-//data form the jsonfile provided
-var pokemonObject;
-console.log(pokemonObject)
 
-//Refers to the array in the pokemon key
-//var listOfPokemon = pokemonObject["pokemon"]
-
-function searchName(someObject, referenceName){
-    for (let i = 0; i < someObject.pokemon.length; i++){
-        if (userInputPath === someObject.pokemon.name.toLowerCase()){
-                return someObject.pokemon[i].name
-        }
-    }
-}
-
-
-console.log("testing document")
-//console.log(pokemonObject)
 
 var respondToRequest = function (request, response){
   // send response with some data (a string)
-    var userInputPath = request.path.split("/")
+    var userInputPath = request.path.split("/")[1]
     console.log(userInputPath)
+
+    //read pokedex.json file
     jsonfile.readFile (file, function(err, obj){
 
-        var output = searchName(obj, userInputPath)
+        var arrayListOfPokemon = obj.pokemon
 
-        response.send("testing");
+        var output;
 
+
+        //loop through each member of the pokemon array
+        arrayListOfPokemon.forEach(function(element){
+
+            //comparing what the user enter in url and the pokedex.json to get correct pokemon
+
+            if( userInputPath === element.name.toLowerCase() ){
+                output = element.weight
+                response.send(output)
+            };
+
+        });
+
+        if(output === undefined){
+        response.send("Could not information about " + userInputPath)
+        };
     })
-}
+};
+
+
+
+
 app.get('*', respondToRequest)
 
 
