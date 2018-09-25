@@ -22,50 +22,6 @@ var stripSlashes = (string) => {
 };
 
 
-var searchByName = (object, pokeName) => {
-
-    const pokes = object.pokemon
-
-    for (i in pokes) {
-
-        if (pokes[i].name.toLowerCase() === pokeName.toLowerCase()) {
-
-            let html = "";
-
-            html += `<html><body><h1>${pokes[i].name}</h1>`;
-            html += `<img src = '${pokes[i].img}'>`;
-            html += `<h2>Pokedex ID number: ${pokes[i].num}</h2>`;
-            html += `<h2>Height: ${pokes[i].height}</h2>`;
-            html += `<h2>Weight: ${pokes[i].weight}</h2>`;
-
-            if (pokes[i].type.length > 1) {
-
-                html += '<h2>Types:</h2>'
-                pokes[i].type.forEach( function(elem) {
-                    html += `<ul>${elem}</ul>`;
-                });
-
-            } else {html += `<h2>Type: ${pokes[i].type}</h2>`;};
-
-            if (pokes[i].weaknesses.length > 1) {
-
-                html += '<h2>Weaknesses:</h2>'
-                pokes[i].weaknesses.forEach( function(elem) {
-                    html += `<ul>${elem}</ul>`;
-                });
-
-            } else {html += `<h2>Weakness: ${pokes[i].weaknesses}</h2>`;};
-
-            html += `</body></html>`;
-
-            return html;
-        };
-    };
-
-    return 'notFound';
-};
-
-
 var searchByType = (object, pokeType) => {
 
     const pokes = object.pokemon
@@ -128,22 +84,53 @@ var handleRequestName = (request, response) => {
     console.log("Request path: " + request.path);
     console.log(`Requesting name = ${request.params.name}`)
 
-    let result;
-
     jsonfile.readFile(file, (err, obj) => {
 
         if (err) {console.log(err)};
 
-        result = searchByName(obj, request.params.name);
+        const pokes = obj.pokemon
+        const pokeName = request.params.name
 
-        if (result === 'notFound') {
+        for (i in pokes) {
 
-            response.status (404);
-            response.send (`<html><body><h1>Could not find information about ${request.params.name.toUpperCase()} - Is that a new pokemon? Gotta catch em' all!</h1></body></html>`);
-        }
+            if (pokes[i].name.toLowerCase() === pokeName.toLowerCase()) {
 
-        else {response.send(result);};
+                let html = "";
 
+                html += `<html><body style="margin:5vw;"><h1>${pokes[i].name}</h1>`;
+                html += `<img src = '${pokes[i].img}'>`;
+                html += `<h2>Pokedex ID number: <span style="color:red;">${pokes[i].num}</span></h2>`;
+                html += `<h2>Height: ${pokes[i].height}</h2>`;
+                html += `<h2>Weight: ${pokes[i].weight}</h2>`;
+
+                if (pokes[i].type.length > 1) {
+
+                    html += '<h2>Types:</h2>'
+                    pokes[i].type.forEach( function(elem) {
+                        html += `<ul style="color:blue;">${elem}</ul>`;
+                    });
+
+                } else {html += `<h2>Type: ${pokes[i].type}</h2>`;};
+
+                if (pokes[i].weaknesses.length > 1) {
+
+                    html += '<h2>Weaknesses:</h2>'
+                    pokes[i].weaknesses.forEach( function(elem) {
+                        html += `<ul style="color:blue;">${elem}</ul>`;
+                    });
+
+                } else {html += `<h2>Weakness: ${pokes[i].weaknesses}</h2>`;};
+
+                html += `</body></html>`;
+
+                return response.send(html);
+
+            };
+        };
+
+        response.status (302);
+        response.redirect ('/');
+        // response.send (`<html><body><h1 style="margin:5vw;">Could not find information about ${request.params.name.toUpperCase()} - Is that a new pokemon? Gotta catch em' all!</h1></body></html>`);
     });
 };
 
@@ -259,7 +246,7 @@ var handleRequestRoot = (request, response) => {
 
         let html = "";
 
-        html += `<html><body><h1>Welcome to the online Pokedex!</h1><h3>Pokemon:</h3>`;
+        html += `<html><body style="margin:5vw;"><h1>Welcome to the online Pokedex!</h1><h3 style="color:red;">Pokemon:</h3>`;
 
         for (i = 1; i <= obj.pokemon.length; i++) {
 
