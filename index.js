@@ -5,7 +5,7 @@ const pokedex = 'pokedex.json';
 
 const app = express();
 
-app.get('*', (request, response) => {
+app.get('/*', (request, response) => {
 
   let searchTerm = request.path.toLowerCase();
 
@@ -96,3 +96,10 @@ app.get('*', (request, response) => {
  * ===================================
  */
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+
+// app.get('/pokemon/:name');
+// let pokemonName = request.params.name;
+// app.get('/type/:type');
+// app.get('nextevo/:nextevo');
+
+// http://localhost:3000/search/?hello=apple&hello=donkey
