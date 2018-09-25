@@ -30,7 +30,18 @@ var searchByName = (object, pokeName) => {
 
         if (pokes[i].name.toLowerCase() === pokeName.toLowerCase()) {
 
-            return `This is ${pokes[i].name}, it is number ${pokes[i].num} in the Pokedex. Its height and weight are ${pokes[i].height} and ${pokes[i].weight} respectively. It also has ${pokes[i].type.length} elemental type(s) and ${pokes[i].weaknesses.length} elemental weakness(es)!`;
+            let html = "";
+
+            html += `<html><body><h1>${pokes[i].name}</h1>`;
+            html += `<img src = '${pokes[i].img}'>`;
+            html += `<h2>Pokedex ID number: ${pokes[i].num}</h2>`;
+            html += `<h2>Height: ${pokes[i].height}</h2>`;
+            html += `<h2>Weight: ${pokes[i].weight}</h2>`;
+            html += `<h2>Type(s): ${pokes[i].type}</h2>`;
+            html += `<h2>Weakness(es): ${pokes[i].weaknesses}</h2>`;
+            html += `</body></html>`;
+
+            return html;
         };
     };
 
@@ -94,10 +105,11 @@ var searchPrevEvo = (object, pokeName) => {
 };
 
 
-var handleRequest = (request, response) => {
+var handleRequestName = (request, response) => {
 
     console.log("Handling response now...");
     console.log("Request path: " + request.path);
+    console.log(`Requesting name = ${request.params.name}`)
 
     let result;
 
@@ -105,21 +117,16 @@ var handleRequest = (request, response) => {
 
         if (err) {console.log(err)};
 
-        if (request.path === '/') {
-            response.send("Welcome to the online Pokdex!");
-        } else {
+        result = searchByName(obj, request.params.name);
 
-            result = searchByName(obj, stripSlashes(request.path));
+        if (result === 'notFound') {
 
-            if (result === 'notFound') {
+            response.status (404);
+            response.send (`Could not find information about ${request.params.name.toUpperCase()} - Is that a new pokemon? Gotta catch em' all!`);
+        }
 
-                response.status (404);
-                response.send (`Could not find information about ${stripSlashes(request.path).toUpperCase()} - Is that a new pokemon? Gotta catch em' all!`);
-            }
+        else {response.send(result);};
 
-            else {response.send(result);};
-
-        };
     });
 };
 
@@ -127,7 +134,8 @@ var handleRequest = (request, response) => {
 var handleRequestType = (request, response) => {
 
     console.log("Handling response now...");
-    console.log("Request path: " + request.path);
+    console.log("Request path: " + request.path)
+    console.log(`Requesting type = ${request.params.type}`);
 
     let result;
 
@@ -139,12 +147,12 @@ var handleRequestType = (request, response) => {
             response.send("Extend the URL to search by specific types e.g. */type/fire to search for all Fire Pokemon");
         } else {
 
-            result = searchByType(obj, stripSlashes(request.path).substr(5));
+            result = searchByType(obj, request.params.type);
 
             if (result === 'notFound') {
 
                 response.status (404);
-                response.send (`Could not find any ${capFirstLetter(stripSlashes(request.path).substr(5).toLowerCase())} Pokemon - Is that a new type? Gotta catch em' all!`);
+                response.send (`Could not find any ${capFirstLetter(request.params.type.toLowerCase())} Pokemon - Is that a new type? Gotta catch em' all!`);
             }
 
             else {response.send(result);};
@@ -158,6 +166,7 @@ var handleRequestWeak = (request, response) => {
 
     console.log("Handling response now...");
     console.log("Request path: " + request.path);
+    console.log(`Requesting weaknesses for ${request.params.weaknesses}`)
 
     let result;
 
@@ -169,12 +178,12 @@ var handleRequestWeak = (request, response) => {
             response.send("Extend the URL to search by specific weakness types e.g. */weaknesses/fire to search for all Pokemon weak to fire");
         } else {
 
-            result = searchByWeakness(obj, stripSlashes(request.path).substr(11));
+            result = searchByWeakness(obj, request.params.weaknesses);
 
             if (result === 'notFound') {
 
                 response.status (404);
-                response.send (`Could not find any Pokemon weak to ${capFirstLetter(stripSlashes(request.path).substr(11).toLowerCase())} - Is that a new type? Gotta catch em' all!`);
+                response.send (`Could not find any Pokemon weak to ${capFirstLetter(request.params.weaknesses.toLowerCase())} - Is that a new type? Gotta catch em' all!`);
             }
 
             else {response.send(result);};
@@ -188,6 +197,7 @@ var handleRequestEvo = (request, response) => {
 
     console.log("Handling response now...");
     console.log("Request path: " + request.path);
+    console.log(`Requesting previous evolutions for ${request.params.prevevos}`);
 
     let result;
 
@@ -199,17 +209,17 @@ var handleRequestEvo = (request, response) => {
             response.send("Extend the URL to search previous evolutions e.g. */prevevolution/charizard to search for all of Charizard's previous evolutions");
         } else {
 
-            result = searchPrevEvo(obj, stripSlashes(request.path).substr(14));
+            result = searchPrevEvo(obj, request.params.prevevos);
 
             if (result === 'noPrevEvo') {
 
                 response.status (404);
-                response.send (`${capFirstLetter(stripSlashes(request.path).substr(14).toLowerCase())} has no previous evolutions!`);
+                response.send (`${capFirstLetter(request.params.prevevos.toLowerCase())} has no previous evolutions!`);
 
             } else if (result === 'noSuchPoke') {
 
                 response.status (404);
-                response.send (`Could not find information about ${capFirstLetter(stripSlashes(request.path).substr(14).toLowerCase())} - Is that a new Pokemon? Gotta catch em' all!`);
+                response.send (`Could not find information about ${capFirstLetter(request.params.prevevos.toLowerCase())} - Is that a new Pokemon? Gotta catch em' all!`);
 
             }
 
@@ -220,38 +230,36 @@ var handleRequestEvo = (request, response) => {
 };
 
 
-app.get('/type/*', handleRequestType );
-app.get('/weaknesses/*', handleRequestWeak );
-app.get('/prevevolution/*', handleRequestEvo );
-app.get('*', handleRequest );
+app.get('/type/:type', handleRequestType );
+app.get('/weaknesses/:weaknesses', handleRequestWeak );
+app.get('/prevevolution/:prevevos', handleRequestEvo );
+app.get('/:name', handleRequestName );
+app.get('/', (request, response) => {response.send("Welcome to the online Pokdex!");} );
 
 app.listen(PORT_NUMBER, () => console.log('~~~ Tuning in to the waves of port 3001 ~~~'));
 
 
 
-// ### Further
+// Pokedex part 2
+// For each route type, create one app.get handler.
+// In the response to the request, send back only HTML.
+// format the HTML to output a nicely formatted page with each pokemon attribute.
 
-// Handle the case where an invalid pokemon name is provided (eg. `/some-name`).
-// Return a message that says "Could not find information about `<pokemon_name>` - Is that a new pokemon? Gotta catch em' all!"
-// (replace `<pokemon_name>` with the requested for pokemon name) Set the status code to 404.
+// Further
+// Use a ul element for each attribute in the pokemon that has more than one thing: i.e., type.
+// create a page at the root route / that displays links to each pokemon's page.
+// (hint: the html is created in a loop)
 
-// ### Further
+// Further
+// If the user requests a pokemon or something that doesn't exist, redirect them back to the root URL.
+// add CSS (right now, this has to be in a style tag in the HTML you send back)
 
-// Detect if the user didn't put anthing in the path. Return a message saying "Welcome to the online Pokdex!"
+// Further
+// Create a route for each of these: spawn_chance, avg_spawns that will show each pokemon
+// that is more or less than the given number. Example: /search/spawn_chance?amount=1&compare=less will send back a formatted HTML page with a list of every pokemon with a spawn change less than 1. Example 2: /search/avg_spawn?amount=0.8&compare=more
 
-// Instead of showing just the weight, show all the details of the requested pokemon for `/some-name` route, in a full sentence.
-// i.e., "This is Bulbasaur, he is 45kg in weight! He also..." etc., etc.
-
-// Expose a new route for `/type/some-type` that returns a message listing the names of all pokemon
-// that have the specified type (eg. `/type/grass` should show a page with names of all pokemon of grass type).
-
-// Expose a new route for `/weaknesses/some-weakness` that returns a message listing the names of all pokemon
-// that have the specified weakness (eg. `/weakness/rock`).
-
-// Expose a new route for `/nextevolution/some-name` that returns a message listing the names of all pokemon
-// that the pokemon evolves *from* (eg. `/nextevolution/charizard`).
-
-
+// Further
+// Create the same routes for: height, weight and spawn_time.
 
 
 
