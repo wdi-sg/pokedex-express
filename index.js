@@ -23,51 +23,51 @@ const app = express();
     console.log("request path: "+ request.path );
 
     let splitReq = request.path.split("/")[1];
-    //console.log(splitReq);
+    console.log(splitReq);
+    let parseSplitReq = parseInt(splitReq);
 
     jsonfile.readFile(file, (err, obj)=>{
         if (err){
             console.log(err);
         }
+        else if (splitReq == ""){
+            response.send('<h1>Welcome to the online pokedex!</h1>');
+        }
         else{
-            const pokemonObj = obj.pokemon;
-            // for (let i = 0; i < pokemonObj.length; i++){
-            //     if (pokemonObj[i].name.toLowerCase() === splitReq.toLowerCase()){
-            //         response.send("Weight of pokemon is: " + pokemonObj[i].weight);
-            //     }
-            // }
 
+            const pokemonObj = obj.pokemon;
             //use id to compare pokemon
             for (let i = 0 ; i < pokemonObj.length; i++) {
-                if (pokemonObj[i].id === parseInt(splitReq)){
+                if (pokemonObj[i].id === parseSplitReq){
                     var html = '';
                     html += '<html>';
                     html += '<body><h1>' + pokemonObj[i].name + '</h1>';
                     html += '<p> The weight of this pokemon is: ' + pokemonObj[i].weight + '</p>';
                     html += '<p> The height of this pokemon is: ' + pokemonObj[i].height + '</p>';
-                    html += '<img src="'+ pokemonObj[i].img +'"/>';
+                    html += "<br>His favorite candy is the " + pokemonObj[i].candy + ", so get that for your pokemon so that they can love you";
+                    html += '<br><img src="'+ pokemonObj[i].img +'"/>';
                     html += "</body>";
                     html += "</html>";
                     // html += "<html>";
                     // html += "<html>";
                     response.send(html);
                 }
-                else {
-                    response.status(404);
-                    var html = '';
-                    html += '<html>';
-                    html += '<body><p>Could not find information about ' + splitReq + ". Is that a new pokemon? Gotta catch em' all!</p>";
-                    response.send(html);
-
+                // else if(  ) {
+                //     var html = '';
+                //     html += '<html>';
+                //     html += '<body><p>Could not find information about ' + parseSplitReq + ". Is that a new pokemon? Gotta catch em' all!" + '</p>';
+                //     html += "</body>";
+                //     html += "</html>";
+                //     response.send(html);
+                // }
                 }
             }
-        }
-
 
     })
  }
 
 app.get('*', handleRequest);
+
 
 
 
