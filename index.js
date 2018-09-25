@@ -113,10 +113,8 @@ app.get('/:name', (request, response) => {
     }
 
     let i;
-
     for (i = 0; i < obj.pokemon.length; i++) {
       let pokemon = obj.pokemon[i];
-
       if (pokemon.name.toLowerCase() === nameRequested) {
         let content = getAllInfo(pokemon);
         response.send(getHtmlPage(content));
@@ -125,9 +123,8 @@ app.get('/:name', (request, response) => {
     }
 
     if (i === obj.pokemon.length) {
-      let content = `<p>Could not find information about ${nameRequested} - Is that a new pokemon? Gotta catch em' all!</p>`;
-      response.status(404);
-      response.send(getHtmlPage(content));
+      response.status(303);
+      response.redirect('/');
     }
   });
 });
@@ -143,16 +140,18 @@ app.get('/type/:type', (request, response) => {
     }
 
     let names = [];
-
     for (let i = 0; i < obj.pokemon.length; i++) {
       let pokemon = obj.pokemon[i];
-
       if (pokemon.type.includes(typeRequested)) {
         names.push(pokemon.name);
       }
     }
 
-    response.send(getHtmlPage(getHtmlList(names)));
+    if (names.length > 0) {
+      response.send(getHtmlPage(getHtmlList(names)));
+    } else {
+      response.status(303).redirect('/');
+    }
   });
 });
 
@@ -167,16 +166,18 @@ app.get('/weaknesses/:weakness', (request, response) => {
     }
 
     let names = [];
-
     for (let i = 0; i < obj.pokemon.length; i++) {
       let pokemon = obj.pokemon[i];
-
       if (pokemon.weaknesses.includes(weakness)) {
         names.push(pokemon.name);
       }
     }
 
-    response.send(getHtmlPage(getHtmlList(names)));
+    if (names.length > 0) {
+      response.send(getHtmlPage(getHtmlList(names)));
+    } else {
+      response.status(303).redirect('/');
+    }
   });
 });
 
@@ -191,14 +192,17 @@ app.get('/nextevolution/:name', (request, response) => {
 
     for (let i = 0; i < obj.pokemon.length; i++) {
       let pokemon = obj.pokemon[i];
-
       if (name === pokemon.name.toLowerCase() && pokemon.prev_evolution) {
         let names = [];
         pokemon.prev_evolution.forEach(pokemonObj => {
           names.push(pokemonObj.name);
         });
 
-        response.send(getHtmlPage(getHtmlList(names)));
+        if (names.length > 0) {
+          response.send(getHtmlPage(getHtmlList(names)));
+        } else {
+          response.status(303).redirect('/');
+        }
       }
     }
   });
