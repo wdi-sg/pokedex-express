@@ -8,7 +8,22 @@ const app = express();
 
 const capitalize = (word) => {
   let capitalized = word.charAt(0).toUpperCase();
-  return capitalized += word.substring(1);
+  capitalized += word.substring(1);
+  return capitalized;
+};
+
+const checkName = (param, p) => {
+  let status = false;
+  let payload = '';
+
+  Object.keys(p).forEach((key) => {
+    if (p[key].name === param) {
+      const types = p[key].type.toString().replace(',', ' & ');
+      payload = `This is ${p[key].name}, it weighs ${p[key].weight}. It is ${p[key].height} tall. It is of ${types} type.`;
+      status = true;
+    }
+  });
+  return [status, payload];
 };
 
 const checkType = (param, p) => {
@@ -56,39 +71,26 @@ jsonfile.readFile('pokedex.json', (err, obj) => {
   else {
     const p = obj.pokemon;
 
-    app.get('*', (req, res) => {
-      // FURTHER 2.3
-      if (req.path.slice(0, 6) === '/type/') {
-        return res.send(checkType(capitalize(req.path.substring(6)), p));
-      }
-      // FURTHER 2.4
-      if (req.path.slice(0, 12) === '/weaknesses/') {
-        return res.send(checkWeakness(capitalize(req.path.substring(12)), p));
-      }
-      // FURTHER 2.5
-      if (req.path.slice(0, 15) === '/nextevolution/') {
-        return res.send(checkEvo(capitalize(req.path.substring(15)), p));
-      }
+    app.get('/', (req, res) => {
+      res.send('Welcome to the online pokedex.');
+    });
 
-      const param = capitalize(req.path.substring(1)); // Remove '/' from req
-      let found = false;
+    app.get('/:name', (req, res) => {
+      const result = checkName(capitalize(req.params.name), p);
+      if (result[0] === true) res.send(result[1]);
+      res.status(404).send(`Could not find information about ${req.params.name}- Is that a new pokemon? Gotta catch em' all!`);
+    });
 
-      Object.keys(p).forEach((key) => {
-        // DELIVERABLE
-        if (p[key].name === param) {
-          // FURTHER 2.2
-          const types = p[key].type.toString().replace(',', ' & ');
-          found = true;
-          return res.send(`This is ${p[key].name}, it weighs ${p[key].weight}. It is ${p[key].height} tall. It is of ${types} type.`);
-        }
-        return console.log('No match');
-      });
-      // FURTHER 1
-      if (found === false && param.length > 0) {
-        return res.status(404).send(`Could not find information about ${param}- Is that a new pokemon? Gotta catch em' all!`);
-      }
-      // FURTHER 2.1
-      return res.send('Welcome to the online pokedex.');
+    app.get('/type/:type', (req, res) => {
+      res.send(checkType(capitalize(req.params.type), p));
+    });
+
+    app.get('/weaknesses/:weakness', (req, res) => {
+      res.send(checkWeakness(capitalize(req.params.weakness), p));
+    });
+
+    app.get('/nextevolution/:name', (req, res) => {
+      res.send(checkEvo(capitalize(req.params.name), p));
     });
   }
 });
