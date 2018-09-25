@@ -29,7 +29,7 @@ app.get('/search/:param', (request, response) => {
 
         if ( direction == "more" ) {
             for ( var i = 0; i < obj.pokemon.length; i++ ) {
-                if ( obj.pokemon[i][param] > amount ) {
+                if ( parseFloat(obj.pokemon[i][param].replace(":",".").match(/[\d\.]+/)) > amount ) {
                     let pokes = '<li>' + obj.pokemon[i].name + '</li>';
                     list = list + pokes;
                 };
@@ -37,7 +37,7 @@ app.get('/search/:param', (request, response) => {
         };
         if ( direction == "less" ) {
             for ( var i = 0; i < obj.pokemon.length; i++ ) {
-                if ( obj.pokemon[i][param] < amount ) {
+                if ( parseFloat(obj.pokemon[i][param].replace(":",".").match(/[\d\.]+/)) < amount ) {
                     let pokes = '<li>' + obj.pokemon[i].name + '</li>';
                     list = list + pokes;
                 };
@@ -78,7 +78,7 @@ app.get('/type/:something', (request, response) => {
         for ( let i = 0; i < pokemon.length; i++ ) {
             for ( let j = 0; j < 2; j++ ) {
                 if ( input == pokemon[i].type[j] ) {
-                    let pokes = '<li>' + pokemon[i].name + ' ' + pokemon[i].param + '</li>';
+                    let pokes = '<li>' + pokemon[i].name + '</li>';
                     list = list + pokes;
                 };
             };
