@@ -56,19 +56,9 @@ const getAllInfo = pokemon => {
   content += '<h2>Spawn Time</h2>';
   content += '<p>' + pokemon.spawn_time + '</p>';
   content += '<h2>Multippliers</h2>';
-  content += '<ul>';
-  pokemon.multipliers.forEach(multiplier => {
-    content += '<li>' + multiplier + '</li>';
-  });
-
-  content += '</ul>';
+  content += getHtmlList(pokemon.multipliers);
   content += '<h2>Weaknesses</h2>';
-  content += '<ul>';
-  pokemon.weaknesses.forEach(weakness => {
-    content += '<li>' + weakness + '</li>';
-  });
-
-  content += '</ul>';
+  content += getHtmlList(pokemon.weaknesses);
   content += '<h2>Previous Evolution</h2>';
   if (pokemon.prev_evolution) {
     content += '<ul>';
@@ -95,8 +85,22 @@ const getAllInfo = pokemon => {
 };
 
 app.get('/', (request, response) => {
-  let content = '<p>Welcome to the online Pokdex!</p>';
-  response.send(getHtmlPage(content));
+  let content = '<h1>Welcome to the online Pokdex!</h1>';
+  jsonfile.readFile(file, (err, obj) => {
+    if (err) {
+      response.send(getHtmlPage('<p>' + err + '</p>'));
+      return;
+    }
+
+    content += '<ul>';
+    obj.pokemon.forEach(pokemon => {
+      content += '<li><a href="/' + pokemon.name + '">' +
+        pokemon.name + '</a></li>';
+    });
+
+    content += '</ul>';
+    response.send(getHtmlPage(content));
+  });
 });
 
 app.get('/:name', (request, response) => {
@@ -104,7 +108,7 @@ app.get('/:name', (request, response) => {
 
   jsonfile.readFile(file, (err, obj) => {
     if (err) {
-      console.log(err);
+      response.send(getHtmlPage('<p>' + err + '</p>'));
       return;
     }
 
@@ -134,7 +138,7 @@ app.get('/type/:type', (request, response) => {
 
   jsonfile.readFile(file, (err, obj) => {
     if (err) {
-      console.log(err);
+      response.send(getHtmlPage('<p>' + err + '</p>'));
       return;
     }
 
@@ -158,7 +162,7 @@ app.get('/weaknesses/:weakness', (request, response) => {
 
   jsonfile.readFile(file, (err, obj) => {
     if (err) {
-      console.log(err);
+      response.send(getHtmlPage('<p>' + err + '</p>'));
       return;
     }
 
@@ -181,7 +185,7 @@ app.get('/nextevolution/:name', (request, response) => {
 
   jsonfile.readFile(file, (err, obj) => {
     if (err) {
-      console.log(err);
+      response.send(getHtmlPage('<p>' + err + '</p>'));
       return;
     }
 
