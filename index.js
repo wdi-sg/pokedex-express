@@ -59,10 +59,9 @@ var searchByName = (obj, name) => {
         if (name.toLowerCase() === pokemons[i].name.toLowerCase()) {
             //var string= pokemons[i].name + pokemons[i].weight;
             return `This is ${pokemons[i].name}, he is ${pokemons[i].weight} in weight and ${pokemons[i].height} in height! He also a ${pokemons[i].type[0]} type pokemon.`
-        } else {
-            return 'notFound'
         }
     }
+    return 'notFound'
 }
 
 
