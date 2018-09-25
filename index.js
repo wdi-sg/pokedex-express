@@ -162,15 +162,15 @@ app.get('/:name', (request, response) => {
         //No such pokemon:
         response.status(404);
 
-        var html = '';
-        html += '<html>'
-        html += '<body>'
-        html += "<h1>Woops!</h1>";
-        html += `<p class="error-msg">Could not find information about ${request.path.substr(1)} - Is that a new pokemon? Gotta catch em' all! </p>`;
-        html += "</body>";
-        html += "</html>";
-        response.send(html);
-        return response.redirect('/');
+        // var html = '';
+        // html += '<html>'
+        // html += '<body>'
+        // html += "<h1>Woops!</h1>";
+        // html += `<p class="error-msg">Could not find information about ${request.path.substr(1)} - Is that a new pokemon? Gotta catch em' all! </p>`;
+        // html += "</body>";
+        // html += "</html>";
+        // response.send(html);
+        // return response.redirect('/');
 
 
       // send response with some data (a string)
@@ -181,6 +181,10 @@ app.get('/:name', (request, response) => {
 
 });
 
+
+
+// http.get('*', function(req, res) {
+//     res.redirect('https://' + req.headers.host + req.url);
 
 
 app.get('/type/:typename', (request, response) => {
