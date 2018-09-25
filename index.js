@@ -13,68 +13,37 @@ var capFirstLetter = (string) => {
 };
 
 
+// var stripSlashes = (string) => {
 
-var stripSlashes = (string) => {
-
-    if (string.charAt(0) === "/") string = string.substr(1);
-    if (string.charAt(string.length - 1) === "/") string = string.substr(0, string.length - 1);
-    return string;
-};
-
-
-var searchByType = (object, pokeType) => {
-
-    const pokes = object.pokemon
-    const resultTypes = [];
-
-    for (i in pokes) {
-
-        if (pokes[i].type.includes(capFirstLetter(pokeType.toLowerCase()))) {
-
-            resultTypes.push(pokes[i].name);
-        };
-    };
-
-    if (resultTypes.length === 0) {return 'notFound';}
-    else return resultTypes;
-};
+//     if (string.charAt(0) === "/") string = string.substr(1);
+//     if (string.charAt(string.length - 1) === "/") string = string.substr(0, string.length - 1);
+//     return string;
+// };
 
 
-var searchByWeakness = (object, pokeWeakness) => {
+var handleRequestRoot = (request, response) => {
 
-    const pokes = object.pokemon
-    const resultWeak = [];
+    console.log("Handling response now...");
+    console.log("Request path: " + request.path);
+    console.log(`Requesting Pokedex root`)
 
-    for (i in pokes) {
+    jsonfile.readFile(file, (err, obj) => {
 
-        if (pokes[i].weaknesses.includes(capFirstLetter(pokeWeakness.toLowerCase()))) {
+        if (err) {console.log(err)};
 
-            resultWeak.push(pokes[i].name);
-        };
-    };
+        let html = "";
 
-    if (resultWeak.length === 0) {return 'notFound';}
-    else return resultWeak;
-};
+        html += `<html><body style="margin:5vw;"><h1>Welcome to the online Pokedex!</h1><h3 style="color:red;">Pokemon:</h3>`;
 
+        for (i = 1; i <= obj.pokemon.length; i++) {
 
-var searchPrevEvo = (object, pokeName) => {
+            html += `<a href = "/${obj.pokemon[i-1].name}">${i}. ${obj.pokemon[i-1].name}</a><br>`;
+        }
 
-    const pokes = object.pokemon
+        html += `</body></html>`;
 
-    for (i in pokes) {
-
-        if (pokes[i].name.toLowerCase() === pokeName.toLowerCase()) {
-
-            if (pokes[i].prev_evolution) {
-                return pokes[i].prev_evolution;
-
-            } else return 'noPrevEvo';
-
-        };
-    };
-
-    return 'noSuchPoke';
+        response.send(html);
+    });
 };
 
 
@@ -139,29 +108,32 @@ var handleRequestType = (request, response) => {
 
     console.log("Handling response now...");
     console.log("Request path: " + request.path)
-    console.log(`Requesting type = ${request.params.type}`);
-
-    let result;
+    console.log(`Requesting all Pokemon with type = ${request.params.type}`);
 
     jsonfile.readFile(file, (err, obj) => {
 
         if (err) {console.log(err)};
 
-        if (request.path === '/type/') {
-            response.send("Extend the URL to search by specific types e.g. */type/fire to search for all Fire Pokemon");
-        } else {
+        const pokes = obj.pokemon
+        const pokeType = request.params.type;
 
-            result = searchByType(obj, request.params.type);
+        const resultTypes = [];
 
-            if (result === 'notFound') {
+        for (i in pokes) {
 
-                response.status (404);
-                response.send (`Could not find any ${capFirstLetter(request.params.type.toLowerCase())} Pokemon - Is that a new type? Gotta catch em' all!`);
-            }
+            if (pokes[i].type.includes(capFirstLetter(pokeType.toLowerCase()))) {
 
-            else {response.send(result);};
-
+                resultTypes.push(pokes[i].name);
+            };
         };
+
+        if (resultTypes.length === 0) {
+
+            response.status (302);
+            response.redirect ('/');
+        }
+
+        else {response.send(resultTypes);};
     });
 };
 
@@ -170,7 +142,7 @@ var handleRequestWeak = (request, response) => {
 
     console.log("Handling response now...");
     console.log("Request path: " + request.path);
-    console.log(`Requesting weaknesses for ${request.params.weaknesses}`)
+    console.log(`Requesting all Pokemon that are weak to ${request.params.weaknesses}`)
 
     let result;
 
@@ -178,21 +150,26 @@ var handleRequestWeak = (request, response) => {
 
         if (err) {console.log(err)};
 
-        if (request.path === '/weaknesses/') {
-            response.send("Extend the URL to search by specific weakness types e.g. */weaknesses/fire to search for all Pokemon weak to fire");
-        } else {
+        const pokes = obj.pokemon
+        const pokeWeakness = request.params.weaknesses;
 
-            result = searchByWeakness(obj, request.params.weaknesses);
+        const resultWeak = [];
 
-            if (result === 'notFound') {
+        for (i in pokes) {
 
-                response.status (404);
-                response.send (`Could not find any Pokemon weak to ${capFirstLetter(request.params.weaknesses.toLowerCase())} - Is that a new type? Gotta catch em' all!`);
-            }
+            if (pokes[i].weaknesses.includes(capFirstLetter(pokeWeakness.toLowerCase()))) {
 
-            else {response.send(result);};
-
+                resultWeak.push(pokes[i].name);
+            };
         };
+
+        if (resultWeak.length === 0) {
+
+            response.status (302);
+            response.redirect ('/');
+        }
+
+        else {response.send(resultWeak);};
     });
 };
 
@@ -209,53 +186,23 @@ var handleRequestEvo = (request, response) => {
 
         if (err) {console.log(err)};
 
-        if (request.path === '/prevevolution/') {
-            response.send("Extend the URL to search previous evolutions e.g. */prevevolution/charizard to search for all of Charizard's previous evolutions");
-        } else {
+        const pokes = obj.pokemon;
+        const pokeName = request.params.prevevos;
 
-            result = searchPrevEvo(obj, request.params.prevevos);
+        for (i in pokes) {
 
-            if (result === 'noPrevEvo') {
+            if (pokes[i].name.toLowerCase() === pokeName.toLowerCase()) {
 
-                response.status (404);
-                response.send (`${capFirstLetter(request.params.prevevos.toLowerCase())} has no previous evolutions!`);
+                if (pokes[i].prev_evolution) {
 
-            } else if (result === 'noSuchPoke') {
+                    return response.send (pokes[i].prev_evolution);
 
-                response.status (404);
-                response.send (`Could not find information about ${capFirstLetter(request.params.prevevos.toLowerCase())} - Is that a new Pokemon? Gotta catch em' all!`);
-
-            }
-
-            else {response.send(result);};
-
+                } else {return response.send (`${capFirstLetter(request.params.prevevos.toLowerCase())} has no previous evolutions!`);};
+            };
         };
-    });
-};
 
-
-var handleRequestRoot = (request, response) => {
-
-    console.log("Handling response now...");
-    console.log("Request path: " + request.path);
-    console.log(`Requesting Pokedex root`)
-
-    jsonfile.readFile(file, (err, obj) => {
-
-        if (err) {console.log(err)};
-
-        let html = "";
-
-        html += `<html><body style="margin:5vw;"><h1>Welcome to the online Pokedex!</h1><h3 style="color:red;">Pokemon:</h3>`;
-
-        for (i = 1; i <= obj.pokemon.length; i++) {
-
-            html += `<a href = "/${obj.pokemon[i-1].name}">${i}. ${obj.pokemon[i-1].name}</a><br>`;
-        }
-
-        html += `</body></html>`;
-
-        response.send(html);
+        response.status (302);
+        response.redirect ('/');
     });
 };
 
