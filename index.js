@@ -72,7 +72,6 @@ const generateHtml = (title, content) => {
 
     Object.keys(content).forEach((key) => {
       // CHANGE INDEX TO START FROM 1
-      console.log(typeof key);
       let index = key;
       if (index.match(/^[0-9]+$/) !== null) {
         index = parseInt(index, 10) + 1;
@@ -80,7 +79,7 @@ const generateHtml = (title, content) => {
       // CHECK FOR IMG ELEMENT
       if (index === 'img') {
         body += `<img src="${content[key]}">`;
-      } else if (key === 'next_evolution') { // CHECK FOR NEXT EVO OBJECT
+      } else if (key === 'next_evolution' || key === 'prev_evolution') { // CHECK FOR NEXT/PREV EVO OBJECT
         content[key].forEach((item) => {
           body += `<li><strong>${capitalize(index.toString())}</strong>: ${item.name}</li>`;
         });
@@ -92,6 +91,16 @@ const generateHtml = (title, content) => {
   return body;
 };
 
+const generatePokemonList = (title, content) => {
+  let body = '<html><body style="font-family:monospace;">';
+  body += `<h1>${title}</h1><ol>`;
+  for (let i = 0; i < content.length; i++) {
+    body += `<li><a href="/${content[i].name}">${content[i].name}</li>`;
+  }
+  body += '</ol></body></html>';
+  return body;
+};
+
 // MAGIC HAPPENS BELOW
 jsonfile.readFile('pokedex.json', (err, obj) => {
   if (err) console.error(err);
@@ -99,7 +108,7 @@ jsonfile.readFile('pokedex.json', (err, obj) => {
     const p = obj.pokemon;
 
     app.get('/', (req, res) => {
-      res.send('Welcome to the online pokedex.');
+      res.send(generatePokemonList('Pokedex', p));
     });
 
     app.get('/:name', (req, res) => {
