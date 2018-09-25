@@ -20,12 +20,27 @@ const getHtmlPage = content => {
 
 const getHtmlList = arr => {
   let html = '';
-  html += '<ul>';
-  arr.forEach(item => {
-    html += '<li>' + item + '</li>';
-  });
-  html += '</ul>';
+  if (arr) {
+    html += '<ul>';
+    arr.forEach(item => {
+      html += '<li>' + item + '</li>';
+    });
+    html += '</ul>';
+  } else {
+    html += '<p>Null</p>';
+  }
   return html;
+};
+
+const getLinkOfPokemons = arrOfPokemons => {
+  content = '<ul>';
+  arrOfPokemons.forEach(pokemon => {
+    content += '<li><a href="/' + pokemon.name + '">' +
+      pokemon.name + '</a></li>';
+  });
+
+  content += '</ul>';
+  return content;
 };
 
 const getAllInfo = pokemon => {
@@ -93,13 +108,7 @@ app.get('/', (request, response) => {
       return;
     }
 
-    content += '<ul>';
-    obj.pokemon.forEach(pokemon => {
-      content += '<li><a href="/' + pokemon.name + '">' +
-        pokemon.name + '</a></li>';
-    });
-
-    content += '</ul>';
+    content += getLinkOfPokemons(obj.pokemon);
     response.send(getHtmlPage(content));
   });
 });
@@ -206,6 +215,31 @@ app.get('/nextevolution/:name', (request, response) => {
         }
       }
     }
+  });
+});
+
+// /search/spawn_chance?amount=1&compare=less
+app.get('/search/:spawn', (request, response) => {
+  jsonfile.readFile(file, (err, obj) => {
+    if (err) {
+      response.send(getHtmlPage('<p>' + err + '</p>'));
+      return;
+    }
+
+    let searchBy = request.params.spawn.toLowerCase();
+    let amount = parseFloat(request.query.amount);
+    let compare = request.query.compare.toLowerCase();
+    let pokemons = obj.pokemon.filter(pokemon => {
+      if (compare === 'less') {
+        return pokemon[searchBy] < amount;
+      } else if (compare === 'more') {
+        return pokemon[searchBy] > amount;
+      } else {
+        response.status(303).redirect('/');
+      }
+    });
+
+    response.send(getHtmlPage(getLinkOfPokemons(pokemons)));
   });
 });
 
