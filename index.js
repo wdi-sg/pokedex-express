@@ -37,8 +37,25 @@ var searchByName = (object, pokeName) => {
             html += `<h2>Pokedex ID number: ${pokes[i].num}</h2>`;
             html += `<h2>Height: ${pokes[i].height}</h2>`;
             html += `<h2>Weight: ${pokes[i].weight}</h2>`;
-            html += `<h2>Type(s): ${pokes[i].type}</h2>`;
-            html += `<h2>Weakness(es): ${pokes[i].weaknesses}</h2>`;
+
+            if (pokes[i].type.length > 1) {
+
+                html += '<h2>Types:</h2>'
+                pokes[i].type.forEach( function(elem) {
+                    html += `<ul>${elem}</ul>`;
+                });
+
+            } else {html += `<h2>Type: ${pokes[i].type}</h2>`;};
+
+            if (pokes[i].weaknesses.length > 1) {
+
+                html += '<h2>Weaknesses:</h2>'
+                pokes[i].weaknesses.forEach( function(elem) {
+                    html += `<ul>${elem}</ul>`;
+                });
+
+            } else {html += `<h2>Weakness: ${pokes[i].weaknesses}</h2>`;};
+
             html += `</body></html>`;
 
             return html;
@@ -122,7 +139,7 @@ var handleRequestName = (request, response) => {
         if (result === 'notFound') {
 
             response.status (404);
-            response.send (`Could not find information about ${request.params.name.toUpperCase()} - Is that a new pokemon? Gotta catch em' all!`);
+            response.send (`<html><body><h1>Could not find information about ${request.params.name.toUpperCase()} - Is that a new pokemon? Gotta catch em' all!</h1></body></html>`);
         }
 
         else {response.send(result);};
@@ -230,13 +247,41 @@ var handleRequestEvo = (request, response) => {
 };
 
 
+var handleRequestRoot = (request, response) => {
+
+    console.log("Handling response now...");
+    console.log("Request path: " + request.path);
+    console.log(`Requesting Pokedex root`)
+
+    jsonfile.readFile(file, (err, obj) => {
+
+        if (err) {console.log(err)};
+
+        let html = "";
+
+        html += `<html><body><h1>Welcome to the online Pokedex!</h1><h3>Pokemon:</h3>`;
+
+        for (i = 1; i <= obj.pokemon.length; i++) {
+
+            html += `<a href = "/${obj.pokemon[i-1].name}">${i}. ${obj.pokemon[i-1].name}</a><br>`;
+        }
+
+        html += `</body></html>`;
+
+        response.send(html);
+    });
+};
+
+
 app.get('/type/:type', handleRequestType );
 app.get('/weaknesses/:weaknesses', handleRequestWeak );
 app.get('/prevevolution/:prevevos', handleRequestEvo );
 app.get('/:name', handleRequestName );
-app.get('/', (request, response) => {response.send("Welcome to the online Pokdex!");} );
+app.get('/', handleRequestRoot );
+// app.get('/', (request, response) => {response.send("Welcome to the online Pokdex!");} );
 
 app.listen(PORT_NUMBER, () => console.log('~~~ Tuning in to the waves of port 3001 ~~~'));
+
 
 
 
