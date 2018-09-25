@@ -14,12 +14,11 @@ const capitalize = (word) => {
 
 const checkName = (param, p) => {
   let status = false;
-  let payload = '';
+  let payload;
 
   Object.keys(p).forEach((key) => {
     if (p[key].name === param) {
-      const types = p[key].type.toString().replace(',', ' & ');
-      payload = `This is ${p[key].name}, it weighs ${p[key].weight}. It is ${p[key].height} tall. It is of ${types} type.`;
+      payload = p[key];
       status = true;
     }
   });
@@ -65,6 +64,22 @@ const checkEvo = (param, p) => {
   return payload;
 };
 
+const generateHtml = (title, content) => {
+  let body = '<html><body style="font-family:monospace;">';
+  body += `<h1>${title}</h1>`;
+  if (typeof content === 'object') {
+    body += '<ul style="list-style-type:none; padding:0; margin:0;">';
+    Object.keys(content).forEach((element) => {
+      if (element === 'img') {
+        body += `<img src="${content[element]}">`;
+      } else body += `<li><strong>${capitalize(element)}</strong>: ${content[element]}</li>`;
+    });
+    body += '</ul>';
+  } else body += content;
+  body += '</body></html';
+  return body;
+};
+
 // MAGIC HAPPENS BELOW
 jsonfile.readFile('pokedex.json', (err, obj) => {
   if (err) console.error(err);
@@ -76,21 +91,31 @@ jsonfile.readFile('pokedex.json', (err, obj) => {
     });
 
     app.get('/:name', (req, res) => {
-      const result = checkName(capitalize(req.params.name), p);
-      if (result[0] === true) res.send(result[1]);
-      res.status(404).send(`Could not find information about ${req.params.name}- Is that a new pokemon? Gotta catch em' all!`);
+      const param = capitalize(req.params.name);
+      const result = checkName(param, p);
+      if (result[0] === true) res.send(generateHtml(param, result[1]));
+      res.status(404).send(generateHtml('404', `Could not find information about ${req.params.name}- Is that a new pokemon? Gotta catch em' all!`));
     });
 
     app.get('/type/:type', (req, res) => {
-      res.send(checkType(capitalize(req.params.type), p));
+      const param = capitalize(req.params.type);
+      const result = checkType(param, p);
+      const title = `Pokemon of type: ${param}`;
+      res.send(generateHtml(title, result));
     });
 
     app.get('/weaknesses/:weakness', (req, res) => {
-      res.send(checkWeakness(capitalize(req.params.weakness), p));
+      const param = capitalize(req.params.weakness);
+      const result = checkWeakness(param, p);
+      const title = `Pokemon weak against: ${param}`;
+      res.send(generateHtml(title, result));
     });
 
     app.get('/nextevolution/:name', (req, res) => {
-      res.send(checkEvo(capitalize(req.params.name), p));
+      const param = capitalize(req.params.name);
+      const result = checkEvo(param, p);
+      const title = `Pokemon evolving to ${param}`;
+      res.send(generateHtml(title, result));
     });
   }
 });
