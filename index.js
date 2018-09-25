@@ -19,12 +19,19 @@ var handleRequest = (request, response) => {
   //actual content of the file. In this case, an object.
   jsonfile.readFile('pokedex.json', function(err, obj){
     //console.log(contents);
-    for(let i = 0; i < obj.pokemon.length; i++){
+    let i;
+    for(i = 0; i < obj.pokemon.length; i++){
       console.log("requestedPokemon: ", requestedPokemon);
       let pokemon = obj.pokemon[i];
       if(requestedPokemon === pokemon.name.toLowerCase()){
         response.send(pokemon.weight);
+        break;
       }
+    }
+    if(i === obj.pokemon.length){
+      response.status(404);
+      response.send("Could not find information about " + requestedPokemon +
+      " - Is that a new pokemon? Gotta catch em' all!");
     }
   });
 
