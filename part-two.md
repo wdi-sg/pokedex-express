@@ -13,7 +13,7 @@
 - add CSS (right now, this has to be in a style tag in the HTML you send back)
 
 ### further
-Create a route for each of these: `spawn_chance`, `avg_spawns` that will show each pokemon that is more or less than the given number. Example: `/spawn_chance/less/1` will send back a formatted HTML page with a list of every pokemon with a spawn change less than 1.
+Create a route for each of these: `spawn_chance`, `avg_spawns` that will show each pokemon that is more or less than the given number. Example: `/search/spawn_chance?amount=1&compare=less` will send back a formatted HTML page with a list of every pokemon with a spawn change less than 1. Example 2: `/search/avg_spawn?amount=0.8&compare=more` 
 
 ### further
 Create the same routes for: `height`, `weight` and `spawn_time`.
