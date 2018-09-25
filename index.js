@@ -30,7 +30,6 @@ var handleRequest = (request, response) => {
         // landing page
         else if (request.path === '/' ){
             response.send('<html><body><h1>Welcome to Pokedex</h1></body></html>');
-            response.status( 404 );
         }
         // search by name
         else if (routeSplit.length === 2){
@@ -43,6 +42,7 @@ var handleRequest = (request, response) => {
 
         else{
             if( results === 'notFound' ){
+                response.status( 404 );
             response.send(`Could not find information about ${route} - Is that a new pokemon? Gotta catch em' all!`)
             }
             else{
