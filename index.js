@@ -13,11 +13,12 @@ app.get('*', (request, response) => {
     searchTerm = searchTerm.substr(1);
   }
 
-  if (searchTerm === "") {
-    response.send("Welcome to the online Pokedex!");
-  }
-
   json.readFile(pokedex, function(err, obj) {
+
+    if (searchTerm === "") {
+      response.send("Welcome to the online Pokedex!");
+      return;
+    }
 
     const pokemon = obj.pokemon;
     let output = [];
