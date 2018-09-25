@@ -12,6 +12,7 @@ var handleRequest = (request, response) => {
 
   console.log("request.path: ", request.path.split('/')[1]);
   let requestedPokemon = request.path.split('/')[1];
+  let pokemonMsg;
 
   if(request.path === "/"){
     console.log(request.path);
@@ -32,7 +33,15 @@ var handleRequest = (request, response) => {
         let pokemon = obj.pokemon[i];
         if(requestedPokemon === pokemon.name.toLowerCase()){
           response.status(200);
-          response.send(pokemon.weight);
+          pokemonMsg = `This is ${pokemon.name}. It is ${pokemon.height} in height
+          and ${pokemon.weight} in weight. Its candy is ${pokemon.candy}. Its
+          candy count is ${pokemon.candy_count}. Its egg is ${pokemon.egg}. Its
+          spawn chance is ${pokemon.spawn_chance}, the average spawn is
+          ${pokemon.avg_spawns} and the spawn time is ${pokemon.spawn_time}.
+          Its multipler is ${pokemon.multiplers}. Its weakness is ${pokemon.weaknesses}.
+          Its next evolution is ${pokemon.next_evolution[0].name}`
+          response.send(pokemonMsg);
+          //response.send(pokemon.weight);
           found = true;
           break;
         }
