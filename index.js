@@ -22,15 +22,8 @@ const app = express();
     console.log("Handling response now...");
     console.log("request path: "+ request.path );
 
-    var takingOffSlash = (requestPath) => {
-        if (requestPath.charAt(0) === "/"){
-            requestPath = requestPath.substr(1); //get rid of the first letter
-        }
-        if (requestPath.charAt(requestPath.length - 1) === "/"){
-            requestPath = requestPath.substr(0, requestPath.length - 1);
-        }
-        return requestPath; // to take off the slashes so that you can compare with the name
-    };
+    let splitReq = request.path.split("/")[1];
+    //console.log(splitReq);
 
     jsonfile.readFile(file, (err, obj)=>{
         if (err){
@@ -38,9 +31,26 @@ const app = express();
         }
         else{
             const pokemonObj = obj.pokemon;
-            for (let i = 0; i < pokemonObj.length; i++){
-                if (pokemonObj[i].name.toLowerCase() === takingOffSlash(request.path.toLowerCase())){
-                    response.send(pokemonObj[i].weight);
+            // for (let i = 0; i < pokemonObj.length; i++){
+            //     if (pokemonObj[i].name.toLowerCase() === splitReq.toLowerCase()){
+            //         response.send("Weight of pokemon is: " + pokemonObj[i].weight);
+            //     }
+            // }
+
+            //use id to compare pokemon
+            for (let i = 0 ; i < pokemonObj.length; i++) {
+                if (pokemonObj[i].id === parseInt(splitReq)){
+                    var html = '';
+                    html += '<html>';
+                    html += '<body><h1>' + pokemonObj[i].name + '</h1>';
+                    html += '<p> The weight of this pokemon is: ' + pokemonObj[i].weight + '</p>';
+                    html += '<p> The height of this pokemon is: ' + pokemonObj[i].height + '</p>';
+                    html += '<img src="'+ pokemonObj[i].img +'"/>';
+                    html += "</body>";
+                    html += "</html>";
+                    // html += "<html>";
+                    // html += "<html>";
+                    response.send(html);
                 }
             }
         }
@@ -52,46 +62,7 @@ const app = express();
 app.get('*', handleRequest);
 
 
-//(request, response) => {
-//   // send response with some data (a requestPath)
-//   // var requestPath = request.path;
-//   // var nameSearch = requestPath.replace('/','');
 
-//   jsonfile.readFile(file, (err,obj)=>{
-
-//       const pokemonObj = obj.pokemon;
-//       let resultName = [];
-//       let resultWeight = [];
-
-//     for (let i = 0; i < pokemonObj.length; i++){
-//         let pokemonName = pokemonObj[i];
-//         if (pokemonName.name === request.params.name){
-//             response.send(pokemonName.weight);
-//         }
-//        // resultName.push('<li>' + pokemonName + ': ' + pokemonWeight + '</li>');
-//     }
-//   }
-//   )
-// });
-
-
-  //     var pokemonWeightFunc = () => {
-  //       for (let i = 0; i < pokemon.length; i++){
-  //           let pokemonWeight = pokemon[0].weight;
-  //           resultWeight.push(pokemonWeight);
-
-  //       }
-  //       return resultWeight;
-  //     }
-
-  //     var makeHtmlPage = (name, weight) => {
-  //       let weightPage = '<ul>' +  name + ": " + weight + '</ul>';
-  //       let htmlPage = '<html><head></head><body><h1>' + 'Weight of pokemon is: ' + '</h1>' + weightPage + '</body></html>';
-  //       return htmlPage;
-  //     }
-
-  //     response.send(makeHtmlPage(pokemonNameFunc(), pokemonWeightFunc()));
-  // })
 
 
 
