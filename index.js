@@ -18,9 +18,17 @@ const app = express();
  */
 
 app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
-});
+  //send response
+    let exist = false;
+app.get('*', (request, response) => {
+send response with some data (a string)
+let exist = false;
+for(var i=0;i<pokemon.length;i++){
+if("/"+pokemon[i].name.toLowerCase() == request.path){
+response.status(200).send("This is "+pokemon[i].name+ ", he is "+pokemon[i].weight+" in weight!");
+exist = true;
+}
+}
 
 /**
  * ===================================
