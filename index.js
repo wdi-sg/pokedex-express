@@ -22,20 +22,38 @@ const app = express();
     console.log("Handling response now...");
     console.log("request path: "+ request.path );
 
-    let splitReq = request.path.split("/")[1];
+    let splitReq = request.path.split("/");
     console.log(splitReq);
-    let parseSplitReq = parseInt(splitReq);
+    //console.log(request.path.split("/"));
+
+
+
 
     jsonfile.readFile(file, (err, obj)=>{
+        const pokemonObj = obj.pokemon;
         if (err){
             console.log(err);
         }
-        else if (splitReq == ""){
+        else if (splitReq[1] == ""){
             response.send('<h1>Welcome to the online pokedex!</h1>');
         }
-        else{
+        else if (splitReq[1] == "type"){
+            var typePath = splitReq[2];
+            //console.log(typePath);
+            let emptyArray = [];
+            for (let i = 0; i < pokemonObj.length; i++){
+                for (let j = 0; j < pokemonObj[i].type.length; j++){
+                    if (typePath == pokemonObj[i].type[j].toLowerCase()){
+                        emptyArray.push(pokemonObj[i].name);
+                    }
 
-            const pokemonObj = obj.pokemon;
+                }
+            }
+            response.send(emptyArray);
+
+        }
+        else{
+            let parseSplitReq = parseInt(splitReq[1]);
             //use id to compare pokemon
             for (let i = 0 ; i < pokemonObj.length; i++) {
                 if (pokemonObj[i].id === parseSplitReq){
