@@ -1,55 +1,87 @@
+const express = require('express');
+const jsonfile = require('jsonfile');
+const file = 'pokedex.json';
+const app = express();
 
-const express = require("express");
-const jsonfile = require("jsonfile");
-const pokeFile = "./pokedex.json";
+var pokemonsArr = [];
+var pokemonsWeight = [];
 
-// Get the object with pokemon
+jsonfile.readFile(file, function(err, obj){
+  if(err){
+    console.log('error is: ', err);
+  }
+  for(let i = 0; i < obj.pokemon.length; i++){
+    let pokemon = obj.pokemon[i].name;
+    let pokemonWg = obj.pokemon[i].weight
+    pokemonsArr.push(pokemon);
+    pokemonsWeight.push(pokemonWg);
 
-jsonfile.readFile(pokeFile, (err, obj) => {
-  if (err) {
-    console.error(err);
-  } else {
-    pokedex = obj;
- //    console.log(pokedex)
   }
 });
 
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
+app.get('*', (request, response) => {
 
-// Init express app
-//const app = express();
+for(let i = 0; i < pokemonsArr.length; i++) {
 
+  if ( request.path == '/foo' ){
+  response.send('foofoofoo');
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
+  } else if ( request.path == '/' + pokemonsArr[i] ) {
+    response.send('this is ' + pokemonsArr[i]);
 
-//  app.get('*', (request, response) => {
-//    response.send("HI");
-//
-//      let exist = false;
-//
-//  app.get('*', (request, response) => {
-//  send response with some data (a string)
-//
-//  let exist = false;
-//
-//  for(var i=0;i<pokemon.length;i++){
-//  if("/"+pokemon[i].name.toLowerCase() == request.path){
-//  response.status(200).send("This is "+pokemon[i].name+ ", he is "+pokemon[i].weight+" in weight!");
-//  exist = true;
-//  }
-//  }
+  } else{
+  response.send(pokemonsArr);
+}
+}
+});
 
-/**
- * ===================================
- * Listen to requests on port 3000
- * ===================================
- */
-// app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+app.listen(3001);
+/*
+   // console.log(file.length);
+    for (let i = 0; i < file.length; i++)
+        if (obj.pokemon[i].name == 'Wartortle')
+            response.send(obj.pokemon[i]);
+        //    console.log(obj.pokemon[i].weaknesses);
+  //  console.log(obj.pokemon[7].name == "Ivysaur");
+  //  console.log(obj.pokemon[7]);
+   //response.send(file);
+});
+ app.get('/:name', (request, response) => {
+  // send response with some data (a string)
+//  response.send(request.path);
+ //console.log(request.params.name);
+     for (let i = 0; i < file.length; i++)
+        if (obj.pokemon[i].name.toLowerCase() == request.params.name)
+            response.send(obj.pokemon[i].weight);
+        //console.log("1" + obj.pokemon[i].name);
+        //if (obj.pokemon[i].name == request)
+           // poke = obj.pokemon[i].weight;
+  //res.send(req.path == '/bulbasaur' ? '' : 'Hello there!')
+});
+ function sendPokemon(req, res) {
+    console.log("HERE");
+    for (let i = 0; i < file.length; i++)
+        if (obj.pokemon[i].name == req)
+            console.log("2" + obj.pokemon[i].name);
+           // poke = obj.pokemon[i].weight;
+  //res.send(req.path == '/bulbasaur' ? '' : 'Hello there!')
+}
+ app.get('/:name', sendPokemon); //(request, response) => {
+  // send response with some data (a string)
+   // console.log(request.path);
+//        sendPokemon
+ //});
+ app.get('*', (request, response) => {
+  // send response with some data (a string)
+  response.send(request.path);
+});
+})
+function sendPokemon(req, res) {
+    console.log("HERE");
+    for (let i = 0; i < file.length; i++)
+        if (obj.pokemon[i].name == req)
+            console.log("2" + obj.pokemon[i].name);
+           // poke = obj.pokemon[i].weight;
+  res.send(req.path == '/bulbasaur' ? '' : 'Hello there!')
+}
+*/
