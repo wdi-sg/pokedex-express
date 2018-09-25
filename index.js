@@ -219,15 +219,15 @@ app.get('/nextevolution/:name', (request, response) => {
 });
 
 // /search/spawn_chance?amount=1&compare=less
-app.get('/search/:spawn', (request, response) => {
+app.get('/search/:searchBy', (request, response) => {
   jsonfile.readFile(file, (err, obj) => {
     if (err) {
       response.send(getHtmlPage('<p>' + err + '</p>'));
       return;
     }
 
-    let searchBy = request.params.spawn.toLowerCase();
-    let amount = parseFloat(request.query.amount);
+    let searchBy = request.params.searchBy.toLowerCase();
+    let amount = request.query.amount;
     let compare = request.query.compare.toLowerCase();
     let pokemons = obj.pokemon.filter(pokemon => {
       if (compare === 'less') {
