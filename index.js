@@ -10,7 +10,7 @@ const file = "pokedex.json"
     //const pokename = [];
     for (var i = 0; i<obj.length; i++){
 
-        const pokename = obj[i];
+        let pokename = obj[i];
 
         // console.log("name", obj[i])
         //get the object key name
@@ -32,7 +32,7 @@ const app = express();
     console.log("request path" + request.path);
     console.log("handling response rn");
 
-    if(request.path == pokename.name;){
+    if(request.path == pokename.name){
         response.send(pokename);
     } else {
         response.send("Not Valid");
