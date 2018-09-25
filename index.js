@@ -1,42 +1,40 @@
+console.log('js is running');
+//1) think of require as a need to import something
 const express = require('express');
+//its the same as fs with an addition of JSON.parse which converts a string to a JSON object
 const jsonfile = require('jsonfile');
 
-// Init express app
-const app = express();
-const file = 'pokedex.json';
-// var searchByName = (object, )
+//2) creating the express app by setting it to the app variable
+var app = express();
 
+//(1)url (2)function that tells express what to send back to the person making the request.
+var handleRequest = (request, response) => {
 
-
-jsonfile.readFile(file, function(err, obj){
-  if(err){
-    console.log('error is: ', err);
-  }
-  for(let i = 0; i < obj.pokemon.length; i++){
-    let pokemon = obj.pokemon[i];
-    console.log(pokemon);
-  }
-
-  var searchArray = (object, pokeName) => {
-    if(object.name.toLowerCase() === pokeName){
-      ob
+  console.log("request.path: ", request.path.split('/')[1]);
+  let requestedPokemon = request.path.split('/')[1];
+  //call the readFile method that gets: the name of the file and a function.
+  //This function is called when the file-reading operation has finished.
+  //The function will get two parameters.
+  //The first is the information about any error conditions, the second is the
+  //actual content of the file. In this case, an object.
+  jsonfile.readFile('pokedex.json', function(err, obj){
+    //console.log(contents);
+    for(let i = 0; i < obj.pokemon.length; i++){
+      console.log("requestedPokemon: ", requestedPokemon);
+      let pokemon = obj.pokemon[i];
+      if(requestedPokemon === pokemon.name.toLowerCase()){
+        response.send(pokemon.weight);
+      }
     }
-  };
+  });
+
+}
+
+//.get is saying that when it gets that path it should give the response that is specified in the function.
+app.get('*', handleRequest);
+const PORTNUMBER = 3000;
+
+//.listen is going to bind the application to the port on our machine.
+app.listen(PORTNUMBER, function(){
+  console.log("Node server is running");
 });
-
-app.get('/:name', (request, response) => {
-  // send response with some data (a string)
-  console.log('request path: ', request.path);
-  console.log('request params: ', request.params);
-  response.send(request.path);
-});
-
-app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
-
-// let name = 0;
-// let i = 0;
-// while(request.path[i] !== undefined){
-//   name += request.path[i];
-//   i++;
-//   console.log(name);
-// }
