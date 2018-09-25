@@ -52,6 +52,14 @@ const app = express();
                     // html += "<html>";
                     response.send(html);
                 }
+                else {
+                    response.status(404);
+                    var html = '';
+                    html += '<html>';
+                    html += '<body><p>Could not find information about ' + splitReq + ". Is that a new pokemon? Gotta catch em' all!</p>";
+                    response.send(html);
+
+                }
             }
         }
 
