@@ -8,27 +8,41 @@ const app = express();
 // when referencing a file, consider -> ./ or ../ or ./foldername
 const pokedex = './pokedex.json';
 
-//Further Q2: detect if the user didn't put anything in the path. Return a message saying "Welcome to the online Pokdex!"
-app.get('/', (request, response) => {
-    response.send(`Welcome to the online Pokedex!`);
-})
-
-
-//Further Q4: Expose a new route for /type/some-type that returns a message listing the names of all pokemon that have the specified type
-// (eg. /type/grass should show a page with names of all pokemon of grass type).
-app.get('/type/:type', (request, response) => {
-    jsonfile.readFile(pokedex, function(error, object) {
-        var typeSearched = request.params.type
-        var pokemonType = [];
-        for (i in object.pokemon) {
-            for (j in object.pokemon[i].type) {
-                if (object.pokemon[i].type[j].toLowerCase().includes(typeSearched)) {
-                    pokemonType.push(object.pokemon[i].name)
+//create a page at the root route / that displays links to each pokemon's page.
+    //(hint: the html is created in a loop)
+        const convertToHTML = function(array) {
+            let html = '<html>';
+            let header = `<h1 style="font-size:20px">Pokemon Index</h1>`
+            let body = '<body>';
+            let div = '<div style="list-style-type:circle; list-style-position:inside;text-align:left">';
+            let ul = '<ul>';
+                for (i in array) {
+                    //is this equal to appendChild?
+                    var nameOfPokemon = array[i].toLowerCase();
+                    ul += `<li><a href="./${nameOfPokemon}">${array[i]}</a></li>`;
                 }
-            }
+            let close = '</ul></div></body></html>';
+
+            // Concatenate all strings into one
+            let complete = html + header + body + div + ul + close;
+            // console.log(complete);
+                //Return the complete string
+            return complete;
         }
-        response.send(pokemonType);
+
+//if the user requests a pokemon or something that doesn't exist, redirect them back to the root URL.
+
+var pokemonIndex = [];
+app.get('/', (request, response) => {
+    jsonfile.readFile(pokedex, function(error, object) {
+        //create object
+        for (key in object.pokemon) {
+            var pokemonName = object.pokemon[key].name;
+            pokemonIndex.push(pokemonName);
+        }
+        response.send(convertToHTML(pokemonIndex));
     })
+
 })
 
         //create a function that can format the results in HTML
@@ -37,19 +51,40 @@ app.get('/type/:type', (request, response) => {
             let body = '<body>';
             let header = `<h1>${title}</h1>`;
             let div = '<div>';
+            let ul = '<ul style="list-style-type:circle; list-style-position:inside; padding-left:20vw; padding-right:20vw; text-align:center">';
             // FILL <div> with information from Pokemon array using for loop
             // console.log(pokemon); - POKEMON IS UNDEFINED
-            for (key in pokemon) {
-                div += key + ": " + pokemon[key] + '<br>' // add <br> for next line
-            };
-            let close = '</div></body></html>';
+            for (key in pokemon) { //understand basics
+                if (key === 'img') {
+                    var pokemonImage = pokemon['img']; //WHY DO YOU NEED THE ' '?
+                    div += `<img src="${pokemonImage}" style="padding:10px;display:block;margin: 0px auto 0px auto;">`+ '<br>';
+                }
+                else if (key === 'prev_evolution' || key === 'next_evolution') {
+                    ul += `<li>${key}:</li> <br>`;
+                    //loop through the various previous spawns
+                    // console.log(pokemon['prev_evolution']);
+                    var pokemonEvolution = pokemon[key];
+                    for (j in pokemonEvolution) {
+                        var pokemonEvolutionSpecies = pokemonEvolution[j];
+                            for (k in pokemonEvolutionSpecies) {
+                                ul += `<li>${k}: ${pokemonEvolutionSpecies[k]}</li>`+ '<br>';
+                            }
+                        console.log(pokemonEvolutionSpecies);
+                    }
+                } else {
+                    var keyName = key.charAt(0).toUpperCase() + key.slice(1)
+                    ul += `<li> ${keyName}: ${pokemon[key]}</li>`+ '<br>';
+                }
+            }
+            let close = '</ul></div></body></html>';
 
             // Concatenate all strings into one
-            let complete = html + body + header + div + close;
-            console.log(complete);
+            let complete = html + body + header + div + ul + close;
+            // console.log(complete);
             //Return the complete string
             return complete;
-        };
+        }
+
 
 //Question 2: Return a string response with the requested pokemon's information when a request comes with matching the route
 app.get('*', (request, response) => {
@@ -70,39 +105,52 @@ app.get('*', (request, response) => {
             }
         }
         if (check == false) {
-            response.status(404).send(`Could not find information about ${path}. Is that a new pokemon? Gotta catch em' all!`)
+            //redirect ppl to home page if they type something wrongly
+            response.status(404).redirect('/');
         }
     })
 })
 
-//Further Qn 1:
-//Handle the case where an invalid pokemon name is provided (eg. /some-name).
-//Return a message that says "Could not find information about <pokemon_name> - Is that a new pokemon? Gotta catch em' all!" (replace <pokemon_name> with the requested for pokemon name)
-//Set the status code to 404.
-
-
-
-
-// console.log("PATH: " + request.path);
-// response.send(object);
 
 //run this command to ready your server, by specifying a port to listen on, and you are listening for a request
 //console.log to make sure you know your server is up and running
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
 
+//TO FIGURE OUT LATER:
+//Create a route for each of these: spawn_chance, avg_spawns that will show each pokemon that is more or less than the given number.
+//Example: /search/spawn_chance?amount=1&compare=less will send back a formatted HTML page with a list of every pokemon with a spawn change less than 1.
+//Example 2: /search/avg_spawn?amount=0.8&compare=more
 
-//LEARNING POINTS:
+// const searchPokemon = (param, amt, cmp, pokedex) => {
+//   if (amt !== undefined && cmp === 'more') {
+//     const payload = [];
+//     Object.keys(pokedex).forEach((key) => {
+//       if (pokedex[key][param] > amt) payload.push(pokedex[key].name);
+//     });
+//     return payload;
+//   }
+//   if (amt !== undefined && cmp === 'less') {
+//     const payload = [];
+//     Object.keys(pokedex).forEach((key) => {
+//       if (pokedex[key][param] < amt) payload.push(pokedex[key].name);
+//     });
+//     return payload;
+//   }
+//   return 'This should not happen.';
+// };
 
-// app.get('/') refers to the home page aka root path
-// app.get('/', function(request, response) {
-//     // send response with some data (a string)
-//     response.send('you visited the home page'); //it will showcase the path
-//     // request.path
-// });
+// app.get('/search/:parameter',(request,response) => {
+//         const parameter = request.params.parameter;
+//         // console.log(request.params.parameter)
+//         const amount = request.query.amount;
+//         const compare = request.query.compare;
 
-// app.get('/foo', function(request, response) {
-//     // send response with some data (a string)
-//     response.send('you visited the foo path'); //it will showcase the path
-//     // response.send(request.path)
-//     // request.path
-// });
+//         response.send("hi")
+// })
+
+//     app.get('/search/:parameter', (request, response) => {
+//       const param = request.params.parameter;
+//       const amt = request.query.amount;
+//       const cmp = request.query.compare;
+//       res.send(generatePokemonList(`${capitalize(param).replace('_', ' ')} ${cmp} than ${amt}`, searchPokemon(param, amt, cmp, pokedex)));
+//     });
