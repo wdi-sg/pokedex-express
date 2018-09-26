@@ -3,7 +3,7 @@ const jsonfile = require('jsonfile');
 
 // Init express app
 const app = express();
-let port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
 
 // FUNCTIONS
 
