@@ -52,39 +52,30 @@ const app = express();
             response.send(emptyArray);
 
         }
-        else{
-            let parseSplitReq = parseInt(splitReq[1]);
-            //use id to compare pokemon
-            for (let i = 0 ; i < pokemonObj.length; i++) {
-                if (pokemonObj[i].id === parseSplitReq){
-                    var html = '';
-                    html += '<html>';
-                    html += '<body><h1>' + pokemonObj[i].name + '</h1>';
-                    html += '<p> The weight of this pokemon is: ' + pokemonObj[i].weight + '</p>';
-                    html += '<p> The height of this pokemon is: ' + pokemonObj[i].height + '</p>';
-                    html += "<br>His favorite candy is the " + pokemonObj[i].candy + ", so get that for your pokemon so that they can love you";
-                    html += '<br><img src="'+ pokemonObj[i].img +'"/>';
-                    html += "</body>";
-                    html += "</html>";
-                    // html += "<html>";
-                    // html += "<html>";
-                    response.send(html);
-                }
-                // else if(  ) {
-                //     var html = '';
-                //     html += '<html>';
-                //     html += '<body><p>Could not find information about ' + parseSplitReq + ". Is that a new pokemon? Gotta catch em' all!" + '</p>';
-                //     html += "</body>";
-                //     html += "</html>";
-                //     response.send(html);
-                // }
-                }
-            }
 
     })
  }
 
-app.get('*', handleRequest);
+app.get('/', handleRequest);
+app.get('/:name', (request, response) => {
+    console.log("Handling response now...");
+    console.log("request path: "+ request.path );
+    console.log(request.params.name);
+
+    jsonfile.readFile(file, (err, obj)=>{
+        const pokemonObj = obj.pokemon;
+        for (let i = 0 ; i < pokemonObj.length; i++) {
+            if (pokemonObj[i].name.toLowerCase() == request.params.name.toLowerCase()){
+                var html = "";
+                html += "<html>";
+                html += "<body><h1>" + pokemonObj[i].name + "</h1></body></html>";
+                //console.log(html);
+                response.send(html);
+            }
+        }
+
+    });
+});
 
 
 
