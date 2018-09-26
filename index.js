@@ -3,6 +3,7 @@ const jsonfile = require('jsonfile');
 
 // Init express app
 const app = express();
+let port = process.env.PORT || 8080;
 
 // FUNCTIONS
 
@@ -172,4 +173,4 @@ jsonfile.readFile('pokedex.json', (err, obj) => {
   }
 });
 
-app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+app.listen(port, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
