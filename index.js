@@ -154,23 +154,23 @@ jsonfile.readFile('pokedex.json', (err, obj) => {
       const param = capitalize(req.params.type);
       const result = checkType(param, pokedex);
       const title = `Pokemon of type: ${param}`;
-      res.send(generateHtml(title, result));
+      res.send(generatePokemonList(title, result));
     });
 
     app.get('/weaknesses/:weakness', (req, res) => {
       const param = capitalize(req.params.weakness);
       const result = checkWeakness(param, pokedex);
       const title = `Pokemon weak against: ${param}`;
-      res.send(generateHtml(title, result));
+      res.send(generatePokemonList(title, result));
     });
 
     app.get('/nextevolution/:name', (req, res) => {
       const param = capitalize(req.params.name);
       const result = checkEvo(param, pokedex);
       const title = `Pokemon evolving to ${param}`;
-      res.send(generateHtml(title, result));
+      res.send(generatePokemonList(title, result));
     });
   }
 });
 
-app.listen(port, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+app.listen(port);
