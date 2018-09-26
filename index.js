@@ -9,17 +9,65 @@ const file = 'pokedex.json';
 var app = express();
 let pokemon;
 
+//Created functions
+var createHtml = (content) => {
+  let html = "<html>";
+  html += "<h1>Pokedex</h1>";
+  html += "<body>";
+  html += "<p>"+content+"</p>";
+  html += "</body>";
+  html += "</html>";
+
+  return html;
+}
+const getPokemonInfo = (pokemon) => {
+  let content = "";
+  content += "<h3> Id: "+pokemon.id+"</h3>";
+  content += "<h3> Num:"+pokemon.num+"</h3>";
+  content += "<h3> Name: "+pokemon.name+"</h3>";
+  content += '<img src="'+pokemon.img+'"/>';
+  content += "<ul> Type: ";
+  pokemon.type.forEach(type => {
+    content += "<li>"+type+"</li>";
+  });
+  content += "</ul>";
+  content += "<h3> Height: "+pokemon.height+"</h3>";
+  content += "<h3> Weight: "+pokemon.weight+"</h3>";
+  content += "<h3> Candy:"+pokemon.candy+"</h3>";
+  content += "<h3>"+pokemon.candy_count+"</h3>";
+  content += "<h3>"+pokemon.egg+"</h3>";
+  content += "<h3>"+pokemon.spawn_chance+"</h3>";
+  content += "<h3>"+pokemon.avg_spawns+"</h3>";
+  content += "<h3>"+pokemon.spawn_time+"</h3>";
+  content += "<ul>";
+  pokemon.multipliers.forEach((multipliers) => {
+    content += "<li>"+multipliers+"</li>"
+  });
+  content += "</ul>";
+  pokemon.weaknesses.forEach((weaknesses) => {
+    content += "<li>"+weaknesses+"</li>"
+  });
+  content += "</ul>";
+  content += "</ul>";
+  pokemon.next_evolution.forEach((next_evolution) => {
+    content += "<li>"+next_evolution+"</li>"
+  });
+  content += "</ul>";
+  return content;
+}
+
 //(1)url (2)function that tells express what to send back to the person making the request.
 var handleRequest = (request, response) => {
 
   console.log("request.path: ", request.path.split('/')[1]);
   let requestedPokemon = request.path.split('/')[1];
-  let pokemonMsg;
+  let outputs;
 
   if(request.path === "/"){
     console.log(request.path);
     response.status(200);
-    response.send("Welcome to the online Pokedex!");
+    outputs = "Welcome to the online Pokedex!";
+    response.send(createHtml(outputs));
   }
   else{
     //call the readFile method that gets: the name of the file and a function.
@@ -36,14 +84,11 @@ var handleRequest = (request, response) => {
         pokemon = obj.pokemon[i];
         if(requestedPokemon === pokemon.name.toLowerCase()){
           response.status(200);
-          pokemonMsg = `This is ${pokemon.name}. It is ${pokemon.height} in height
-          and ${pokemon.weight} in weight. Its candy is ${pokemon.candy}. Its
-          candy count is ${pokemon.candy_count}. Its egg is ${pokemon.egg}. Its
-          spawn chance is ${pokemon.spawn_chance}, the average spawn is
-          ${pokemon.avg_spawns} and the spawn time is ${pokemon.spawn_time}.
-          Its multipler is ${pokemon.multiplers}. Its weakness is ${pokemon.weaknesses}.
-          Its next evolution is ${pokemon.next_evolution[0].name}`
-          response.send(pokemonMsg);
+          console.log(pokemon);
+          console.log(pokemon.id);
+          outputs = getPokemonInfo(pokemon);
+          console.log(outputs);
+          response.send(createHtml(outputs));
           //response.send(pokemon.weight);
           found = true;
           break;
@@ -52,8 +97,9 @@ var handleRequest = (request, response) => {
 
       if(i === obj.pokemon.length && found === false){
         response.status(404);
-        response.send("Could not find information about " + requestedPokemon +
-        " - Is that a new pokemon? Gotta catch em' all!");
+        outputs = "Could not find information about " + requestedPokemon +
+        " - Is that a new pokemon? Gotta catch em' all!";
+        response.send(createHtml(outputs));
       }
     });
   }
@@ -75,12 +121,14 @@ app.get('/type/:type', (request, response) => { //":type" <=> request.params.typ
       pokemon = obj.pokemon[i];
       let pokemonLowerCase = pokemon.type;
         if(pokemonLowerCase.includes(requestedType)){
+          response.status(200);
           pokemonNames.push(pokemon.name)
         }
     }
     console.log(pokemonNames);
-    response.send(`All the pokemons that are ${request.params.type} type:
-      ${pokemonNames}`);
+    outputs = `All the pokemons that are ${request.params.type} type: <br>
+      ${pokemonNames}`;
+    response.send(createHtml(outputs));
   });
 });
 
