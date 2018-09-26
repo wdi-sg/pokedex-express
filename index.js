@@ -3,9 +3,11 @@ console.log('js is running');
 const express = require('express');
 //its the same as fs with an addition of JSON.parse which converts a string to a JSON object
 const jsonfile = require('jsonfile');
+const file = 'pokedex.json';
 
 //2) creating the express app by setting it to the app variable
 var app = express();
+let pokemon;
 
 //(1)url (2)function that tells express what to send back to the person making the request.
 var handleRequest = (request, response) => {
@@ -25,12 +27,13 @@ var handleRequest = (request, response) => {
     //The function will get two parameters.
     //The first is the information about any error conditions, the second is the
     //actual content of the file. In this case, an object.
-    jsonfile.readFile('pokedex.json', function(err, obj){
+    jsonfile.readFile(file, function(err, obj){
       //console.log(contents);
+      if(err) console.log("error: ", err);
       let i;
       found = false;
       for(i = 0; i < obj.pokemon.length; i++){
-        let pokemon = obj.pokemon[i];
+        pokemon = obj.pokemon[i];
         if(requestedPokemon === pokemon.name.toLowerCase()){
           response.status(200);
           pokemonMsg = `This is ${pokemon.name}. It is ${pokemon.height} in height
@@ -59,6 +62,28 @@ var handleRequest = (request, response) => {
 }
 
 //.get is saying that when it gets that path it should give the response that is specified in the function.
+app.get('/type/:type', (request, response) => { //":type" <=> request.params.type
+  console.log("request.params.type: ", request.params.type);
+  jsonfile.readFile(file, (err, obj) => {
+    if(err){
+      console.log("error: ", err);
+    }
+    requestedType = request.params.type.charAt(0).toUpperCase() +
+    request.params.type.slice(1);
+    let pokemonNames = [];
+    for(let i = 0; i < obj.pokemon.length; i++){
+      pokemon = obj.pokemon[i];
+      let pokemonLowerCase = pokemon.type;
+        if(pokemonLowerCase.includes(requestedType)){
+          pokemonNames.push(pokemon.name)
+        }
+    }
+    console.log(pokemonNames);
+    response.send(`All the pokemons that are ${request.params.type} type:
+      ${pokemonNames}`);
+  });
+});
+
 app.get('*', handleRequest);
 
 const PORTNUMBER = 3000;
