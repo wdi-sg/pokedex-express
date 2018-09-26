@@ -31,38 +31,41 @@ app.get('/type/:type', (request, response) => {
     })
 })
 
-//Question 2: Return a string response with the requested pokemon's information when a request comes with matching the route
-app.get('*', (request, response) => {
-    var path = request.path.substring(1);
-    var check = false;
-    //start by reading the pokedex json file, object can be named anything
-    jsonfile.readFile(pokedex, function(error, object) {
         //create a function that can format the results in HTML
-        const formatResultsInHTML = function (title, pokemon) {
+        const formatResultsInHTML = function(title, pokemon) {
             let html = '<html>';
             let body = '<body>';
             let header = `<h1>${title}</h1>`;
             let div = '<div>';
             // FILL <div> with information from Pokemon array using for loop
-            for (i in object.pokemon) {
-                div += object.pokemon[i] + '<br>' // add <br> for next line
+            // console.log(pokemon); - POKEMON IS UNDEFINED
+            for (key in pokemon) {
+                div += key + ": " + pokemon[key] + '<br>' // add <br> for next line
             };
             let close = '</div></body></html>';
 
             // Concatenate all strings into one
             let complete = html + body + header + div + close;
             console.log(complete);
-
             //Return the complete string
             return complete;
         };
+
+//Question 2: Return a string response with the requested pokemon's information when a request comes with matching the route
+app.get('*', (request, response) => {
+    var path = request.path.substring(1);
+    var check = false;
+    //start by reading the pokedex json file, object can be named anything
+    jsonfile.readFile(pokedex, function(error, object) {
+
         //and then sending it in the response of the request
-        for (i in object.pokemon) {
-            var pokemonName = object.pokemon[i].name.toLowerCase();
+        for (key in object.pokemon) {
+            var pokemonName = object.pokemon[key].name.toLowerCase();
             if (path.includes(pokemonName)) {
                 //Further Q3: Instead of showing just the weight, show all the details of the requested pokemon for /some-name route, in a full sentence. i.e., "This is Bublasaur, he is 45kg in weight! He also..." etc., etc
                 // response.send(`This is ${object.pokemon[i].name}, he is ${object.pokemon[i].weight} in weight! His weaknesses are ${object.pokemon[i].weaknesses}`)
-                response.send(formatResultsInHTML(object.pokemon[i]));
+                // response.send(object.pokemon[i]);
+                response.send(formatResultsInHTML(object.pokemon[key].name,object.pokemon[key]));
                 check = true;
             }
         }
