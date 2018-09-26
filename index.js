@@ -40,6 +40,7 @@ const pokedex = obj.pokemon;
           html += `Spawn Time: ${pokedex[key].spawn_time}<br>`;
           html += `Multipliers: ${pokedex[key].multipliers}<br>`;
           html += `Weaknesses: ${pokedex[key].weaknesses}<br>`;
+          html += `Next Evolution: ${pokedex[key].next_evolution[0].name}<br>`;
 
           response.send(html);
         }
