@@ -31,11 +31,13 @@ const app = express();
 
 function getPokemnoDetail(rec) {
 
-  let result="";
+  var result = "";
+  
  
   for (var i = 0; i < rec.length; i++) {
-    var weaknesses = "";
    
+    var weaknesses="";
+    
     if (rec[i].weaknesses.length > 0) {
       for (var j = 0; j < rec[i].weaknesses.length; j++) {
         weaknesses += rec[i].weaknesses[j]
@@ -57,22 +59,25 @@ function getPokemnoDetail(rec) {
     }
 
     var nextEvolution = "";
-    if (rec[i].next_evolution.length > 0) {
-      for (var j = 0; j < rec[i].next_evolution.length; j++) {
-        nextEvolution += rec[i].next_evolution[j].name
-        if (j < rec[i].next_evolution.length - 1) {
-          nextEvolution += ", "
+
+    if (rec[i].hasOwnProperty('next_evolution')) {
+      if (rec[i].next_evolution.length > 0) {
+        for (var j = 0; j < rec[i].next_evolution.length; j++) {
+          nextEvolution += rec[i].next_evolution[j].name
+          if (j < rec[i].next_evolution.length - 1) {
+            nextEvolution += ", "
+          }
         }
       }
     }
-    
+
     result = result + 
-      `<h1>Name : ${rec[i].name}</h1>
+      `<h1 style="width: 420px; text-align: center;">${rec[i].name}</h1>
       <div>
-      <div style="display:inline-block">
-      <img src='${rec[i].img}' alt='${rec[i].name}'>
+      <div style="display:inline-block; width=300px;">
+      <img src='${rec[i].img}' alt='${rec[i].name} width: 200px; height: 200px;'>
       </div>
-      <div style="display:inline-block; margin-left: 20px;">
+      <div style="display:inline-block; margin-left: 20px; width=200px;">
       <p>Candy : ${rec[i].candy}</p>
       <p>Height : ${rec[i].height}</p>
       <p>Weight : ${rec[i].weight}</p>
