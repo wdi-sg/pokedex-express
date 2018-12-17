@@ -5,12 +5,21 @@
     "start": "nodemon"
   },
   "main": "index.js",
-  "repository": "https://github.com/wdi-sg/pokedex-express",
-  "author": "Nick Ang <nickangtc@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kauvia/pokedex-express.git"
+  },
+  "author": "Kauvia",
   "license": "MIT",
   "dependencies": {
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
-    "jsonfile": "^4.0.0"
-  }
+    "jsonfile": "^4.0.0",
+    "socket.io": "^2.2.0"
+  },
+  "description": "We will build our first web app using Node.js and Express - a Pokedex app.",
+  "bugs": {
+    "url": "https://github.com/kauvia/pokedex-express/issues"
+  },
+  "homepage": "https://github.com/kauvia/pokedex-express#readme"
 }
