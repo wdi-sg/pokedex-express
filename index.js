@@ -123,7 +123,18 @@ jsonfile.readFile(file, (err, obj) => {
 
         for (var p = 0; p < count; p++) {
             if (obj.pokemon[p].name.toLowerCase() === currentName) {
-                if (Object.values(obj.pokemon[p]["prev_evolution"]).length !== undefined) {
+
+                // to check it previous evolutions exist
+                var arrayOfCharacteristics = Object.keys(obj.pokemon[p]);
+                console.log(arrayOfCharacteristics);
+                arrayOfCharacteristics.forEach(function (element) {
+                    if (element === "prev_evolution") {
+                        evolutionExist = true;
+                    }
+                });
+
+                // only find for previous evolution if previous evolution index exists.
+                if (evolutionExist) {
                     for (var q = 0; q < Object.values(obj.pokemon[p]["prev_evolution"]).length; q++) {
                         evolutionExist = true;
                         evolutionList += "- " + obj.pokemon[p]["prev_evolution"][q].name + "<br>";
@@ -132,10 +143,11 @@ jsonfile.readFile(file, (err, obj) => {
             }
         }
 
+        // prints results accordindingly
         if (evolutionExist) {
             response.send(evolutionList);
         } else {
-            response.send(`${niceCurrentName} has no previous evolutions. Itz a baby!`)
+            response.send(`${niceCurrentName} has no previous evolutions. It'z a baby!`)
         }
     });
 });
@@ -149,32 +161,3 @@ jsonfile.readFile(file, (err, obj) => {
  * ===================================
  */
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
-
-
-
-//    // searches by Pokemon's next evolution
-//    app.get('/nextevolution/:name', (request, response) => {
-//     var currentName = request.params.name;
-//     console.log(currentName);
-//     var niceCurrentName = currentName.charAt(0).toUpperCase() + currentName.slice(1);
-
-//     var evolutionList = `List of ${niceCurrentName}'s previous evolutions: <br> `;
-//     var evolutionExist = false;
-
-//     for (var p = 0; p < count; p++) {
-//         if (obj.pokemon[p].name.toLowerCase() === currentName) {
-//             if (Object.values(obj.pokemon[p]["prev_evolution"]).length !== undefined) {
-//                 for (var q = 0; q < Object.values(obj.pokemon[p]["prev_evolution"]).length; q++) {
-//                     evolutionExist = true;
-//                     evolutionList += "- " + obj.pokemon[p]["prev_evolution"][q].name + "<br>";
-//                 }
-//             } 
-//         }
-//     }
-
-//     if (evolutionExist) {
-//         response.send(evolutionList);
-//     } else {
-//         response.send(`${niceCurrentName} has no previous evolutions. Itz a baby!`)
-//     }
-// });
