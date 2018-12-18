@@ -18,7 +18,6 @@ objOfPokemon = obj.pokemon;
             //name exist in the pokemen object, exist is TRUE
             //response send the weight of the pokemon
             //change exist back to false then exit
-
             if (request.params.name === objOfPokemon[b].name) {
             exist = true;
             response.send(objOfPokemon[b].name + ' weight is ' + objOfPokemon[b].weight);
@@ -36,6 +35,11 @@ objOfPokemon = obj.pokemon;
             console.log("no such name");
             return;
             }
+     });
+
+     app.get("/",(request, response) => {
+        response.send("Welcome to the online Pokedex!");
+
      });
 });
 
