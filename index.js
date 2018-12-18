@@ -1,11 +1,7 @@
-const express = require('express');
-// Init express app
-const app = express();
-
 const jsonfile = require('jsonfile');
-const file = 'pokedex.json'
-
-// const jsonfile = require('jsonfile');
+const file = 'pokedex.json';
+const express = require('express');
+const app = express();
 
 /**
  * ===================================
@@ -22,25 +18,31 @@ const file = 'pokedex.json'
 //   response.send(request.path);
 // });
 
-jsonfile.readFile(file, (err, obj) => {
-
-    let pokedex = obj.pokemon;
-
-     app.get("/search/:name", (request, response) => {
-        response.send("Hello, You are searching for: " + request.query.q);
-        response.send("You have found" + pokedex[0].name);
+app.get("/:name", (request, response) => {
 
         let search = request.params.name;
 
-        // response.send("You have found" + pokedex[0].name);
+        jsonfile.readFile(file, (err, obj) => {
 
-        for (var i = 0; i < pokedex.length; i++) {
-            if (search == pokedex[i].name)
-            response.send("You have found" + pokedex[i].name);
-        }
+            let pokedex = obj.pokemon;
+
+            for (i = 0; i < pokedex.length; i++) {
+                if (pokedex[i].name.toLowerCase() == search) {
+                response.send(
+                    `<html>
+                        <body>
+                            <p>This is <img src = ` +pokedex[i].img+ `></p>
+                            <p>He weighs ` +pokedex[i].weight+ `.</p>
+                        </body>
+                        </html>`
+                    );
+                } else if (err) {
+                    response.sendStatus(404);
+                    response.send("Could not find information about " + search + " - Is that a new pokemon? Gotta catch em' all!");
+                }
+            }
     });
 });
-
 /**
  * ===================================
  * Listen to requests on port 3000
