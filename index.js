@@ -22,53 +22,59 @@ app.get("/", (request, response) => {
 });
 
 app.get("/type/:sometype", (request, response) => {
+    var typeList = '';
     var searchPoke = request.params.sometype.toLowerCase();
     var searchPokeNew = searchPoke.charAt(0).toUpperCase() + searchPoke.slice(1);
-    console.log("The pokemon with " + searchPokeNew + " type are:- \n");
+    // response.send("The pokemon with " + searchPokeNew + " type are:- \n");
       jsonfile.readFile(pokedex, (err, obj) => {
         for(var i = 0; i < obj.pokemon.length; i++){
             var typePoke = obj.pokemon[i].type;
             for(var j = 0; j < typePoke.length; j++){
                 // console.log(typePoke[j]);
                 if(searchPokeNew === typePoke[j]){
-                    console.log(obj.pokemon[i].name);
+                    typeList += (obj.pokemon[i].name + "\n");
                 }
             }
         }
+        response.send("The pokemon with " + searchPokeNew + " type are:- \n\n" + typeList);
     });
 });
 
 app.get("/weaknesses/:someweakness", (request, response) => {
+    var weaknessesList = '';
     var searchPoke = request.params.someweakness.toLowerCase();
     var searchPokeNew = searchPoke.charAt(0).toUpperCase() + searchPoke.slice(1);
-    console.log("The pokemon with " + searchPokeNew + " weaknesses are:- \n");
+    // console.log("The pokemon with " + searchPokeNew + " weaknesses are:- \n");
       jsonfile.readFile(pokedex, (err, obj) => {
         for(var i = 0; i < obj.pokemon.length; i++){
             var weaknessPoke = obj.pokemon[i].weaknesses;
             for(var j = 0; j < weaknessPoke.length; j++){
                 if(searchPokeNew === weaknessPoke[j]){
-                    console.log(obj.pokemon[i].name);
+                    weaknessesList += (obj.pokemon[i].name + "\n");
                 }
             }
         }
+        response.send("The pokemon with " + searchPokeNew + " type weaknesses are:- \n\n" + weaknessesList);
     });
 });
 
 app.get("/nextevolution/:someevolution", (request, response) => {
+    var nextEvoList = '';
     var searchPoke = request.params.someevolution.toLowerCase();
     var searchPokeNew = searchPoke.charAt(0).toUpperCase() + searchPoke.slice(1);
-    console.log("The pokemon with " + searchPokeNew + " evolution are:- \n");
+    // console.log("The pokemon with " + searchPokeNew + " evolution are:- \n");
       jsonfile.readFile(pokedex, (err, obj) => {
         for(var i = 0; i < obj.pokemon.length; i++){
             if(obj.pokemon[i].hasOwnProperty('next_evolution')){
                 var evoPoke = obj.pokemon[i].next_evolution;
                 for(var j = 0; j < evoPoke.length; j++){
                     if(searchPokeNew === obj.pokemon[i].name){
-                        console.log(evoPoke[j].name);
+                        nextEvoList += (evoPoke[j].name + "\n");
                     }
                 }
             }
         }
+        response.send("The pokemon that evolves from " + searchPokeNew + " are:- \n\n" + nextEvoList);
     });
 });
 
