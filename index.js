@@ -10,13 +10,7 @@ jsonfile.readFile(file, (err, obj) => {
     app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
 
     app.get('/:pokemon', (request, response) => {
-        let pokemonSearched = request.params.pokemon;
-        let pokemonFound = whosThatPokemon(request.params.pokemon);
-        if (typeof pokemonFound !== 'undefined'){
-            response.send(`You searched for ${pokemonSearched}. <br/>We got ye covered, brother. We found ${pokemonFound.name}. It's ${pokemonFound.weight} and ${pokemonFound.height} tall. ${pokemonFound.name} is number ${pokemonFound.num} on the Pokedex.`);
-        } else {
-            response.send(`Could not find information about ${pokemonSearched} - Is that a new pokemon? Gotta catch em' all!`)
-        }
+        response.send(getPokemonDescriptions(request.params.pokemon));
     });
 
     app.get('/', (request, response) => {
@@ -24,21 +18,11 @@ jsonfile.readFile(file, (err, obj) => {
     });
 
     app.get('/type/:element', (request, response) => {
-        let resultString = "";
-        let typeArray = whosThatType(request.params.element);
-        for (let pokemon of typeArray){
-            resultString += pokemon.name + "<br/>"
-        }
-        response.send(resultString);
+        response.send(getPokemonNamesByTypeOrWeakness(request.params.element, "type"));
     });
 
     app.get('/weaknesses/:weakness', (request, response) => {
-        let resultString = "";
-        let weaknessArray = whosThatWeakness(request.params.weakness);
-        for (let pokemon of weaknessArray){
-            resultString += pokemon.name + "<br/>"
-        }
-        response.send(resultString);
+        response.send(getPokemonNamesByTypeOrWeakness(request.params.weakness, "weaknesses"));
     });
 
     app.get('/nextevolution/:pokemon', (request, response) => {
@@ -46,36 +30,47 @@ jsonfile.readFile(file, (err, obj) => {
     });
 });
 
-function whosThatPokemon(pokemonSearched){
+function getPokemonByName(pokemonName){
     return pokedex.find(pokemon => {
-        return pokemon.name.toLowerCase() === pokemonSearched.toLowerCase();
+        return pokemon.name.toLowerCase() === pokemonName.toLowerCase();
     });
 }
 
-function whosThatType(type){
-    let modifiedType = type.charAt(0).toUpperCase() + type.substring(1);
-    return pokedex.filter(pokemon => pokemon.type.includes(modifiedType));
+function getPokemonDescriptions(pokemon){
+    let pokemonFound = getPokemonByName(pokemon);
+    if (pokemonFound){
+        return `You searched for ${pokemonFound.name}.<br/>We got ye covered, brother. We found ${pokemonFound.name}. It's ${pokemonFound.weight} and ${pokemonFound.height} tall. ${pokemonFound.name} is number ${pokemonFound.num} on the Pokedex.`;
+    }
+    return `Could not find information about ${pokemon} - Is that a new pokemon? Gotta catch em' all!`;
 }
 
-function whosThatWeakness(weakness){
-    let modifiedWeakness = weakness.charAt(0).toUpperCase() + weakness.substring(1);
-    return pokedex.filter(pokemon => pokemon.weaknesses.includes(modifiedWeakness));
+function getPokemonNamesByTypeOrWeakness(input, searchType){
+    let capitalizedSearchString = input.charAt(0).toUpperCase() + input.substring(1);
+    let pokemonMatches = getPokemonByTypeOrWeakness(capitalizedSearchString, searchType);
+
+    //Map all the names of the Pokemon objects, then join them up with ".join" in a string. The Pokemon names within the String are split with break tags.
+    return pokemonMatches.map(pokemon => {
+        return pokemon.name;
+    }).join("<br/>");
+}
+
+function getPokemonByTypeOrWeakness(input, searchType){
+    //Search through Pokedex and return all Pokemon objects that matches the searchType in the form of an array.
+    return pokedex.filter(pokemon => pokemon[searchType].includes(input));
 }
 
 function whosThatLowerLifeform(pokemon){
-    let pokemonToCheck = whosThatPokemon(pokemon);
+    let pokemonToCheck = getPokemonByName(pokemon);
     let resultString = "";
     if (pokemonToCheck){
         if (pokemonToCheck.prev_evolution){
-            let pokemonEvolutions = pokemonToCheck.prev_evolution;
-            for (let evolution of pokemonEvolutions){
-                resultString += evolution.name + "<br/>";
-            }
+            return pokemonToCheck.prev_evolution.map(evolution => {
+                return evolution.name;
+            }).join("<br/>");
         } else {
-            resultString += "No evolutions, bruddah."
+            return `No previous evolutions for ${pokemonToCheck.name}, bruddah.`
         }
     } else {
-        resultString += "Couldn't find that pokemon, brudder."
+        return `Couldn't find that pokemon, brudder.`
     }
-    return resultString;
 }
