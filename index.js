@@ -26,18 +26,22 @@ jsonfile.readFile(file, (err, obj) => {
     });
 
     app.get('/nextevolution/:pokemon', (request, response) => {
-        response.send(whosThatLowerLifeform(request.params.pokemon));
+        response.send(getPreviousEvolutions(request.params.pokemon));
     });
 });
 
 function getPokemonByName(pokemonName){
+    //Iterate through the Pokedex. If the Pokemon exists in the Pokedex, return the Pokemon object.
     return pokedex.find(pokemon => {
         return pokemon.name.toLowerCase() === pokemonName.toLowerCase();
     });
 }
 
 function getPokemonDescriptions(pokemon){
+    //Search for the Pokemon in the Pokedex.
     let pokemonFound = getPokemonByName(pokemon);
+
+    //If the Pokemon exists, return a String of its description, otherwise, return a String saying that the Pokemon couldn't be found.
     if (pokemonFound){
         return `You searched for ${pokemonFound.name}.<br/>We got ye covered, brother. We found ${pokemonFound.name}. It's ${pokemonFound.weight} and ${pokemonFound.height} tall. ${pokemonFound.name} is number ${pokemonFound.num} on the Pokedex.`;
     }
@@ -59,10 +63,13 @@ function getPokemonByTypeOrWeakness(input, searchType){
     return pokedex.filter(pokemon => pokemon[searchType].includes(input));
 }
 
-function whosThatLowerLifeform(pokemon){
+function getPreviousEvolutions(pokemon){
     let pokemonToCheck = getPokemonByName(pokemon);
-    let resultString = "";
+
+    //If the Pokemon exists, check for evolutions, otherwise, return a String saying it couldn't be found.
     if (pokemonToCheck){
+
+        //If the Pokemon exists and has previous evolutions, return a String with all its evolutions, otherwise, return a String saying that no evolutions were found.
         if (pokemonToCheck.prev_evolution){
             return pokemonToCheck.prev_evolution.map(evolution => {
                 return evolution.name;
