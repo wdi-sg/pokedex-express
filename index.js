@@ -54,15 +54,80 @@ app.get("/type/:x", (request, response) => {
             }
         }
         if (list.length > 0) {
-            message = "The list of pokemon with type " + type + ": ";
+            message = "The list of pokemon with type " + type + ": " + "</br>";
             for (var k = 0; k < list.length; k++) {
-                message = message + list[k] + ", ";
+                message = message + "-" + list[k] + ", " + "</br>";
             }
             response.send(message);
         }
 
         else {
             response.send("There is no pokemon with type " + type + ".");
+        }
+    })
+})
+
+app.get("/weakness/:x", (request, response) => {
+    var weakness  = request.params.x;
+    var list = [];
+    var message = "";
+    jsonfile.readFile(file, function (err, obj) {
+        for(var i = 0; i < obj.pokemon.length; i++ ) {
+            for (var j = 0; j < obj.pokemon[i].weaknesses.length; j++) {
+                if (obj.pokemon[i].weaknesses[j].toLowerCase() === weakness.toLowerCase()){
+                    list.push(obj.pokemon[i].name);
+                    break;
+                }
+            }
+        }
+        if (list.length > 0) {
+            message = "The list of pokemon with weakness " + weakness  + ": " + "</br>";
+            for (var k = 0; k < list.length; k++) {
+                message = message + "-"+ list[k] + "</br>";
+            }
+            response.send(message);
+        }
+
+        else {
+            response.send("There is no pokemon with weakness " + weakness + ".");
+        }
+    })
+})
+
+app.get("/nextevolution/:x", (request, response) => {
+    var nextEvolution  = request.params.x;
+    var listWithNextEvo = [];
+    var list = [];
+    var message = "";
+    jsonfile.readFile(file, function (err, obj) {
+        for(var i = 0; i < obj.pokemon.length; i++ ) {
+            for (var property in obj.pokemon[i]) {
+                if (property === "next_evolution") {
+                    listWithNextEvo.push(obj.pokemon[i]);
+                    break;
+                }
+            }
+        }
+
+        for(var i = 0; i < listWithNextEvo.length; i++ ) {
+            for (var j = 0; j < listWithNextEvo[i].next_evolution.length; j++) {
+                if (listWithNextEvo[i].next_evolution[j].name.toLowerCase() === nextEvolution.toLowerCase()){
+                    list.push(listWithNextEvo[i].name);
+                    break;
+                }
+            }
+        }
+
+        if (list.length > 0) {
+            message = "The list of pokemon with next evolution " + nextEvolution  + ": " + "</br>";
+            for (var k = 0; k < list.length; k++) {
+                message = message + "-"+ list[k] + "</br>";
+            }
+            response.send(message);
+        }
+
+        else {
+            response.send("There is no pokemon with next evolution " + nextEvolution + ".");
         }
     })
 })
