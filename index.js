@@ -59,6 +59,7 @@ app.get("/weaknesses/:someweakness", (request, response) => {
 });
 
 app.get("/nextevolution/:someevolution", (request, response) => {
+    let y = true
     var nextEvoList = '';
     var searchPoke = request.params.someevolution.toLowerCase();
     var searchPokeNew = searchPoke.charAt(0).toUpperCase() + searchPoke.slice(1);
@@ -69,12 +70,18 @@ app.get("/nextevolution/:someevolution", (request, response) => {
                 var evoPoke = obj.pokemon[i].next_evolution;
                 for(var j = 0; j < evoPoke.length; j++){
                     if(searchPokeNew === obj.pokemon[i].name){
+                        y = false;
                         nextEvoList += (evoPoke[j].name + "\n");
                     }
                 }
             }
         }
-        response.send("The pokemon that evolves from " + searchPokeNew + " are:- \n\n" + nextEvoList);
+        if(y === true){
+            response.status(404).send(searchPokeNew + " has no evolution");
+        }
+        else{
+            response.send("The pokemon that evolves from " + searchPokeNew + " are:- \n\n" + nextEvoList);
+        }
     });
 });
 
