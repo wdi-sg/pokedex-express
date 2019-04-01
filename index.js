@@ -43,9 +43,9 @@ app.get("/type/:type", (request, response) => {
                 typeFound = true;
             }
         }
-        console.log(typeFound)
+        // console.log(typeFound)
         if (typeFound === true) {
-            response.send("Here is a list of pokemon that are of the " + inputType + "type: " + pokemonList.join(', ') + ".");
+            response.send("Here is a list of pokemon that are of the " + inputType + " type: " + pokemonList.join(', ') + ".");
         } else {
             response.send(404, "Could not find information about " + inputType + "- is that a new pokemon type? Gotta catch em' all!");
         }
@@ -53,6 +53,29 @@ app.get("/type/:type", (request, response) => {
 
 });
 
+// list the names of all pokemon that have the specified weakness
+app.get("/weakness/:type", (request, response) => {
+    let inputType = request.params.type;
+    jsonfile.readFile(file, (err, obj) => {
+        let pokemonFound = false;
+        let pokemonList = [];
+        for (let i = 0; i < obj.pokemon.length; i++) {
+            let pokemonWeakness = obj.pokemon[i].weaknesses.toString().toLowerCase();
+            let typeInput = inputType.toLowerCase();
+            if (pokemonWeakness.includes(typeInput)) {
+                pokemonList.push(obj.pokemon[i].name)
+                pokemonFound = true;
+            }
+        }
+        // console.log(typeFound)
+        if (pokemonFound === true) {
+            response.send("Here is a list of pokemon that are of the " + inputType + " type: " + pokemonList.join(', ') + ".");
+        } else {
+            response.send(404, "Could not find information about " + inputType + "- is that a new pokemon type? Gotta catch em' all!");
+        }
+    });
+
+});
 
 // default response
 app.get('*', (request, response) => {
