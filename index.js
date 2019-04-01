@@ -17,12 +17,19 @@ app.get("/:pokemon", (request, response) => {
                 let pokemonHeight = obj.pokemon[i].height;
                 let candy = obj.pokemon[i].candy;
                 let id = obj.pokemon[i].id;
-                response.send("This is " + pokemonName + ", it weighs " + pokemonWeight + "! It's height is " + pokemonHeight + " and it uses " + candy + " to get stronger. " + pokemonName + "'s Pokedex number is " + id + ".");
+                console.log(obj.pokemon[i]);
+                if (candy.toLowerCase() === "none") {
+                    response.send("This is " + pokemonName + ". It weighs " + pokemonWeight + " and it's height is " + pokemonHeight + ". " + pokemonName + "'s Pokedex number is " + id + ".");
+                }
+                else {
+                    response.send("This is " + pokemonName + ", it weighs " + pokemonWeight + "! It's height is " + pokemonHeight + " and it uses " + candy + " to get stronger. " + pokemonName + "'s Pokedex number is " + id + ".");
+                }
+
                 pokemonFound = true;
             }
         }
         if (!pokemonFound) {
-            response.send(404, "Could not find information about " + pokemonName + "- is that a new pokemon? Gotta catch em' all!");
+            response.status(404).send("Could not find information about " + pokemonName + "- is that a new pokemon? Gotta catch em' all!");
             // res.status(404).send("Could not find information about " + pokemonName + "- is that a new pokemon? Gotta catch em' all!")
         }
     });
@@ -47,7 +54,7 @@ app.get("/type/:type", (request, response) => {
         if (typeFound === true) {
             response.send("Here is a list of pokemon that are of the " + inputType + " type: " + pokemonList.join(', ') + ".");
         } else {
-            response.send(404, "Could not find information about " + inputType + "- is that a new pokemon type? Gotta catch em' all!");
+            response.status(404).send("Could not find information about " + inputType + "- is that a new pokemon type? Gotta catch em' all!");
         }
     });
 
@@ -69,9 +76,9 @@ app.get("/weakness/:type", (request, response) => {
         }
         // console.log(typeFound)
         if (pokemonFound === true) {
-            response.send("Here is a list of pokemon that are of the " + inputType + " type: " + pokemonList.join(', ') + ".");
+            response.send("Here is a list of pokemon that have the weakness of " + inputType + " type: " + pokemonList.join(', ') + ".");
         } else {
-            response.send(404, "Could not find information about " + inputType + "- is that a new pokemon type? Gotta catch em' all!");
+            response.status(404).send("Could not find information about " + inputType + "- is that a new pokemon type? Gotta catch em' all!");
         }
     });
 
@@ -81,7 +88,7 @@ app.get("/weakness/:type", (request, response) => {
 app.get('*', (request, response) => {
     // send response with some data (a string)
     // response.send(request.path);
-    response.send("Welcome to the online Pokedex!");
+    response.send('<html><body><h1>Welcome to the online Pokedex!</h1></body></html>');
 });
 
 /**
