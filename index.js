@@ -14,7 +14,11 @@ app.get("/:pokemon", (request, response) => {
         for (let i = 0; i < obj.pokemon.length; i++) {
             if (obj.pokemon[i].name.toLowerCase() === pokemonName.toLowerCase()) {
                 let pokemonWeight = obj.pokemon[i].weight;
-                response.send(pokemonName + "'s weight is: " + pokemonWeight);
+                let pokemonHeight = obj.pokemon[i].height;
+                let candy = obj.pokemon[i].candy;
+                let id = obj.pokemon[i].id;
+                response.send("This is " + pokemonName + ", it weighs " + pokemonWeight + "! It's height is " + pokemonHeight + " and it loves " + candy + ". " + pokemonName + "'s Pokedex number is " + id + ".");
+                response.send(pokemonName + "Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun's rays, the seed grows progressively larger.")
                 pokemonFound = true;
             }
         }
