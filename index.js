@@ -1,4 +1,5 @@
 const express = require('express');
+const jsonfile = require('jsonfile');
 
 // const jsonfile = require('jsonfile');
 
@@ -10,6 +11,7 @@ const express = require('express');
 
 // Init express app
 const app = express();
+const file = 'pokedex.json'
 
 /**
  * ===================================
@@ -17,9 +19,21 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
+ // app.get('*', (request, response) => {
+ //   // send response with some data (a string)
+ //   response.send(request.path);
+ // });
+
+app.get('/Bulbasaur', (request, response) => {
+  jsonfile.readFile(file, (err, obj) => {
+    // if(err){
+    //   console.log("***Error found in reading file***");
+    // }
+      // console.log("***Reading file now***");
+      // obj.pokemon[0].weight;
+      response.send(obj.pokemon[0].weight);// send response with some data (a string)
+      // console.log("***Done reading file***");
+  })
 });
 
 /**
