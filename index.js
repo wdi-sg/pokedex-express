@@ -1,140 +1,143 @@
 //===================================
 // Configurations and set up
 //===================================
-const express = require('express');
-const jsonfile = require('jsonfile');
+const _ = require('lodash');
+const promise = require("bluebird");
 
+const jsonfile = promise.promisifyAll(require('jsonfile'));
+
+const express = require('express');
 const app = express();
+
+let data;
 const file = 'pokedex.json';
 
+//===================================
+// Server And Data Loader Function
+//===================================
+var startServer = function () {
+    // read data before starting up server
+    jsonfile.readFileAsync(file)
+        .then((JSONContent) => {
+            data = JSONContent;
+        })
+        .then(() => {
+            app.listen(3000);
+        });
+}
 
 // ===================================
 // Request Handlers
 // ===================================
 var homeRequestHandler = function (request, response) {
-    let contentForDisplay = `Welcome to the online Pokdex!`;
+    let contentForDisplay = `Welcome to the online Pokedex!`;
     response.send(contentForDisplay);
 }
 
 var getPokemonByNameRequestHandler = function (request, response) {
-    jsonfile.readFile(file, (err, data) => {
-        let found = false;
-        let contentForDisplay = `Could not find information about ${ request.params.name } - Is that a new pokemon? Gotta catch em' all!`;
+    let found = false;
+    let contentForDisplay = `Could not find pokedex information about ${ request.params.name }.`;
 
-        data.pokemon.forEach(function(item) {
-            if (item.name.toLowerCase() === request.params.name.toLowerCase()) {
-                found = true;
-                contentForDisplay = `This is ${ item.name }, he is ${ item.weight } in weight! <br>
-                He is also a ${ item.type } type pokemon.`
-            }
-        });
-
-        if (found === true) {
-            response.send(contentForDisplay);
-        } else if (found === false) {
-            response.send(404, contentForDisplay);
+    _.forEach(data.pokemon, (o) => {
+        if (o.name.toLowerCase() === request.params.name.toLowerCase()) {
+            found = true;
+            contentForDisplay = `This is ${ o.name }, he is ${ o.weight } in weight!`
         }
     });
+
+    if (found === true) {
+        response.send(contentForDisplay);
+    } else if (found === false) {
+        response.send(404, contentForDisplay);
+    }
 }
 
 var getPokemonByTypeRequestHandler = function (request, response) {
-    jsonfile.readFile(file, (err, data) => {
-        let temp = [];
-        let found = false;
-        let contentForDisplay = `Could not find information about ${ request.params.someType } - Is that a new type?`;
+    let temp = [];
+    let found = false;
+    let contentForDisplay = `Could not find type information about ${ request.params.someType }.`;
 
-        data.pokemon.forEach(function(item) {
-            for (let i = 0; i < item.type.length; i++) {
-                if (item.type[i].toLowerCase() === request.params.someType.toLowerCase()) {
-                    found = true;
-                    temp.push(item.name);
-                }
+    _.forEach(data.pokemon, (o) => {
+        for (let i = 0; i < o.type.length; i++) {
+            if (o.type[i].toLowerCase() === request.params.someType.toLowerCase()) {
+                found = true;
+                temp.push(o.name);
             }
-            contentForDisplay = temp;
-        });
-
-        if (found === true) {
-            response.send(200, contentForDisplay);
-        } else if (found === false) {
-            response.send(404, contentForDisplay);
         }
+        contentForDisplay = temp;
     });
+
+    if (found === true) {
+        response.send(contentForDisplay);
+    } else {
+        response.send(404, contentForDisplay);
+    }
 }
 
 var getPokemonByWeaknessRequestHandler = function (request, response) {
-    jsonfile.readFile(file, (err, data) => {
-        let temp = [];
-        let found = false;
-        let contentForDisplay = `Could not find information about ${ request.params.someWeakness } - Is that a new weakness?`;
+    let temp = [];
+    let found = false;
+    let contentForDisplay = `Could not find weakness information about ${ request.params.someWeakness }.`;
 
-        data.pokemon.forEach(function(item) {
-            for (let i = 0; i < item.weaknesses.length; i++) {
-                if (item.weaknesses[i].toLowerCase() === request.params.someWeakness.toLowerCase()) {
-                    found = true;
-                    temp.push(item.name);
-                }
+    _.forEach(data.pokemon, (o) => {
+        for (let i = 0; i < o.weaknesses.length; i++) {
+            if (o.weaknesses[i].toLowerCase() === request.params.someWeakness.toLowerCase()) {
+                found = true;
+                temp.push(o.name);
             }
-            contentForDisplay = temp;
-        });
-
-        if (found === true) {
-            response.send(200, contentForDisplay);
-        } else if (found === false) {
-            response.send(404, contentForDisplay);
         }
+        contentForDisplay = temp;
     });
+
+    if (found === true) {
+        response.send(contentForDisplay);
+    } else {
+        response.send(404, contentForDisplay);
+    }
 }
 
 var getPokemonPreEvolutionRequestHandler = function (request, response) {
-    jsonfile.readFile(file, (err, data) => {
-        let temp = [];
-        let found = false;
-        let contentForDisplay = `Could not find previous evolution information for ${ request.params.name }`;
+    let temp = [];
+    let found = false;
+    let contentForDisplay = `Could not find previous evolution information for ${ request.params.name }`;
 
-        data.pokemon.forEach(function(item) {
-            if (item.name.toLowerCase() === request.params.name.toLowerCase() && "prev_evolution" in item) {
+    _.forEach(data.pokemon, (o) => {
+        if (o.name.toLowerCase() === request.params.name.toLowerCase() && "prev_evolution" in o) {
+            for (let i = 0; i < o.prev_evolution.length; i++) {
                 found = true;
-
-                for (let i = 0; i < item.prev_evolution.length; i++) {
-                    temp.push(item.prev_evolution[i].name);
-                }
-
-                contentForDisplay = temp;
+                temp.push(o.prev_evolution[i].name);
             }
-        });
-
-        if (found === true) {
-            response.send(200, contentForDisplay);
-        } else if (found === false) {
-            response.send(404, contentForDisplay);
+            contentForDisplay = temp;
         }
     });
+
+    if (found === true) {
+        response.send(contentForDisplay);
+    } else {
+        response.send(404, contentForDisplay);
+    }
 }
 
 var getPokemonNextEvolutionRequestHandler = function (request, response) {
-    jsonfile.readFile(file, (err, data) => {
-        let temp = [];
-        let found = false;
-        let contentForDisplay = `Could not find next evolution information for ${ request.params.name }`;
+    let temp = [];
+    let found = false;
+    let contentForDisplay = `Could not find next evolution information for ${ request.params.name }`;
 
-        data.pokemon.forEach(function(item) {
-            if (item.name.toLowerCase() === request.params.name.toLowerCase() && "next_evolution" in item) {
+    _.forEach(data.pokemon, (o) => {
+        if (o.name.toLowerCase() === request.params.name.toLowerCase() && "next_evolution" in o) {
+            for (let i = 0; i < o.next_evolution.length; i++) {
                 found = true;
-
-                for (let i = 0; i < item.next_evolution.length; i++) {
-                    temp.push(item.next_evolution[i].name);
-                }
-
-                contentForDisplay = temp;
+                temp.push(o.next_evolution[i].name);
             }
-        });
-
-        if (found === true) {
-            response.send(200, contentForDisplay);
-        } else if (found === false) {
-            response.send(404, contentForDisplay);
+            contentForDisplay = temp;
         }
     });
+
+    if (found === true) {
+        response.send(contentForDisplay);
+    } else {
+        response.send(404, contentForDisplay);
+    }
 }
 
 
@@ -150,6 +153,6 @@ app.get('/nextevolution/:name', getPokemonNextEvolutionRequestHandler);
 
 
 // ===================================
-// Listen to requests on port 3000
+// Start Server
 // ===================================
-app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+startServer();
