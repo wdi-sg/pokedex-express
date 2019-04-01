@@ -36,7 +36,7 @@ jsonfile.readFile(pokedex, (err, obj) => {
         const pokemon = pokemonArray[index];
         if (pokemonName === "/" + pokemon.name.toLowerCase()) {
           pokemonFound = true;
-          response.send(pokemon.name + " weighs " + pokemon.weight);
+          response.send( "This is " + pokemon.name + ", he is " + pokemon.weight + " in weight! He is also " + pokemon.height + " tall.");
         }
       }
       if (pokemonFound === false) {
