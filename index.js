@@ -19,7 +19,7 @@ app.get("/:pokemon", (request, response) => {
             }
         }
         if (!pokemonFound) {
-            response.send("Could not find information about " + pokemonName + "- is that a new pokemon? Gotta catch em' all!");
+            response.send(404, "Could not find information about " + pokemonName + "- is that a new pokemon? Gotta catch em' all!");
         }
     });
     // when you read the file, get the specific pokemon that is being requested
