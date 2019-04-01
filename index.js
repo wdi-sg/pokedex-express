@@ -29,16 +29,19 @@ jsonfile.readFile(pokedex, (err, obj) => {
     // console.log(pokemonName);
     // console.log(pokemonArray[0].name);
     let pokemonFound = false;
-    for (let index = 0; index < pokemonArray.length; index++) {
-      const pokemon = pokemonArray[index];
-      if (pokemonName === "/" + pokemon.name.toLowerCase()) {
-        pokemonFound = true;
-        response.send(pokemon.name + " weighs " + pokemon.weight);
+    if (request.path === "/") {
+      response.send("Welcome to the online Pokdex!")
+    } else{
+      for (let index = 0; index < pokemonArray.length; index++) {
+        const pokemon = pokemonArray[index];
+        if (pokemonName === "/" + pokemon.name.toLowerCase()) {
+          pokemonFound = true;
+          response.send(pokemon.name + " weighs " + pokemon.weight);
+        }
       }
-    }
-    if (pokemonFound === false) {
-
-      response.status(404).send("Could not find information about " + pokemonNameWithoutSlash);
+      if (pokemonFound === false) {
+        response.status(404).send("Could not find information about " + pokemonNameWithoutSlash);
+      }
     }
   });
 });
