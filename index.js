@@ -81,6 +81,43 @@ app.get("/weakness/:type", (request, response) => {
             response.status(404).send("Could not find information about " + inputType + "- is that a new pokemon type? Gotta catch em' all!");
         }
     });
+});
+
+// list the names of all pokemon that the specified pokemon evolves from
+app.get("/nextevolution/:pokemon", (request, response) => {
+    let pokemonName = request.params.pokemon;
+    jsonfile.readFile(file, (err, obj) => {
+        let pokemonFound = false;
+        let noPreEvolution = false;
+        let pokemonList = [];
+        for (let i = 0; i < obj.pokemon.length; i++) {
+            if (obj.pokemon[i].name.toLowerCase() === pokemonName.toLowerCase()) {
+                let preEvolution = obj.pokemon[i].prev_evolution;
+                // console.log(PreEvolution)
+                if (preEvolution === undefined) {
+                    noPreEvolution = true;
+                }
+                else {
+                    for (let pokemon of obj.pokemon[i].prev_evolution){
+                        pokemonList.push(pokemon.name)
+                    };
+                }
+                pokemonFound = true;
+            }
+        }
+        // console.log(typeFound)
+        if (pokemonFound === true) {
+            if (noPreEvolution === false) {
+                response.send(pokemonName + " is evolved from: " + pokemonList.join(', ') + ".");
+            }
+            else {
+                response.send(pokemonName + " is not evolved from any other pokemon!");
+            }
+
+        } else {
+            response.status(404).send("Could not find information about " + pokemonName + "- is that a new pokemon? Gotta catch em' all!");
+        }
+    });
 
 });
 
