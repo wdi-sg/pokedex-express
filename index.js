@@ -25,13 +25,19 @@ jsonfile.readFile(pokedex, (err, obj) => {
     // send response with some data (a string)
     let pokemonArray = obj["pokemon"];
     let pokemonName = request.path;
-    console.log(pokemonName);
-    console.log(pokemonArray[0].name);
+    let pokemonNameWithoutSlash = pokemonName.split("/")[1];
+    // console.log(pokemonName);
+    // console.log(pokemonArray[0].name);
+    let pokemonFound = false;
     for (let index = 0; index < pokemonArray.length; index++) {
       const pokemon = pokemonArray[index];
       if (pokemonName === "/" + pokemon.name.toLowerCase()) {
+        pokemonFound = true;
         response.send(pokemon.name + " weighs " + pokemon.weight);
       }
+    }
+    if (pokemonFound === false) {
+      response.send("Could not find information about " + pokemonNameWithoutSlash);
     }
   });
 });
