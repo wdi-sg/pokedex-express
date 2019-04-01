@@ -1,4 +1,7 @@
-const express = require('express');
+const express = require("express");
+const jsonfile = require("jsonfile");
+
+const pokedex = "pokedex.json";
 
 // const jsonfile = require('jsonfile');
 
@@ -17,9 +20,20 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
+jsonfile.readFile(pokedex, (err, obj) => {
+  app.get("/*", (request, response) => {
+    // send response with some data (a string)
+    let pokemonArray = obj["pokemon"];
+    let pokemonName = request.path;
+    console.log(pokemonName);
+    console.log(pokemonArray[0].name);
+    for (let index = 0; index < pokemonArray.length; index++) {
+      const pokemon = pokemonArray[index];
+      if (pokemonName === "/" + pokemon.name.toLowerCase()) {
+        response.send(pokemon.name + " weighs " + pokemon.weight);
+      }
+    }
+  });
 });
 
 /**
@@ -27,4 +41,6 @@ app.get('*', (request, response) => {
  * Listen to requests on port 3000
  * ===================================
  */
-app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+app.listen(3000, () =>
+  console.log("~~~ Tuning in to the waves of port 3000 ~~~")
+);
