@@ -2,7 +2,7 @@ var json = require("./pokedex.json");
 const express = require('express');
 const app = express();
 const jsonfile = require('jsonfile');
-
+const file = 'pokedex.json';
 
 
 app.get('/bulbasaur', (request, response) => {
@@ -10,9 +10,9 @@ app.get('/bulbasaur', (request, response) => {
   response.send(`The Bulbasaur weight is ${bulbasaurWeight}`);
 }); //BASIC 1
 
-app.get('/404', (request, response) => {
-  response.send(404, "ERRORRRR");
-}); //FURTHER 1
+// app.get('/404', (request, response) => {
+//   response.send(404, "ERRORRRR");
+// }); //FURTHER 1
 
 app.get('/', (request, response) => {
   response.send(`Welcome to the online pokedex!`);
@@ -36,14 +36,38 @@ console.log(pokemonSearch);
         }
     }
 
-}); //FURTHER 3
+    response.send("POKEMON NOT FOUND!")
 
+}); //FURTHER 3 + 1
+
+
+app.get('/type/:type', (request, response) => {
+
+let pokemonSearch = request.params.type.toLowerCase();
+// console.log(pokemonSearch);
+        let array = [];
+    for (i = 0; i < json['pokemon'].length; i++) {
+        let pokemonType = json.pokemon[i].type.toString().toLowerCase();
+        if (pokemonType.includes(pokemonSearch)) {
+            array.push(json.pokemon[i].name);
+            console.log(array);
+            response.send(array)
+        }
+
+    }
+
+}); //FURTHER 4
 
 
 
 
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
 
+// let pokeArray = [];
+// pokeArray.push("HELLO");
+// pokeArray.push("Bye");
+// console.log(pokeArray);
 
-console.log(json['pokemon'][1]);
-console.log(json['pokemon'][0]['type']);
+// console.log(json['pokemon'][13]['type']);
+// console.log('testing');
+// console.log(json['pokemon'][0]['type'][0].toLowerCase());
