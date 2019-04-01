@@ -79,6 +79,58 @@ const file = 'pokedex.json'
     });
   });
 
+  app.get("/pokedex/weakness/:weakness", (request,response) => {
+    let weaknessArr = [];
+    let search = request.params.weakness.toLowerCase();
+    jsonfile.readFile(file, (err,obj) => {
+      for (let i=0; i<obj.pokemon.length; i++){
+        console.log(i+" first loop is running");
+        for (let j=0; j<obj.pokemon[i].type.length;j++){
+          console.log(j+" second loop is running");
+          if (search == obj.pokemon[i].weaknesses[j].toLowerCase()){
+            console.log(obj.pokemon[i].weaknesses[j]);
+            weaknessArr.push(obj.pokemon[i].name);
+          }
+        }
+      }
+      console.log(weaknessArr);
+      console.log(weaknessArr.join(', '))
+      response.send(weaknessArr.join(', '));
+    });
+  });
+
+  app.get("/pokedex/nextevolution/:name", (request,response) => {
+    let evoArr = [];
+    let containerArr = [];
+    let search = request.params.name.toLowerCase();
+    jsonfile.readFile(file, (err,obj) => {
+      for (let i=0; i<obj.pokemon.length; i++){
+        console.log(obj.pokemon[i].name+" first loop is running");
+        for (let j=0; j<obj.pokemon[i].next_evolution.length; j++){
+          console.log(" second loop is running");
+          checkAdult = () => {
+            if(obj.pokemon[i].next_evolution = "undefined"){
+              return false;
+            }
+          }
+          containerArr = obj.pokemon[i].filter(checkAdult);
+          for (let i=0; i<obj.pokemon.length; i++){
+            for(let j=0; j<obj.pokemon[i].next_evolution.length;j++){
+              if(search == obj.pokemon[i].next_evolution[j].toLowerCase()){
+                evoArr.push(pokemon[i].name);
+              }
+            }
+          }
+        }
+      }
+      console.log(evoArr);
+      console.log(evoArr.join(', '))
+      response.send(evoArr.join(', '));
+    });
+  });
+
+
+
 // }else{
 //   response.send("Welcome to the online Pokdex!");
 // }
