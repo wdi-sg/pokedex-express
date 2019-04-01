@@ -78,7 +78,6 @@ var getPokemonByWeaknessRequestHandler = function (request, response) {
     _.forEach(data.pokemon, (o) => {
         for (let i = 0; i < o.weaknesses.length; i++) {
             if (o.weaknesses[i].toLowerCase() === request.params.someWeakness.toLowerCase()) {
-                found = true;
                 pokemons.push(o.name);
             }
         }
