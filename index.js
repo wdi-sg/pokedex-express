@@ -174,7 +174,7 @@ app.get("/:pokemonName", (request, response) => {
             response.send(
 
             //pokemon name, weight, height
-                pokemonObj["name"]+ " weighs " +pokemonObj["weight"] + ", and is " +pokemonObj["height"]+ " tall! It uses " +pokemonObj["candy"]+"."
+                pokemonObj["name"]+ " weighs " +pokemonObj["weight"] + ", and is " +pokemonObj["height"]+ " tall! It uses " +pokemonObj["candy"]+". It has a spawn chance of " +pokemonObj["spawn_chance"] + "."
 
                 );
 
