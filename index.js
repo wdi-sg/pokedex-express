@@ -19,6 +19,42 @@ const app = express();
  */
 
 
+//Expose a new route for /weaknesses/some-weakness that returns a message listing the names of all pokemon that have the specified weakness (eg. /weakness/rock).
+
+app.get("/weakness/:weaknessType", (request, response) => {
+
+    let weakness = request.params.weaknessType;
+
+  jsonfile.readFile(file, (err, obj) => {
+
+    let pokemonWithThisWeakness = [];
+    let pokemonWeaknessMatch = false;
+
+    for (var i = 0; i < obj["pokemon"].length; i++) {
+
+        let stringify = obj["pokemon"][i]["weaknesses"].toString();
+
+        if (stringify.toLowerCase().includes(weakness.toLowerCase())) {
+            pokemonWithThisWeakness.push(obj["pokemon"][i]["name"]);
+            pokemonWeaknessMatch = true;
+        }
+    }
+
+    let printPokemonWithThisWeakness = pokemonWithThisWeakness.join(', ');
+
+        if (pokemonWeaknessMatch === false) {
+            response.status(404).send('Weakness not found!');
+        } else {
+            response.send("These Pokémon are weak against " +weakness+ " attacks: " +printPokemonWithThisWeakness);
+        }
+
+  // jsonfile.writeFile(file, obj, (err) => {
+  //   console.log(err)
+  // });
+});
+});
+
+
 app.get("/:pokemonName", (request, response) => {
 
     let pokemonName = request.params.pokemonName;
@@ -28,17 +64,27 @@ app.get("/:pokemonName", (request, response) => {
 
     let pokemonFound = false;
 
-
     console.log(obj["pokemon"].length);
     for (var i = 0; i < obj["pokemon"].length; i++) {
+
+        let pokemonObj = obj["pokemon"][i];
+
+
+
         if (pokemonName.toLowerCase() === obj["pokemon"][i]["name"].toLowerCase()) {
-            response.send(obj["pokemon"][i]["name"]+ "'s weight is " +obj["pokemon"][i]["weight"] + ". It is a " + obj["pokemon"][i]["type"][0] + " Pokémon.");
+            response.send(
+
+            //pokemon name, weight, height
+                pokemonObj["name"]+ " weighs " +pokemonObj["weight"] + ", and is " +pokemonObj["height"]+ " tall! It uses " +pokemonObj["candy"]+"."
+
+                );
+
             pokemonFound = true;
         }
     }
 
     if (!pokemonFound) {
-        response.send(pokemonName + " does not exist!");
+        response.status(404).send('Pokémon not found!');
     }
 
 
