@@ -34,8 +34,9 @@ app.get("/:pokemon", (request, response) => {
  */
 
 app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
+    // send response with some data (a string)
+    // response.send(request.path);
+    response.send("Welcome to the online Pokedex!");
 });
 
 /**
