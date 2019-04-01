@@ -24,15 +24,36 @@ const file = 'pokedex.json'
  //   response.send(request.path);
  // });
 
-app.get('/Bulbasaur', (request, response) => {
+
+app.get("/:name", (request, response) => {
+  let match = null;
+  let pokemonName;
+  console.log(request.params);
+  console.log(request.params.name);
+  let search = request.params.name.toLowerCase(); //uppercase the first letter of the search word
   jsonfile.readFile(file, (err, obj) => {
-    // if(err){
-    //   console.log("***Error found in reading file***");
-    // }
-      // console.log("***Reading file now***");
-      // obj.pokemon[0].weight;
-      response.send(obj.pokemon[0].weight);// send response with some data (a string)
-      // console.log("***Done reading file***");
+    for (let i =0; i<obj.pokemon.length; i++){
+      // console.log("The loop is working");
+      // console.log(obj.pokemon[i].name);
+      // console.log(search);
+      if (search == obj.pokemon[i].name.toLowerCase()){
+        // console.log(search);
+        // result = obj.pokemon[i];
+        // console.log("The loop returned something");
+        pokemonName = obj.pokemon[i].name;
+        console.log(pokemonName);
+        match = true;
+
+      } else if (match==null && (i==(obj.pokemon.length-1))){
+         match = false;
+       }
+
+    }console.log(match);
+     if (match == true) {
+       response.send(pokemonName);//deliberately coded it this way to return the entire pokemon's data as an object
+     } else if (match == false) {
+          response.send("Could not find");
+     }
   })
 });
 
