@@ -37,7 +37,8 @@ jsonfile.readFile(pokedex, (err, obj) => {
       }
     }
     if (pokemonFound === false) {
-      response.send("Could not find information about " + pokemonNameWithoutSlash);
+
+      response.status(404).send("Could not find information about " + pokemonNameWithoutSlash);
     }
   });
 });
