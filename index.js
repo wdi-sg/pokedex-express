@@ -24,38 +24,57 @@ const file = 'pokedex.json'
  //   response.send(request.path);
  // });
 
+ app.get('', (request, response) => {
+   response.send("Welcome to the online Pokdex! To use, pls type '/pokedex/' followed by 'name' of pokemon!");
+ });
+  app.get("/pokedex/:name", (request, response) => {
+    let match = null;
+    let pokemonName;
+    console.log(request.params);
+    console.log(request.params.name);
+    let search = request.params.name.toLowerCase(); //uppercase the first letter of the search word
+    jsonfile.readFile(file, (err, obj) => {
+      for (let i =0; i<obj.pokemon.length; i++){
+        if (search == obj.pokemon[i].name.toLowerCase()){
+          pokemonName = obj.pokemon[i].name;
+          console.log(pokemonName);
+          match = true;
+        } else if (match==null && (i==(obj.pokemon.length-1))){
+           match = false;
+         }
+      }console.log(match);
+       if (match == true) {
+         response.send(pokemonName);//deliberately coded it this way to return the entire pokemon's data as an object
+       } else if (match == false) {
+            response.status(404).send(`Could not find information about ${search} - Is that a new pokemon? Gotta catch em' all!` );
+        }
+   })
+  });
 
-app.get("/:name", (request, response) => {
-  let match = null;
-  let pokemonName;
-  console.log(request.params);
-  console.log(request.params.name);
-  let search = request.params.name.toLowerCase(); //uppercase the first letter of the search word
-  jsonfile.readFile(file, (err, obj) => {
-    for (let i =0; i<obj.pokemon.length; i++){
-      // console.log("The loop is working");
-      // console.log(obj.pokemon[i].name);
-      // console.log(search);
-      if (search == obj.pokemon[i].name.toLowerCase()){
-        // console.log(search);
-        // result = obj.pokemon[i];
-        // console.log("The loop returned something");
-        pokemonName = obj.pokemon[i].name;
-        console.log(pokemonName);
-        match = true;
+  app.get("/pokedex/type/:type", (request,response) => {
+    let typeArray = [];
+    let search = request.params.type.toLowerCase();
+    jsonfile.readFile(file, (err,obj) => {
+      for (let i=0; i<obj.pokemon.length; i++){
+        console.log(i+" first loop is running");
+        for (let j=0; j<obj.pokemon[i].type.length;j++){
+          console.log(j+" second loop is running");
+          if (search == obj.pokemon[i].type[j].toLowerCase()){
+            console.log(obj.pokemon[i].type[j]);
+            typeArray.push(obj.pokemon[i].name);
+          }
+        }
+      }
+      console.log(typeArray);
+      console.log(typeArray.join(', '))
+      response.send(typeArray.join(', '));
+    });
+  });
 
-      } else if (match==null && (i==(obj.pokemon.length-1))){
-         match = false;
-       }
+// }else{
+//   response.send("Welcome to the online Pokdex!");
+// }
 
-    }console.log(match);
-     if (match == true) {
-       response.send(pokemonName);//deliberately coded it this way to return the entire pokemon's data as an object
-     } else if (match == false) {
-          response.send("Could not find");
-     }
-  })
-});
 
 /**
  * ===================================
