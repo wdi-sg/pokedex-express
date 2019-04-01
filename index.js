@@ -30,6 +30,10 @@ const file = 'pokedex.json'
   app.get("/pokedex/:name", (request, response) => {
     let match = null;
     let pokemonName;
+    let pokemonWeight;
+    let pokemonHeight;
+    let pokemonHatch;
+    let pokemonNumber;
     console.log(request.params);
     console.log(request.params.name);
     let search = request.params.name.toLowerCase(); //uppercase the first letter of the search word
@@ -37,6 +41,10 @@ const file = 'pokedex.json'
       for (let i =0; i<obj.pokemon.length; i++){
         if (search == obj.pokemon[i].name.toLowerCase()){
           pokemonName = obj.pokemon[i].name;
+          pokemonWeight = obj.pokemon[i].weight;
+          pokemonHeight = obj.pokemon[i].height;
+          pokemonHatch = obj.pokemon[i].egg;
+          pokemonNumber = obj.pokemon[i].num;
           console.log(pokemonName);
           match = true;
         } else if (match==null && (i==(obj.pokemon.length-1))){
@@ -44,7 +52,7 @@ const file = 'pokedex.json'
          }
       }console.log(match);
        if (match == true) {
-         response.send(pokemonName);//deliberately coded it this way to return the entire pokemon's data as an object
+         response.send(`${pokemonName} is number ${pokemonNumber} in the pokedex. It has a height of ${pokemonHeight} and a weight of ${pokemonWeight}. Trainer needs to walk ${pokemonHatch} to hatch this pocket monster from its egg.`);//deliberately coded it this way to return the entire pokemon's data as an object
        } else if (match == false) {
             response.status(404).send(`Could not find information about ${search} - Is that a new pokemon? Gotta catch em' all!` );
         }
