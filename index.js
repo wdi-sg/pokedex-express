@@ -18,7 +18,56 @@ const app = express();
  * ===================================
  */
 
- // Left with last 2 furthers - weaknesses and next evolution
+ // Expose a new route for /nextevolution/some-name that returns a message listing the names of all pokemon that the pokemon evolves from (eg. /nextevolution/charizard).
+
+            // app.get("/nextevolution/:Pokemon", (request, response) => {
+
+            //     jsonfile.readFile(file, (err, obj) => {
+
+            //         let Pokemon = request.params.Pokemon;
+            //         let parentPokemonArray = [];
+
+            //         console.log(obj.pokemon[0].next_evolution.length);
+
+            //         for(let i=0; i<obj.pokemon.length; i++) {
+            //             for(let j=0; j<obj.pokemon[i].next_evolution.length; j++) {
+            //                 if(Pokemon.toLowerCase() === obj.pokemon[i].next_evolution[j].name.toLowerCase()) {
+            //                     parentPokemonArray.push(obj.pokemon[i].name);
+            //                 }
+            //             }
+            //         }
+
+            //     response.send(`<html><body><p>The list of pokemons which evolved from ${Pokemon} are:<p><br><p>${parentPokemonArray}</p></body></html>`)
+
+            // });
+
+            // });
+
+
+
+            app.get("/weakness/:inputWeakness", (request, response) => {
+
+              jsonfile.readFile(file, (err, obj) => {
+
+                let inputWeakness = request.params.inputWeakness;
+                let weaknessesPokemonArray = [];
+
+                for(let i=0; i<obj.pokemon.length; i++) {
+                    for(let j=0; j<obj.pokemon[i].weaknesses.length; j++) {
+                        if(inputWeakness.toLowerCase() === obj.pokemon[i].weaknesses[j].toLowerCase()) {
+                            weaknessesPokemonArray.push(obj.pokemon[i].name);
+                        }
+                    }
+                }
+
+                 response.send(`<html><body><p>The list of pokemons with weaknesses of ${inputWeakness} are:<p><br><p>${weaknessesPokemonArray}</p></body></html>`);
+
+
+            });
+
+            });
+
+
 
              app.get("/type/:inputType", (request, response) => {
 
