@@ -18,30 +18,93 @@ const app = express();
  * ===================================
  */
 
- // Expose a new route for /nextevolution/some-name that returns a message listing the names of all pokemon that the pokemon evolves from (eg. /nextevolution/charizard).
+            app.get("/nextevolution/:Pokemon", (request, response) => {
 
-            // app.get("/nextevolution/:Pokemon", (request, response) => {
+                jsonfile.readFile(file, (err, obj) => {
 
-            //     jsonfile.readFile(file, (err, obj) => {
+                    let Pokemon = request.params.Pokemon;
+                    let pokemonsWithNextEvolutionArray = [];
+                    let pokemonsWithNextEvolutionNameArray = [];
+                    let parentPokemonArray = [];
+                    let parentPokemonStringList = "";
 
-            //         let Pokemon = request.params.Pokemon;
-            //         let parentPokemonArray = [];
+                    for(let i=0; i<obj.pokemon.length; i++) {
+                        if(obj.pokemon[i].next_evolution !== undefined) {
+                            pokemonsWithNextEvolutionArray.push(obj.pokemon[i]);
+                            pokemonsWithNextEvolutionNameArray.push(obj.pokemon[i].name.toLowerCase());
+                        }
+                    }
 
-            //         console.log(obj.pokemon[0].next_evolution.length);
+                    if(pokemonsWithNextEvolutionNameArray.includes(Pokemon.toLowerCase()) == false) {
+                                response.send(`${Pokemon} does not evolved into anything, it is in its final form, please try another pokemon`);
+                                return;
+                            } else if(pokemonsWithNextEvolutionNameArray.includes(Pokemon.toLowerCase()) == true) {
+                                for(let j=0; j<pokemonsWithNextEvolutionArray.length; j++) {
+                                    for(let k=0; k<pokemonsWithNextEvolutionArray[j].next_evolution.length; k++) {
+                                        if( Pokemon.toLowerCase() === pokemonsWithNextEvolutionArray[j].name.toLowerCase()) {
+                                            parentPokemonArray.push(pokemonsWithNextEvolutionArray[j].next_evolution[k]);
+                                        }
+                                    }
+                                }
 
-            //         for(let i=0; i<obj.pokemon.length; i++) {
-            //             for(let j=0; j<obj.pokemon[i].next_evolution.length; j++) {
-            //                 if(Pokemon.toLowerCase() === obj.pokemon[i].next_evolution[j].name.toLowerCase()) {
-            //                     parentPokemonArray.push(obj.pokemon[i].name);
-            //                 }
-            //             }
-            //         }
+                                for(let i=0; i<parentPokemonArray.length; i++) {
+                                    parentPokemonStringList = parentPokemonStringList + " " + parentPokemonArray[i].name;
+                                }
+                            }
 
-            //     response.send(`<html><body><p>The list of pokemons which evolved from ${Pokemon} are:<p><br><p>${parentPokemonArray}</p></body></html>`)
 
-            // });
 
-            // });
+
+                response.send(`<html><body><p>The list of pokemons which ${Pokemon} can evolved to are :<p><br><p>${parentPokemonStringList}</p></body></html>`)
+
+            });
+
+            });
+
+
+
+            app.get("/prevevolution/:Pokemon", (request, response) => {
+
+                jsonfile.readFile(file, (err, obj) => {
+
+                    let Pokemon = request.params.Pokemon;
+                    let pokemonsWithPreviousEvolutionArray = [];
+                    let pokemonsWithPrevioustEvolutionNameArray = [];
+                    let childPokemonArray = [];
+                    let childPokemonStringList = "";
+
+                    for(let i=0; i<obj.pokemon.length; i++) {
+                        if(obj.pokemon[i].prev_evolution !== undefined) {
+                            pokemonsWithPreviousEvolutionArray.push(obj.pokemon[i]);
+                            pokemonsWithPrevioustEvolutionNameArray.push(obj.pokemon[i].name.toLowerCase());
+                        }
+                    }
+
+                    if(pokemonsWithPrevioustEvolutionNameArray.includes(Pokemon.toLowerCase()) == false) {
+                                response.send(`${Pokemon} is in its basic form, it has no previous evolution state, please try another pokemon`);
+                                return;
+                            } else if(pokemonsWithPrevioustEvolutionNameArray.includes(Pokemon.toLowerCase()) == true) {
+                                for(let j=0; j<pokemonsWithPreviousEvolutionArray.length; j++) {
+                                    for(let k=0; k<pokemonsWithPreviousEvolutionArray[j].prev_evolution.length; k++) {
+                                        if( Pokemon.toLowerCase() === pokemonsWithPreviousEvolutionArray[j].name.toLowerCase()) {
+                                            childPokemonArray.push(pokemonsWithPreviousEvolutionArray[j].prev_evolution[k]);
+                                        }
+                                    }
+                                }
+
+                                for(let i=0; i<childPokemonArray.length; i++) {
+                                    childPokemonStringList = childPokemonStringList + " " + childPokemonArray[i].name;
+                                }
+                            }
+
+
+
+
+                response.send(`<html><body><p>The list of pokemons which ${Pokemon} evolved from are :<p><br><p>${childPokemonStringList}</p></body></html>`)
+
+            });
+
+            });
 
 
 
@@ -162,15 +225,3 @@ if(flag === true) {
  * ===================================
  */
  app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
-
-//assignment
-// app.get("/pokemon/:number", (request, response) => {
-
-//   let pokemonNumber = request.params.number;
-
-
-//   //jsonfile.readFile()
-//   // when you read the file, get the specific pokemon that is being requested
-
-//   //response.send(pokemon that was requested);
-// });
