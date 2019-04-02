@@ -48,14 +48,15 @@ let pokemonSearch = request.params.type.toLowerCase();
     let array = [];
     for (i = 0; i < json['pokemon'].length; i++) {
         let pokemonType = json.pokemon[i].type.toString().toLowerCase();
-        console.log(pokemonType);
+        // console.log(pokemonType);
         if (pokemonType.includes(pokemonSearch)) {
             array.push(json.pokemon[i].name);
             // console.log(array);
-            response.send(array)
+
         }
 
     }
+            response.send(array)
 
 }); //FURTHER 4
 
