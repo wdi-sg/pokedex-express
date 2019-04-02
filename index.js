@@ -30,8 +30,11 @@ app.get("/pokedex/:name", (request, response) => {
 		for (let i=0; i < list.pokemon.length; i++) {
 			if (list.pokemon[i].name.toLowerCase() === request.params.name) {
 				pokemonFound = true;
-				response.send(list.pokemon[i].name + " is " + list.pokemon[i].weight);
+				response.send("This is" + list.pokemon[i].name + " he is " + list.pokemon[i].weight +"! His weaknesses are " + list.pokemon[i].weaknesses[0] + ", " + list.pokemon[i].weaknesses[1] + ", " + list.pokemon[i].weaknesses[2] + ".");
 			}
+		}
+		if (!pokeemonFound) {
+			response.send(404, "is that a new pokemon? Gotta catch em\' all!");
 		}
 	})
 });
@@ -52,7 +55,7 @@ app.get("/type/:someType", (requst, response) => {
 			if (listType.length > 0) {
 				response.send(listType);
 			} else {
-				response.send(404, "Could not find information about" + inputType + " - Is that a new pokemon? Gotta catch em' all!")
+				response.send(404, "Does this type exist?" + inputType + " - Is that a new pokemon? Gotta catch em' all!")
 		}
 	});
 })
