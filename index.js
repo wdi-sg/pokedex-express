@@ -35,25 +35,22 @@ var homeRequestHandler = function (request, response) {
 
 var getPokemonByNameRequestHandler = function (request, response) {
     let pokemon;
-    let contentForDisplay = `Could not find pokedex information about ${ request.params.name }.`;
 
     _.forEach(data.pokemon, (o) => {
         if (o.name.toLowerCase() === request.params.name.toLowerCase()) {
             pokemon = o;
-            contentForDisplay = `This is ${ o.name }, it is ${ o.weight } in weight!`
         }
     });
 
-    if (typeof pokemon !== 'undefined') {
-        response.send(contentForDisplay);
+    if (pokemon !== undefined) {
+        response.send(`This is ${ pokemon.name }, it is ${ pokemon.weight } in weight!`);
     } else {
-        response.send(404, contentForDisplay);
+        response.send(404, `Could not find pokedex information about ${ request.params.name }.`);
     }
 }
 
 var getPokemonByTypeRequestHandler = function (request, response) {
     let pokemons = [];
-    let contentForDisplay = `Could not find type information about ${ request.params.someType }.`;
 
     _.forEach(data.pokemon, (o) => {
         for (let i = 0; i < o.type.length; i++) {
@@ -61,19 +58,17 @@ var getPokemonByTypeRequestHandler = function (request, response) {
                 pokemons.push(o.name);
             }
         }
-        contentForDisplay = pokemons;
     });
 
     if (pokemons.length > 0) {
-        response.send(contentForDisplay);
+        response.send(pokemons);
     } else {
-        response.send(404, contentForDisplay);
+        response.send(404, `Could not find type information about ${ request.params.someType }.`);
     }
 }
 
 var getPokemonByWeaknessRequestHandler = function (request, response) {
     let pokemons = [];
-    let contentForDisplay = `Could not find weakness information about ${ request.params.someWeakness }.`;
 
     _.forEach(data.pokemon, (o) => {
         for (let i = 0; i < o.weaknesses.length; i++) {
@@ -81,39 +76,35 @@ var getPokemonByWeaknessRequestHandler = function (request, response) {
                 pokemons.push(o.name);
             }
         }
-        contentForDisplay = pokemons;
     });
 
     if (pokemons.length > 0) {
-        response.send(contentForDisplay);
+        response.send(pokemons);
     } else {
-        response.send(404, contentForDisplay);
+        response.send(404, `Could not find weakness information about ${ request.params.someWeakness }.`);
     }
 }
 
 var getPokemonPreEvolutionRequestHandler = function (request, response) {
     let pokemons = [];
-    let contentForDisplay = `Could not find previous evolution information for ${ request.params.name }`;
 
     _.forEach(data.pokemon, (o) => {
         if (o.name.toLowerCase() === request.params.name.toLowerCase() && "prev_evolution" in o) {
             for (let i = 0; i < o.prev_evolution.length; i++) {
                 pokemons.push(o.prev_evolution[i].name);
             }
-            contentForDisplay = pokemons;
         }
     });
 
     if (pokemons.length > 0) {
-        response.send(contentForDisplay);
+        response.send(pokemons);
     } else {
-        response.send(404, contentForDisplay);
+        response.send(404, `Could not find previous evolution information for ${ request.params.name }`);
     }
 }
 
 var getPokemonNextEvolutionRequestHandler = function (request, response) {
     let pokemons = [];
-    let contentForDisplay = `Could not find next evolution information for ${ request.params.name }`;
 
     _.forEach(data.pokemon, (o) => {
         if (o.name.toLowerCase() === request.params.name.toLowerCase() && "next_evolution" in o) {
@@ -125,9 +116,9 @@ var getPokemonNextEvolutionRequestHandler = function (request, response) {
     });
 
     if (pokemons.length > 0) {
-        response.send(contentForDisplay);
+        response.send(pokemons);
     } else {
-        response.send(404, contentForDisplay);
+        response.send(404, `Could not find next evolution information for ${ request.params.name }`);
     }
 }
 
