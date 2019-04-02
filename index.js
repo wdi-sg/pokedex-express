@@ -24,7 +24,7 @@ const app = express();
 //   response.send(request.path);
 // });
 
-app.get('/pokedex/:name', (request, response) => {
+app.get("/pokedex/:name", (request, response) => {
 	jsonfile.readFile(file, (err, list) => {
 		let pokemonFound = false;
 		for (let i=0; i < list.pokemon.length; i++) {
@@ -35,6 +35,12 @@ app.get('/pokedex/:name', (request, response) => {
 		}
 	})
 });
+
+app.get("/pokedex", (request, response) => {
+	response.send("Welcome to the online pokedex!");
+})
+
+
 
 /**
  * ===================================
