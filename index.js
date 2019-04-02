@@ -2,7 +2,7 @@ var json = require("./pokedex.json");
 const express = require('express');
 const app = express();
 const jsonfile = require('jsonfile');
-const file = 'pokedex.json';
+
 
 
 app.get('/bulbasaur', (request, response) => {
@@ -14,7 +14,7 @@ app.get('/bulbasaur', (request, response) => {
 //   response.send(404, "ERRORRRR");
 // }); //FURTHER 1
 
-app.get('/', (request, response) => {
+app.get('', (request, response) => {
   response.send(`Welcome to the online pokedex!`);
 }); //FURTHER 2
 
@@ -45,12 +45,13 @@ app.get('/type/:type', (request, response) => {
 
 let pokemonSearch = request.params.type.toLowerCase();
 // console.log(pokemonSearch);
-        let array = [];
+    let array = [];
     for (i = 0; i < json['pokemon'].length; i++) {
         let pokemonType = json.pokemon[i].type.toString().toLowerCase();
+        console.log(pokemonType);
         if (pokemonType.includes(pokemonSearch)) {
             array.push(json.pokemon[i].name);
-            console.log(array);
+            // console.log(array);
             response.send(array)
         }
 
