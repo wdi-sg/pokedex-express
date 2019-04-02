@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="package.json"></script>
+    <script type="text/javascript" src="pokedex.json"></script>
+</head>
+<body>
+
+<!-- <h2>Convert a JavaScript object into a JSON string, and send it to the server.</h2>
+  -->
+<!-- <script>
+
+var myObj = { "name":"John", "age":31, "city":"New York" };
+var myJSON = JSON.stringify(myObj);
+window.location = "demo_json.php?x=" + myJSON;
+
+</script> -->
+<script>
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(xhttp.responseText);
+            var pokemon = response.pokemon;
+
+            var output = '';
+            for(var i = 0;i < pokemon.length;i++){
+              output += '<li>'+pokemon[i].name+'</li>';
+            }
+            document.getElementById('pokemon').innerHTML = output;
+          }
+      };
+      xhttp.open("GET", "pokedex.json", true);
+      xhttp.send();
+</script>
+</body>
+</html>
