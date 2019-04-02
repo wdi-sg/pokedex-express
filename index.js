@@ -40,7 +40,22 @@ app.get("/pokedex", (request, response) => {
 	response.send("Welcome to the online pokedex!");
 })
 
-
+app.get("/type/:someType", (requst, response) => {
+	var inputType = request.params.someType.charAt(0).toUpperCase()+resquest.params.someType.slice(1);	
+		jsonfile.readFile(file (err, list) => {
+			var listType = [];
+			for (let i=0; i<list.pokemon.length; i++) {
+				if (list.pokemon[i].type.includes(inputType) > 0) {
+					listType.push(list.pokemon[i].name);
+				}
+			}
+			if (listType.length > 0) {
+				response.send(listType);
+			} else {
+				response.send(404, "Could not find information about" + inputType + " - Is that a new pokemon? Gotta catch em' all!")
+		}
+	});
+})
 
 /**
  * ===================================
