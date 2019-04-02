@@ -1,6 +1,8 @@
 const express = require('express');
 
-// const jsonfile = require('jsonfile');
+const jsonfile = require('jsonfile');
+
+const file = 'pokedex.json'
 
 /**
  * ===================================
@@ -17,10 +19,22 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
+app.get('/:name', (request, response) => {
   // send response with some data (a string)
-  response.send(request.path);
-});
+    let path = request.params.name;
+    let counter = 0;
+    jsonfile.readFile(file, (err, obj) => {
+        for (let i=0; i<151; i++){
+            if (obj['pokemon'][i]['name'].toLowerCase() === path) {
+                console.log("found it! " + obj['pokemon'][i]['name'].toLowerCase())
+                response.send(path + " is " + obj['pokemon'][i]['weight']);
+            // } else if (obj['pokemon'][i]['name'].toLowerCase() !== path) {
+            //     response.status(404).send("Could not find information about "+ path + "- Is that a new pokemon? Gotta catch em' all!");
+            }
+        }
+    })
+})
+
 
 /**
  * ===================================
