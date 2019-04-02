@@ -29,8 +29,7 @@ var startServer = function () {
 // Request Handlers
 // ===================================
 var homeRequestHandler = function (request, response) {
-    let contentForDisplay = `Welcome to the online Pokedex!`;
-    response.send(contentForDisplay);
+    response.send(`Welcome to the online Pokedex!`);
 }
 
 var getPokemonByNameRequestHandler = function (request, response) {
