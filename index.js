@@ -6,16 +6,23 @@ const jsonfile = require('jsonfile')
 
 const file = 'pokedex.json'
 
-app.get("/pokemon/:name", (req, res) => {
-    console.log(req.params.name)
-    const arr = obj["pokemon"]
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i]["name"].toLowerCase() === pokemonName.toLowerCase()) {
-        const weight = arr[i]["weight"]
-        res.send(`This is ${pokemonName} and its weight is ${weight} `)
+
+jsonfile.readFile(file, (err, obj) => {
+    app.get('/:pokemon', (req, res) => {
+        const pokemonName = req.params.pokemon;
+        const arr = obj["pokemon"];
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i]["name"].toLowerCase() === pokemonName.toLowerCase()) {
+                const weight = arr[i]["weight"];
+                res.send(`${pokemonName}'s weight is ${weight}`);
+            } else if (arr[i]["name"].toLowerCase() !== pokemonName.toLowerCase()) {
+                res.status(404).send(`Could not find information about ${pokemonName}. Is that a new pokemon? Gotta catch em' all!`);
     }
-    }
+}
+        })
+
 });
+
 
 
 
