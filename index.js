@@ -24,7 +24,7 @@ app.set('view engine', 'jsx');
 const methodOverride = require('method-override')
 app.use(methodOverride('_method'));
 //required as a workaround since all requests will be 'put'
-//which means that the put request will be masked with override as a put, but in fact is whatever is defined in this script, ie. a POST
+//which means that the put request will be masked with override as a put but in fact is whatever is defined in this script, ie. a POST will be masked as a PUT but when applied is a POST
 
 app.use(express.json());
 //tells express to enable json usage
