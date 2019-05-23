@@ -9,6 +9,7 @@
   "author": "Nick Ang <nickangtc@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "cloudinary": "^1.14.0",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "formidable": "^1.2.1",

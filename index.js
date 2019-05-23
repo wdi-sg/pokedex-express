@@ -1,9 +1,11 @@
+
 const jsonfile = require('jsonfile');
 const file = 'pokedex.json'
 
 const express = require('express');
 var formidable = require('formidable');
 
+var cloudinary = require('cloudinary');
 var multer = require('multer');
 var upload = multer({ dest: './uploads/' });
 
@@ -32,9 +34,17 @@ app.post('/upload', function (req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/testUpload', (request, response) => {
+    response.send(`<form enctype="multipart/form-data" action="/testUpload" method="POST">
+  <input type="file" name="myFile">
+  <input type="submit" class="btn btn-primary">
+</form>`)
+})
 
-app.post('/testupload', upload.single('myFile'), function(req, res) {
-  res.send(req.file);
+app.post('/testUpload', upload.single('myFile'), function(req, res) {
+  cloudinary.uploader.upload(req.file.path, function(result) {
+    res.send(result);
+  });
 });
 
 app.get('/', (request, response) => {
@@ -155,4 +165,6 @@ app.get('/nextevolution/:someEvolution', (request, response) => {
 
 
 
-app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+const PORT = process.env.PORT || 3000;
+
+const server = app.listen(PORT, () => console.log('~~~ Tuning in to the waves of port '+PORT+' ~~~'));
