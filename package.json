@@ -2,7 +2,7 @@
   "name": "pokedex-express",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon"
+    "start": "node ./bin/www"
   },
   "main": "index.js",
   "repository": "https://github.com/wdi-sg/pokedex-express",
