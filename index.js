@@ -13,11 +13,6 @@ const file = 'pokedex.json';
  */
 
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
 
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -192,6 +187,18 @@ var getPokemonNextEvolutionRequest = function(request, response){
    })
 }
 
+/**
+ * ===================================
+ * Routes
+ * ===================================
+ */
+
+ app.get('/', defaultRequest);
+ app.get('/pokemon/:name', getPokemonByNameRequest);
+ app.get('/type/:type', getPokemonByTypeRequest);
+ app.get('/weaknesses/:weaknesses', getPokemonByWeaknessRequest);
+ app.get('/nextevolution/:name', getPokemonNextEvolutionRequest);
+
 
 
 /**
@@ -200,10 +207,5 @@ var getPokemonNextEvolutionRequest = function(request, response){
  * ===================================
  */
 
-app.get('/', defaultRequest);
-app.get('/pokemon/:name', getPokemonByNameRequest);
-app.get('/type/:type', getPokemonByTypeRequest);
-app.get('/weaknesses/:weaknesses', getPokemonByWeaknessRequest);
-app.get('/nextevolution/:name', getPokemonNextEvolutionRequest);
 
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
