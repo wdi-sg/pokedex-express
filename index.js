@@ -19,9 +19,24 @@ const file = 'pokedex.json';
  * ===================================
  */
 
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+// default request, if never specify
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 var defaultRequest = function(request, response){
   response.send('Welcome to the online Pokedex!');
 }
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+// get pokemon by name
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 var getPokemonByNameRequest = function(request, response){
   jsonfile.readFile(file, function (err, data) {
@@ -53,6 +68,14 @@ var getPokemonByNameRequest = function(request, response){
    })
 }
 
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+// get pokemon by type
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 var getPokemonByTypeRequest = function(request, response){
   jsonfile.readFile(file, function (err, data) {
      if (err){
@@ -65,7 +88,7 @@ var getPokemonByTypeRequest = function(request, response){
 
        for (var i = 0; i< data.pokemon.length; i++){
          for (var j = 0; j< data.pokemon[i].type.length; j++){
-           if(data.pokemon[i].type[j].toLowerCase() === request.params.sometype){
+           if(data.pokemon[i].type[j].toLowerCase() === request.params.type){
              arr.push(data.pokemon[i].name);
              found = true;
            }
@@ -73,7 +96,7 @@ var getPokemonByTypeRequest = function(request, response){
        }
 
        if(found === true){
-         message = `These are the ${request.params.sometype} type pokemon: ${arr.toString()}`;
+         message = `These are the ${request.params.type} type pokemon: ${arr.toString()}`;
          response.send(200, message);
        }
 
@@ -87,6 +110,90 @@ var getPokemonByTypeRequest = function(request, response){
    })
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+// get pokemon by weakness
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+var getPokemonByWeaknessRequest = function(request, response){
+  jsonfile.readFile(file, function (err, data) {
+     if (err){
+       console.error(err);
+     } else {
+
+       let found = false;
+       let message = '';
+       let arr = [];
+
+       for (var i = 0; i< data.pokemon.length; i++){
+         for (var j = 0; j< data.pokemon[i].weaknesses.length; j++){
+           if(data.pokemon[i].weaknesses[j].toLowerCase() === request.params.weaknesses){
+             arr.push(data.pokemon[i].name);
+             found = true;
+           }
+         }
+       }
+
+       if(found === true){
+         message = `These pokemon <br> ${arr.toString()} <br>  are afraid of ${request.params.weaknesses}`;
+         response.send(200, message);
+       }
+
+
+       if(found === false){
+         message = `${request.params.weaknesses} is not a valid weakness. Try Bug, Ghost, Dark etc.`;
+         response.send(404, message);
+       }
+
+     }
+   })
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+// get pokemon next evolution
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+var getPokemonNextEvolutionRequest = function(request, response){
+  jsonfile.readFile(file, function (err, data) {
+     if (err){
+       console.error(err);
+     } else {
+
+       let found = false;
+       let message = '';
+       let arr = [];
+
+       for( var i = 0 ; i < data.pokemon.length; i++){
+
+         if( data.pokemon[i].name.toLowerCase() === request.params.name && data.pokemon[i].hasOwnProperty('next_evolution')){
+           for (let j = 0; j < data.pokemon[i].next_evolution.length; j ++){
+             arr.push(data.pokemon[i].next_evolution[j].name);
+             found = true;
+           }
+         }
+       }
+
+       if(found === true){
+         message = `${request.params.name} next evolution is ${arr.toString()}.`
+         response.send(200, message);
+       }
+
+       if(found === false){
+         message = `${request.params.name} does not have next evolution`;
+         response.send(404, message);
+       }
+
+     }
+   })
+}
+
+
+
 /**
  * ===================================
  * Listen to requests on port 3000
@@ -95,6 +202,8 @@ var getPokemonByTypeRequest = function(request, response){
 
 app.get('/', defaultRequest);
 app.get('/pokemon/:name', getPokemonByNameRequest);
-app.get('/type/:sometype', getPokemonByTypeRequest);
+app.get('/type/:type', getPokemonByTypeRequest);
+app.get('/weaknesses/:weaknesses', getPokemonByWeaknessRequest);
+app.get('/nextevolution/:name', getPokemonNextEvolutionRequest);
 
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
