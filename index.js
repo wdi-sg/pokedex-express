@@ -51,7 +51,8 @@ app.get('/pokedex/:name', (request, response)=>{
                     console.log(obj.pokemon[i]);
                     // get data from the file
                     const data = obj.pokemon[i];
-                    response.send(data);
+                    let output = `This is ${data.name}, he is ${data.weight} in weight! ${data.name} is a ${data.type[0]} type Pokemon.`;
+                    response.send(output);
                 }
             }
         } else if (request.params.name != namesList) {
