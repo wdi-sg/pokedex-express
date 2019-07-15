@@ -11,11 +11,42 @@ const express = require('express');
 // Init express app
 const app = express();
 
+const jsonfile = require('jsonfile');
+const file = 'pokedex.json'
+
+// var fs = require('fs');
+// var obj = JSON.parse(fs.readFileSync('./pokedex.json', 'utf8'));
+//console.log(obj);
 /**
  * ===================================
  * Routes
  * ===================================
  */
+console.log("defining when request recieved code");
+var whenRequestIsRecieved = (request, response) => {
+    console.log("start log request");
+    console.log(reqest);
+    console.log("END LOG REQUEST");
+};
+
+
+app.get('/pokedex/:name', (request, response)=>{
+    console.log(request.params.name );
+    jsonfile.readFile(file, (err, obj) => {
+        for (let i = 0; i < obj.pokemon.length; i++){
+            if (obj.pokemon[i].name === request.params.name){
+                console.log(i);
+                console.log(obj.pokemon[i]);
+                // get data from the file
+                const data = obj.pokemon[i];
+                response.send(data);
+            } else {
+                const data = `Could not find information about ${request.params.name} - Is that a new pokemon? Gotta catch em' all!`
+                response.status(404).send(data);
+            }
+        }
+    })
+});
 
 app.get('*', (request, response) => {
   // send response with some data (a string)
