@@ -74,24 +74,41 @@ app.get('/pokedex/:name', (request, response)=>{
                         type.push(data.pokemon[i].type[j]);
                     }
                     if (data.pokemon[i].type.length === 1) {
-                        details = `<html><body style="text-align: center; background-color: black; color: yellow"><h1>${data.pokemon[i].num}. ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}</h1><img style="margin: 0 auto" src='${data.pokemon[i].img}'</img></body></html><br>
+                        details = `
+                        <html>
+                        <body style="text-align: center; background-color: black; color: yellow">
+                        <img src="https://fontmeme.com/permalink/190715/f87c04db0b54e3b89caa3d1d3ee405fb.png">
+                        <h1>${data.pokemon[i].num}. ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}</h1>
+                        <img style="margin: 0 auto" src='${data.pokemon[i].img}'</img></body></html><br>
                         Number: ${data.pokemon[i].num}<br>
                         Name: ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}<br>
                         Weight: ${data.pokemon[i].weight}<br>
                         Height: ${data.pokemon[i].height}<br>
-                        Type: ${type[0]}<br>`;
+                        Type: ${type[0]}<br>`;;
                     } else if (data.pokemon[i].type.length === 2) {
-                        details = `<html><body style="text-align: center; background-color: black; color: yellow"><h1>${data.pokemon[i].num}. ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}</h1><img style="margin: 0 auto" src='${data.pokemon[i].img}'</img></body></html><br>
+                        details = `
+                        <html>
+                        <body style="text-align: center; background-color: black; color: yellow">
+                        <img src="https://fontmeme.com/permalink/190715/f87c04db0b54e3b89caa3d1d3ee405fb.png">
+                        <h1>${data.pokemon[i].num}. ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}</h1>
+                        <img style="margin: 0 auto" src='${data.pokemon[i].img}'</img></body></html><br>
                         Number: ${data.pokemon[i].num}<br>
                         Name: ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}<br>
                         Weight: ${data.pokemon[i].weight}<br>
                         Height: ${data.pokemon[i].height}<br>
-                        Type: ${type[0]} and ${type[1]}<br>`;
+                        Type: ${type[0]}/${type[1]}<br>`;
                     }
                     break;
 
                 } else {
-                    details = "<html><body><h1>No Such Pokemon!</h1></body></html>"
+                    details = `
+                    <html>
+                    <body style="text-align: center; background-color: black; color: yellow">
+                    <img src="https://fontmeme.com/permalink/190715/f87c04db0b54e3b89caa3d1d3ee405fb.png">
+                    <h1>No Such Pokemon!</h1>
+                    <h2> Please add pokemon data to pokedex!</h2>
+                    </body>
+                    </html>`
                     response.status( 404 );
                 }
             }
@@ -130,7 +147,14 @@ app.get('/pokedex/type/:someType', (request, response)=>{
                 sameTypeList = `${sameTypeList}<br> <img style="display: block; margin: 0 auto" src='${sameType[i].img}'<br>${sameType[i].name}<br>`
             }
 
-            typePage = `<html><body style="text-align: center; background-color: black; color: yellow"><h1>List of ${request.params.someType} type pokemon</h1><br><br>${sameTypeList}</body></html>`;
+            typePage = `
+                    <html>
+                    <body style="text-align: center; background-color: black; color: yellow">
+                    <img src="https://fontmeme.com/permalink/190715/f87c04db0b54e3b89caa3d1d3ee405fb.png">
+                    <h1>List of ${request.params.someType} type pokemon</h1><br>
+                    <br>${sameTypeList}
+                    </body>
+                    </html>`;
 
             response.send(typePage);
              // response.send(sameTypeList);
