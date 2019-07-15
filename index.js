@@ -86,6 +86,8 @@ app.get('/type/:requestType', (request, response) => {
     })
 });
 
+
+
 app.get('/weakness/:requestWeaknesses', (request, response) => {
     var pokemonWeaknesses;
     let weaknessesArr = [];
@@ -120,6 +122,48 @@ app.get('/weakness/:requestWeaknesses', (request, response) => {
 });
 
 
+
+// when user enters pokemon name, it will return it's prev-evolution name
+app.get('/prevevo/:name', (request, response) => {
+    let pokemonFound = false;
+    let foundArr = [];
+
+    jsonfile.readFile(file, function (err, obj) {
+        if (err) {
+        console.error(err)
+        response.send('Pokedex 404!');
+        response.status(404);
+
+        } else {
+
+            for (let i = 0; i < obj.pokemon.length; i++) {
+                if (obj.pokemon[i].prev_evolution != undefined) {
+
+                    for (let j = 0; j < obj.pokemon[i].prev_evolution.length; j++) {
+                        if (obj.pokemon[i].prev_evolution[j] != undefined) {
+                                let pokemonName = obj.pokemon[i].name;
+                                if (pokemonName.toLowerCase() == request.params.name) {
+                                    pokemonFound = true;
+                                    foundArr.push(obj.pokemon[i].prev_evolution[j]);
+                            }
+                        }
+
+                    }
+
+                }
+            }
+            if (pokemonFound == false ) {
+                response.send('Could not find information about ' + request.params.name + ' previous evolution. ');
+                response.status(404);
+            } else {
+                response.send(foundArr);
+            }
+        }
+    })
+});
+
+
+
 app.get('/weakness', (request, response) => {
     response.send('Which pokemon weakness are you looking for?');
 });
@@ -136,7 +180,7 @@ app.get('/pokemon', (request, response) => {
 
 
 app.get('/', (request, response) => {
-    response.send('Welcome to the online Pokdex!');
+    response.send('Welcome to the online Pokedex!');
 });
 
 
