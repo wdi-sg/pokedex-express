@@ -19,7 +19,37 @@ const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const whenRequestIsReceived = (request, response) => {
+// const pokemonWeight = (request, response) => {
+
+//     let matchFound = false;
+
+//     let pokemonName = capitalizeFirstLetter(request.params.name);
+
+//     jsonfile.readFile(file, (err,obj) => {
+
+//         if(err) {
+//             console.log('there is an error')
+
+//         } else {
+
+//             for (let i = 0; i < obj['pokemon'].length; i ++) {
+
+//                 if (obj['pokemon'][i].name === pokemonName) {
+//                     matchFound = true;
+//                     response.send(obj['pokemon'][i].name + ' weighs ' + obj['pokemon'][i].weight);
+//                 }
+//             }
+
+//             if (matchFound === false) {
+//                 response.status( 404 );
+//                 response.send(`Could not find information about ${pokemonName} - Is that a new pokemon? Gotta catch em' all!`)
+//             }
+
+//         }
+//     });
+// }
+
+const pokemonDetails = (request, response) => {
 
     let matchFound = false;
 
@@ -36,7 +66,8 @@ const whenRequestIsReceived = (request, response) => {
 
                 if (obj['pokemon'][i].name === pokemonName) {
                     matchFound = true;
-                    response.send(obj['pokemon'][i].name + ' weighs ' + obj['pokemon'][i].weight);
+                    response.send('This is ' + obj['pokemon'][i].name + '. He has a weight of ' + obj['pokemon'][i].weight + ` and a height of ` +  obj['pokemon'][i].height + `<br>` +`<html><body><img src = ${obj['pokemon'][i].img}></body></html>`);
+
                 }
             }
 
@@ -48,8 +79,6 @@ const whenRequestIsReceived = (request, response) => {
         }
     });
 }
-
-
 
 /**
  * ===================================
@@ -65,7 +94,10 @@ app.get('/pokedex', (request, response) => {
   response.send("Please type in a pokemon you would like to search")
 });
 
-app.get("/pokedex/:name/", whenRequestIsReceived);
+// app.get("/pokedex/:name/", pokemonWeight);
+
+app.get("/pokedex/:name/", pokemonDetails);
+
 
 
 
