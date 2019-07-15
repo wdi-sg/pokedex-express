@@ -19,14 +19,9 @@ const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+const whenRequestIsReceived = (request, response) => {
 
-//----- Function for reading data.json -----//
-
-const readDataFile = (pokemonName) => {
-
-    let capPokemonName = capitalizeFirstLetter(pokemonName);
-
-    console.log(capPokemonName);
+    let pokemonName = capitalizeFirstLetter(request.params.name);
 
     jsonfile.readFile(file, (err,obj) => {
 
@@ -35,17 +30,19 @@ const readDataFile = (pokemonName) => {
 
         } else {
 
-            console.log('running array check')
+            // console.log('running array check!')
 
             for (let i = 0; i < obj['pokemon'].length; i ++) {
 
-                if (obj['pokemon'][i].name === capPokemonName) {
-                    console.log(obj['pokemon'][i].weight)
+                if (obj['pokemon'][i].name === pokemonName) {
+                    response.send(obj['pokemon'][i].name + ' weighs ' + obj['pokemon'][i].weight);
                 }
             }
         }
     });
 }
+
+
 
 /**
  * ===================================
@@ -58,15 +55,8 @@ const readDataFile = (pokemonName) => {
 //   response.send(request.path);
 // });
 
-app.get("/pokedex/:name/", (request, response) => {
+app.get("/pokedex/:name/", whenRequestIsReceived);
 
-    let pokemonSearched = request.params.name;
-
-    let output = readDataFile(pokemonSearched);
-
-    response.send(output);
-
-});
 
 
 /**
