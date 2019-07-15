@@ -86,12 +86,54 @@ app.get('/type/:requestType', (request, response) => {
     })
 });
 
+app.get('/weakness/:requestWeaknesses', (request, response) => {
+    var pokemonWeaknesses;
+    let weaknessesArr = [];
+    let pokemonFound = false;
 
+    jsonfile.readFile(file, function (err, obj) {
+        if (err) {
+        console.error(err)
+        response.send('Pokedex 404!');
+        response.status(404);
+
+        } else {
+
+            for (let i = 0; i < obj.pokemon.length; i++) {
+                for (let j = 0; j < obj.pokemon[i].weaknesses.length; j++) {
+                    let pokemonWeaknesses = obj.pokemon[i].weaknesses[j];
+                    if (pokemonWeaknesses.toLowerCase() == request.params.requestWeaknesses) {
+                        pokemonFound = true;
+                        weaknessesArr.push('Weaknesses: ' + obj.pokemon[i].weaknesses[j] + ' ; Name: ' + obj.pokemon[i].name);
+                    }
+                }
+
+            }
+            if (pokemonFound == false ) {
+                response.send('Could not find information about ' + request.params.requestWeaknesses + '... Is that a new weakness?');
+                response.status(404);
+            } else {
+                response.send(weaknessesArr);
+            }
+        }
+    })
+});
+
+
+app.get('/weakness', (request, response) => {
+    response.send('Which pokemon weakness are you looking for?');
+});
+
+
+app.get('/type', (request, response) => {
+    response.send('Which pokemon type are you looking for?');
+});
 
 
 app.get('/pokemon', (request, response) => {
     response.send('Which pokemon are you looking for?');
 });
+
 
 app.get('/', (request, response) => {
     response.send('Welcome to the online Pokdex!');
