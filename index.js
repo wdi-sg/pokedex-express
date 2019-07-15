@@ -19,6 +19,10 @@ const app = express();
  * ===================================
  */
 
+app.get('/', (request, response) => {	
+		response.send(`<html><body><h1>Welcome to the online Pokdex!</h1></body></html>`);	
+});
+
 //Get Pokemon Details
 app.get('/pokemon/:name', (request, response) => {	
 	jsonfile.readFile(file, (err, obj) => {
@@ -140,6 +144,36 @@ app.get('/nextevolution/:name', (request, response) => {
 		}
 	});
 });
+
+//Show Pokemon next evolution
+app.get('/prevevolution/:name', (request, response) => {
+	jsonfile.readFile(file, (err, obj) => {
+		let allPokemonEvolutions = `Index - Pokemon Name<br>`;
+		let pokemonFound=false;
+		let evolution=false;
+		for(var i=0; i<obj.pokemon.length-1;i++){
+			if (obj.pokemon[i].name === (request.params.name)){
+				pokemonFound = true;
+				if (('prev_evolution' in obj.pokemon[i])){
+					evolution=true;
+					for(var j=0; j<obj.pokemon[i]['prev_evolution'].length; j++){
+					allPokemonEvolutions = allPokemonEvolutions + `${obj.pokemon[i]['prev_evolution'][j].num} - ${obj.pokemon[i]['prev_evolution'][j].name}<br>`
+				}
+				break;
+				}
+			}
+		}
+
+		if (!pokemonFound){
+			response.status(404).send(`<html><body><h1>Could not find information about ${request.params.name} - Is that a new pokemon?</h1></body></html>`);
+		} else if (pokemonFound && !evolution){
+			response.status(404).send(`<html><body><h1>Pokemon at its Basic Form</h1></body></html>`);
+		} else {
+			response.send(`<html><body><h1>The following are all previous evolutions to ${request.params.name}:\n\n</h1><p>${allPokemonEvolutions}</p></body></html>`);	
+		}
+	});
+});
+
 
 /**
  * ===================================
