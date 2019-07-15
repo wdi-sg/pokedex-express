@@ -32,7 +32,7 @@ Use the data in `pokedex.json` and return a response with details about the requ
 
 * Go through `pokedex.json` to understand how the data is structured. Where are all the pokemon data stored?
 
-* Return a string response with the requested pokemon's information when a request comes with matching the route `/some-name` (eg. `localhost:3000/bulbasaur` should show Bulbasaur's information - for now, show only its weight value)
+* Return a string response with the requested pokemon's information when a request comes with matching the route `/pokemon/some-name` (eg. `localhost:3000/pokemon/bulbasaur` should show Bulbasaur's information - for now, show only its weight value)
 
 ### How to start:
 Start by simply reading the pokedex json file (`jsonfile.readFile`), and then sending it in the response of the request. Remember that these are nested asynchronous callbacks, and that the order the code executes in is very important.
@@ -41,13 +41,13 @@ After that the deliverables have to do with looping over the pokedex and doing a
 
 ### Further
 
-* Handle the case where an invalid pokemon name is provided (eg. `/some-name`). Return a message that says "Could not find information about `<pokemon_name>` - Is that a new pokemon? Gotta catch em' all!" (replace `<pokemon_name>` with the requested for pokemon name) Set the status code to 404.
+* Handle the case where an invalid pokemon name is provided (eg. `/pokemon/some-name`). Return a message that says "Could not find information about `<pokemon_name>` - Is that a new pokemon? Gotta catch em' all!" (replace `<pokemon_name>` with the requested for pokemon name) Set the status code to 404.
 
 ### Further
 
 * detect if the user didn't put anthing in the path. Return a message saying "Welcome to the online Pokdex!"
 
-* Instead of showing just the weight, show all the details of the requested pokemon for `/some-name` route, in a full sentence. i.e., "This is Bublasaur, he is 45kg in weight! He also..." etc., etc.
+* Instead of showing just the weight, show all the details of the requested pokemon for `/pokemon/some-name` route, in a full sentence. i.e., "This is Bublasaur, he is 45kg in weight! He also..." etc., etc.
 
 * Expose a new route for `/type/some-type` that returns a message listing the names of all pokemon that have the specified type (eg. `/type/grass` should show a page with names of all pokemon of grass type).
 
