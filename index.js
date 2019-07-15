@@ -41,6 +41,9 @@ app.get("/pokemon/:id", (request, response) => {
         if (arr.name == request.params.id){
             console.log("it works");
             response.send(`<html><img src= ${arr.img}><br></html> My name is ${arr.name} and  my weight is  ${arr.weight}`)
+        }else{
+            response.send(`Is ${request.params.id} a new Pokemon?, gonna catch them all!`);
+            reponse.status(404);
         };
       })
     })
