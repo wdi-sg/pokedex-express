@@ -119,7 +119,6 @@ app.get('/nextevolution/:name', (request, response) => {
 		let pokemonFound=false;
 		let evolution=false;
 		for(var i=0; i<obj.pokemon.length-1;i++){
-			pokemonCount++;
 			if (obj.pokemon[i].name === (request.params.name)){
 				pokemonFound = true;
 				if (('next_evolution' in obj.pokemon[i])){
