@@ -1,6 +1,7 @@
 const express = require('express');
 
-// const jsonfile = require('jsonfile');
+const jsonfile = require('jsonfile');
+const file = 'pokedex.json'
 
 /**
  * ===================================
@@ -17,10 +18,94 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
+// app.get('/', (request, response) => {
+//     console.log(request.params)
+//     response.send('hello brian')
+// });
+
+// app.get('/pokedex/:name', (request, response)=>{
+//     console.log(request.params);
+//     console.log(request.params.name);
+
+//     // const weight = "";
+//     // // get data from the file
+
+//     jsonfile.readFile(file, (err, data) => {
+//         let weight = "";
+
+//         for (i=0; i<data.pokemon.length; i++) {
+//             if (data["pokemon"][i].name.toLowerCase() === request.params.name) {
+//                 console.log("pokemon name matched");
+//                 weight = `${request.params.name} weight is ${data.pokemon[i].weight}`;
+//                 //response.send(weight);
+//                 break
+
+//             } else {
+//                 weight = "<html><body><h1>No Such Pokemon!</h1></body></html>"
+//                 //response.status( 404 );
+//             }
+//         }
+//         response.send(weight);
+//         console.log(weight);
+//         // response.send(weight);
+//     })
+
+//     // console.log(data.pokemon.length);
+
+//     // response.send(weight);
+// });
+
+
+//////////////////////////
+//Get details on pokemon//
+//////////////////////////
+app.get('/pokedex/:name', (request, response)=>{
+    console.log(request.params);
+    console.log(request.params.name);
+
+    jsonfile.readFile(file, (err, data) => {
+            let details = "";
+            let type = [];
+
+            for (i=0; i<data.pokemon.length; i++) {
+                if (data.pokemon[i].name.toLowerCase() === request.params.name.toLowerCase()) {
+                    console.log("pokemon name matched");
+                    for (j=0; j<data.pokemon[i].type.length; j++) {
+                        type.push(data.pokemon[i].type[j]);
+                    }
+                    if (data.pokemon[i].type.length === 1) {
+                        details = `<html><body><img src='${data.pokemon[i].img}'</img></body></html><br>
+                        This is ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}. It's weight is ${data.pokemon[i].weight}<br>
+                        It is a ${type[0]} type Pokemon`;
+                    } else if (data.pokemon[i].type.length === 2) {
+                        details = `<html><body><img src='${data.pokemon[i].img}'</img></body></html><br>
+                        This is ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}. It's weight is ${data.pokemon[i].weight}<br>
+                        It is a ${type[0]} and ${type[1]} type Pokemon`;
+                    }
+                    break;
+
+                } else {
+                    details = "<html><body><h1>No Such Pokemon!</h1></body></html>"
+                    response.status( 404 );
+                }
+            }
+            response.send(details);
+            console.log(details);
+    });
 });
+
+
+
+
+
+// app.get('*', (request, response) => {
+//   // send response with some data (a string)
+//   response.send(request.path);
+// });
+
+
+
+
 
 /**
  * ===================================
