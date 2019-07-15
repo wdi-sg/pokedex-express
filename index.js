@@ -1,13 +1,6 @@
 const express = require('express');
-
-// const jsonfile = require('jsonfile');
-
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
-
+const jsonfile = require('jsonfile');
+const file = 'pokedex.json'
 // Init express app
 const app = express();
 
@@ -17,10 +10,26 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
+//listen to request for pokemon name to get weight
+app.get("/pokemon/:name", (request, response) => {
+    const name = request.params.name
+    let pokemonWeight = "";
+//read pokedex json
+    jsonfile.readFile(file, (err, obj) => {
+         //read obj
+         // response.send(obj);
+//check through array and retrieve pokemon weight
+        for (i = 0; i < obj.pokemon.length; i++) {
+            if (obj.pokemon[i].name === name) {
+                console.log(name);
+                pokemonWeight = obj.pokemon[i].weight;
+            }
+        }
+        response.send(name + "'s weight is " + pokemonWeight)
+    });
 });
+
+
 
 /**
  * ===================================
