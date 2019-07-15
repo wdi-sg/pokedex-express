@@ -26,9 +26,9 @@ var pokemon = (request, response) => {
         // console.log("BOOYEAH");
         // console.log(obj);
         for (let i = 0; i < obj.pokemon.length; i++){
-            if(pokemonName === obj.pokemon[i].name) {
+            if(pokemonName === obj.pokemon[i].name.toLowerCase()) {
                 console.log("The name of the pokemon: " + obj.pokemon[i].name)
-                display = obj.pokemon[i].name + " weight is: " + obj.pokemon[i].weight;
+                display = "This is " + obj.pokemon[i].name + ". This pokemon weighs " + obj.pokemon[i].weight + ". To increase the happiness of the pokemon, trainer MUST give " + obj.pokemon[i].candy + ".";
                 break;
             }
             else {
@@ -40,6 +40,33 @@ var pokemon = (request, response) => {
     });
 };
 
+var type = (request, response) => {
+    var pokemonType = request.params.colorType;
+    console.log(pokemonType);
+    //console.log(request.params);
+    var pokemon = [];
+    jsonfile.readFile(file,(err,obj) =>{
+        // console.log("BOOYEAH");
+        // console.log(obj);
+        for (let i = 0; i < obj.pokemon.length; i++){
+            // console.log("The name of the pokemon: " + obj.pokemon[i].name);
+            for (let j = 0; j < obj.pokemon[i].type.length; j++){
+                if(pokemonType === obj.pokemon[i].type[j].toLowerCase()){
+                    console.log("The name of the pokemon: " + obj.pokemon[i].name);
+                    pokemon.push(obj.pokemon[i].name);
+                }
+                else {
+                    response.status(404)
+                    display = "No such type";
+                    response.send(display);
+                }
+            };
+        };
+        var pokemonJoin = pokemon.join(", ");
+        response.send(pokemonJoin);
+    });
+};
+
 var showHome = (request, response) =>{
     // console.log("Welcome to the online Pokdex!");
     display = "Welcome to the online Pokedex!";
@@ -48,7 +75,9 @@ var showHome = (request, response) =>{
 
 
 app.get('/pokemon/:name', pokemon);
+app.get("/type/:colorType", type)
 app.get('/', showHome);
+
 
   //   console.log("test ", pokemon("Bulbasaur"));
   // send response with some data (a string)
