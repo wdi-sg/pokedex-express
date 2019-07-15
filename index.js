@@ -21,6 +21,8 @@ const capitalizeFirstLetter = (string) => {
 
 const whenRequestIsReceived = (request, response) => {
 
+    let matchFound = false;
+
     let pokemonName = capitalizeFirstLetter(request.params.name);
 
     jsonfile.readFile(file, (err,obj) => {
@@ -30,14 +32,19 @@ const whenRequestIsReceived = (request, response) => {
 
         } else {
 
-            // console.log('running array check!')
-
             for (let i = 0; i < obj['pokemon'].length; i ++) {
 
                 if (obj['pokemon'][i].name === pokemonName) {
+                    matchFound = true;
                     response.send(obj['pokemon'][i].name + ' weighs ' + obj['pokemon'][i].weight);
                 }
             }
+
+            if (matchFound === false) {
+                response.status( 404 );
+                response.send(`Could not find information about ${pokemonName} - Is that a new pokemon? Gotta catch em' all!`)
+            }
+
         }
     });
 }
@@ -50,10 +57,13 @@ const whenRequestIsReceived = (request, response) => {
  * ===================================
  */
 
-// app.get('*', (request, response) => {
-//   // send response with some data (a string)
-//   response.send(request.path);
-// });
+app.get('/', (request, response) => {
+  response.send("Welcome to the online Pokedex!")
+});
+
+app.get('/pokedex', (request, response) => {
+  response.send("Please type in a pokemon you would like to search")
+});
 
 app.get("/pokedex/:name/", whenRequestIsReceived);
 
