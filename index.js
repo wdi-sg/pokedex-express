@@ -18,11 +18,10 @@ const app = express();
  * ===================================
  */
 
-// app.get('/', (request, response) => {
-//     console.log(request.params)
-//     response.send('hello brian')
-// });
 
+// ///////////////
+// //Get Weight//
+// //////////////
 // app.get('/pokedex/:name', (request, response)=>{
 //     console.log(request.params);
 //     console.log(request.params.name);
@@ -56,44 +55,50 @@ const app = express();
 // });
 
 
-// //////////////////////////
-// //      New Route      //
-// //Get details on pokemon//
-// //////////////////////////
-// app.get('/pokedex/:name', (request, response)=>{
-//     console.log(request.params);
-//     console.log(request.params.name);
+//////////////////////////
+//      New Route      //
+//Get details on pokemon//
+//////////////////////////
+app.get('/pokedex/:name', (request, response)=>{
+    console.log(request.params);
+    console.log(request.params.name);
 
-//     jsonfile.readFile(file, (err, data) => {
-//             let details = "";
-//             let type = [];
+    jsonfile.readFile(file, (err, data) => {
+            let details = "";
+            let type = [];
 
-//             for (i=0; i<data.pokemon.length; i++) {
-//                 if (data.pokemon[i].name.toLowerCase() === request.params.name.toLowerCase()) {
-//                     console.log("pokemon name matched");
-//                     for (j=0; j<data.pokemon[i].type.length; j++) {
-//                         type.push(data.pokemon[i].type[j]);
-//                     }
-//                     if (data.pokemon[i].type.length === 1) {
-//                         details = `<html><body><img src='${data.pokemon[i].img}'</img></body></html><br>
-//                         This is ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}. It's weight is ${data.pokemon[i].weight}<br>
-//                         It is a ${type[0]} type Pokemon`;
-//                     } else if (data.pokemon[i].type.length === 2) {
-//                         details = `<html><body><img src='${data.pokemon[i].img}'</img></body></html><br>
-//                         This is ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}. It's weight is ${data.pokemon[i].weight}<br>
-//                         It is a ${type[0]} and ${type[1]} type Pokemon`;
-//                     }
-//                     break;
+            for (i=0; i<data.pokemon.length; i++) {
+                if (data.pokemon[i].name.toLowerCase() === request.params.name.toLowerCase()) {
+                    console.log("pokemon name matched");
+                    for (j=0; j<data.pokemon[i].type.length; j++) {
+                        type.push(data.pokemon[i].type[j]);
+                    }
+                    if (data.pokemon[i].type.length === 1) {
+                        details = `<html><body style="text-align: center; background-color: black; color: yellow"><h1>${data.pokemon[i].num}. ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}</h1><img style="margin: 0 auto" src='${data.pokemon[i].img}'</img></body></html><br>
+                        Number: ${data.pokemon[i].num}<br>
+                        Name: ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}<br>
+                        Weight: ${data.pokemon[i].weight}<br>
+                        Height: ${data.pokemon[i].height}<br>
+                        Type: ${type[0]}<br>`;
+                    } else if (data.pokemon[i].type.length === 2) {
+                        details = `<html><body style="text-align: center; background-color: black; color: yellow"><h1>${data.pokemon[i].num}. ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}</h1><img style="margin: 0 auto" src='${data.pokemon[i].img}'</img></body></html><br>
+                        Number: ${data.pokemon[i].num}<br>
+                        Name: ${request.params.name.charAt(0).toUpperCase()}${request.params.name.slice(1)}<br>
+                        Weight: ${data.pokemon[i].weight}<br>
+                        Height: ${data.pokemon[i].height}<br>
+                        Type: ${type[0]} and ${type[1]}<br>`;
+                    }
+                    break;
 
-//                 } else {
-//                     details = "<html><body><h1>No Such Pokemon!</h1></body></html>"
-//                     response.status( 404 );
-//                 }
-//             }
-//             response.send(details);
-//             console.log(details);
-//     });
-// });
+                } else {
+                    details = "<html><body><h1>No Such Pokemon!</h1></body></html>"
+                    response.status( 404 );
+                }
+            }
+            response.send(details);
+            console.log(details);
+    });
+});
 
 //////////////////////////
 //      New Route       //
@@ -108,32 +113,30 @@ app.get('/pokedex/type/:someType', (request, response)=>{
             let sameType = [];
             let typePage = "";
 
-            for (i=0; i<data.pokemon.length; i++) {
-                for (j=0; j<data.pokemon[i].type.length; j++) {
+            for (let i=0; i<data.pokemon.length; i++) {
+                for (let j=0; j<data.pokemon[i].type.length; j++) {
                     if (data.pokemon[i].type[j].toLowerCase() === request.params.someType.toLowerCase()) {
                         console.log("pokemon type matched");
-                        sameType.push(data.pokemon[i].name);
+                        let pokemon = {};
+                        pokemon.name = data.pokemon[i].name;
+                        pokemon.img = data.pokemon[i].img;
+                        sameType.push(pokemon);
                         console.log(sameType);
                     }
                     break;
                 }
             }
             for (i=0; i<sameType.length; i++) {
-                sameTypeList = `${sameTypeList} ${sameType[i]}<html><br></html>`
+                sameTypeList = `${sameTypeList}<br> <img style="display: block; margin: 0 auto" src='${sameType[i].img}'<br>${sameType[i].name}<br>`
             }
 
-            typePage = `List of ${request.params.someType} type pokemon<br><br>${sameTypeList}`;
+            typePage = `<html><body style="text-align: center; background-color: black; color: yellow"><h1>List of ${request.params.someType} type pokemon</h1><br><br>${sameTypeList}</body></html>`;
 
             response.send(typePage);
-            console.log(sameTypeList);
+             // response.send(sameTypeList);
+            // console.log(sameTypeList);
     });
 });
-
-
-
-
-
-
 
 
 
@@ -141,8 +144,6 @@ app.get('/pokedex/type/:someType', (request, response)=>{
 //   // send response with some data (a string)
 //   response.send(request.path);
 // });
-
-
 
 
 
