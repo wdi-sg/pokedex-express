@@ -25,34 +25,6 @@ app.get('/:pokemon', (request, response) => {
     })
 });
 
-// app.get("/:pokemon", (request, response) => {
-//     let pokemonName = request.params.pokemon;
-//     jsonfile.readFile(file, (err, obj) => {
-//         let pokemonFound = false;
-//         for (let i = 0; i < obj.pokemon.length; i++) {
-//             if (obj.pokemon[i].name.toLowerCase() === pokemonName.toLowerCase()) {
-//                 let pokemonWeight = obj.pokemon[i].weight;
-//                 let pokemonHeight = obj.pokemon[i].height;
-//                 let candy = obj.pokemon[i].candy;
-//                 let id = obj.pokemon[i].id;
-//                 console.log(obj.pokemon[i]);
-//                 if (candy.toLowerCase() === "none") {
-//                     response.send("This is " + pokemonName + ". It weighs " + pokemonWeight + " and it's height is " + pokemonHeight + ". " + pokemonName + "'s Pokedex number is " + id + ".");
-//                 }
-//                 else {
-//                     response.send("This is " + pokemonName + ", it weighs " + pokemonWeight + "! It's height is " + pokemonHeight + " and it uses " + candy + " to get stronger. " + pokemonName + "'s Pokedex number is " + id + ".");
-//                 }
-
-//                 pokemonFound = true;
-//             }
-//         }
-//         if (!pokemonFound) {
-//             response.status(404).send("Could not find information about " + pokemonName + "- is that a new pokemon? Gotta catch em' all!");
-//             // res.status(404).send("Could not find information about " + pokemonName + "- is that a new pokemon? Gotta catch em' all!")
-//         }
-//     });
-
-// });
 
 
 
