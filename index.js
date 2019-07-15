@@ -29,11 +29,19 @@ const file = 'pokedex.json';
       if (err){
         console.error(err);
       } else {
+        let found = false;
+        let message = '';
         for( var i = 0 ; i < data.pokemon.length; i++){
           var pokemonName = (data.pokemon[i].name).toLowerCase();
           if( request.params.name === pokemonName){
-            response.send(`The pokemon is ${data.pokemon[i].name}. His weight is ${data.pokemon[i].weight}.`);
+            message = `The pokemon is ${data.pokemon[i].name}. His weight is ${data.pokemon[i].weight}.`
+            response.send(200, message);
+            found = true;
           }
+        }
+        if(found === false){
+          message = `Could not find information about ${request.params.name} - Is that a new pokemon? Gotta catch em' all!`;
+          response.send(404, message);
         }
       }
     })
