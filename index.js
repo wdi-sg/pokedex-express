@@ -31,17 +31,34 @@ var whenRequestIsRecieved = (request, response) => {
 app.get('/pokedex/:name', (request, response)=>{
     console.log(request.params.name );
     jsonfile.readFile(file, (err, obj) => {
-        for (let i = 0; i < obj.pokemon.length; i++){
-            if (obj.pokemon[i].name === request.params.name){
-                console.log(i);
-                console.log(obj.pokemon[i]);
-                // get data from the file
-                const data = obj.pokemon[i];
-                response.send(data);
-            } /*else {
-                const data = `Could not find information about ${request.params.name} - Is that a new pokemon? Gotta catch em' all!`
-                response.status(404).send(data);
-            }*/
+        var namesList = [];
+        var names = function() {
+            for (let i = 0; i < obj.pokemon.length; i++){
+                //Object.keys(obj.pokemon[i].name);
+                namesList.push(obj.pokemon[i].name);
+            }
+        //console.log(namesList);
+        }
+
+        names();
+
+        if (namesList.includes(request.params.name)){
+            for (let i = 0; i < obj.pokemon.length; i++){
+                if (obj.pokemon[i].name === request.params.name){
+                    console.log(i);
+                    console.log(obj.pokemon[i]);
+                    // get data from the file
+                    const data = obj.pokemon[i];
+                    response.send(data);
+                }
+            }
+        } else if (request.params.name != namesList) {
+            const data = `Could not find information about ${request.params.name} - Is that a new pokemon? Gotta catch em' all!`
+            response.status(404).send(data);
+
+        } else {
+            const data = "Welcome to the online Pokdex!";
+            response.send(data);
         }
     })
 });
