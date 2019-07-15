@@ -14,9 +14,7 @@ const app = express();
 const jsonfile = require('jsonfile');
 const file = 'pokedex.json'
 
-// var fs = require('fs');
-// var obj = JSON.parse(fs.readFileSync('./pokedex.json', 'utf8'));
-//console.log(obj);
+
 /**
  * ===================================
  * Routes
@@ -40,10 +38,10 @@ app.get('/pokedex/:name', (request, response)=>{
                 // get data from the file
                 const data = obj.pokemon[i];
                 response.send(data);
-            } else {
+            } /*else {
                 const data = `Could not find information about ${request.params.name} - Is that a new pokemon? Gotta catch em' all!`
                 response.status(404).send(data);
-            }
+            }*/
         }
     })
 });
