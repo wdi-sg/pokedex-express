@@ -12,6 +12,11 @@ const dexData = "pokedex.json"
 // Init express app
 const app = express();
 
+/**
+ * ===================================
+ * Functions
+ * ===================================
+ */
 function borderSide(string) {
     const rowSpace = "     ++                                                                                                ++";
     const borderPadding = "     ";
@@ -42,14 +47,6 @@ function pokedexBanner() {
     const rowD = borderSide("██╔═══╝ ██║   ██║██╔═██╗ ██╔══╝  ██║  ██║██╔══╝   ██╔██╗  ");
     const rowE = borderSide("██║     ╚██████╔╝██║  ██╗███████╗██████╔╝███████╗██╔╝ ██╗ ");
     const rowF = borderSide("╚═╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═════╝ ╚══════╝╚═╝  ╚═╝ ");
-
-    // const rowG = borderSide(" ▄▄·  ▄ .▄            .▄▄ · ▄▄▄ .     ▄· ▄▌      ▄• ▄▌▄▄▄       ▄▄▄·      ▄ •▄ ▄▄▄ .• ▌ ▄ ·.        ▐ ▄ ");
-    // const rowH = borderSide("▐█ ▌▪██▪▐█▪     ▪     ▐█ ▀. ▀▄.▀·    ▐█▪██▌▪     █▪██▌▀▄ █·    ▐█ ▄█▪     █▌▄▌▪▀▄.▀··██ ▐███▪▪     •█▌▐█");
-    // const rowI = borderSide("██ ▄▄██▀▐█ ▄█▀▄  ▄█▀▄ ▄▀▀▀█▄▐▀▀▪▄    ▐█▌▐█▪ ▄█▀▄ █▌▐█▌▐▀▀▄      ██▀· ▄█▀▄ ▐▀▀▄·▐▀▀▪▄▐█ ▌▐▌▐█· ▄█▀▄ ▐█▐▐▌");
-    // const rowJ = borderSide("▐███▌██▌▐▀▐█▌.▐▌▐█▌.▐▌▐█▄▪▐█▐█▄▄▌     ▐█▀·.▐█▌.▐▌▐█▄█▌▐█•█▌    ▐█▪·•▐█▌.▐▌▐█.█▌▐█▄▄▌██ ██▌▐█▌▐█▌.▐▌██▐█▌");
-    // const rowK = borderSide("·▀▀▀ ▀▀▀ · ▀█▄▀▪ ▀█▄▀▪ ▀▀▀▀  ▀▀▀       ▀ •  ▀█▄▀▪ ▀▀▀ .▀  ▀    .▀    ▀█▄▀▪·▀  ▀ ▀▀▀ ▀▀  █▪▀▀▀ ▀█▄▀▪▀▀ █▪");
-
-
     const rowSpace = borderEmptyRow();
     const row = borderTopBottom();
 
@@ -62,12 +59,10 @@ function indexMsg() {
     const msg = "<ul><li><a href='/'>index</a></li><ul><li><a href='/pokedex'>pokedex</a></li></ul></ul>";
     return msg
 };
-
 function monImg(imgsrc){
     const img = `<img src='${imgsrc}'>`
     return img
-}
-
+};
 function getMonsByType(data, type){
     const byType = type
     console.log(byType)
@@ -105,6 +100,11 @@ function getImgByName(data, pokemon){
         }
     }
 };
+/**
+ * ===================================
+ * Routes
+ * ===================================
+ */
 app.get('/', (request, response) => {
     const msg = indexMsg()
   // send response with some data (a string)
@@ -115,8 +115,6 @@ app.get('/pokedex', (request, response) => {
   // send response with some data (a string)
   response.send(`<html><body><div><pre>${banner}</pre></div></body></html>`);
 });
-
-
 jsonfile.readFile(dexData, (err, obj) => {
 
     app.get('/pokedex/:name', (request, response) => {
@@ -145,33 +143,6 @@ jsonfile.readFile(dexData, (err, obj) => {
 
     if (err) console.error(err);
 });
-
-
-
-/**
- * ===================================
- * Routes
- * ===================================
- */
-
-
-
-
-// app.get('/pokedex/:name', (request, response) => {
-
-//     if(request.params.name === "bulbasaur"){
-//         response.send("yes");
-//     } else if(request.params.name === "ditto") {
-//         response.send("no");
-//     }
-
-//     var x = getWeight()
-//     console.log(x)
-
-//     console.log("000000000000000000000000")
-//   // send response with some data (a string)
-//   //response.send(request.path);
-// });
 
 /**
  * ===================================
