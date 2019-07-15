@@ -17,9 +17,11 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
+app.get("/pokemon/:name/:type", (request, response) => {
   // send response with some data (a string)
-  response.send(request.path);
+  console.log(request.params);
+  console.log(request.params.name + " " + request.params.type)
+  response.send('listening!');
 });
 
 /**
@@ -27,4 +29,6 @@ app.get('*', (request, response) => {
  * Listen to requests on port 3000
  * ===================================
  */
-app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+const PORT = 3000;
+app.listen(PORT);
+console.log("listening to "+PORT);
