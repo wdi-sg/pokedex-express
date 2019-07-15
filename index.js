@@ -28,6 +28,8 @@ var whenRequestIsRecieved = (request, response) => {
 };
 
 
+
+
 app.get('/pokedex/:name', (request, response)=>{
     console.log(request.params.name );
     jsonfile.readFile(file, (err, obj) => {
@@ -55,12 +57,13 @@ app.get('/pokedex/:name', (request, response)=>{
         } else if (request.params.name != namesList) {
             const data = `Could not find information about ${request.params.name} - Is that a new pokemon? Gotta catch em' all!`
             response.status(404).send(data);
-
-        } else {
-            const data = "Welcome to the online Pokdex!";
-            response.send(data);
         }
     })
+});
+
+app.get('/pokedex/', (request, response)=>{
+            const data = "Welcome to the online Pokdex!";
+            response.send(data);
 });
 
 app.get('*', (request, response) => {
