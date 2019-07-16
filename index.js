@@ -77,12 +77,12 @@ app.get('/nextevolution/:evolve',(request,response)=>{
   jsonfile.readFile(file, function(err,obj){
     for (var i = 0; i < obj["pokemon"].length; i++){
       if (obj["pokemon"][i]["name"] === combined){
-        if (obj["pokemon"][i]["prev_evolution"]){
-          for (var j = 0; j < obj["pokemon"][i]["prev_evolution"].length; j++){
-            response.write(`${obj["pokemon"][i]["prev_evolution"][j]["name"]} <br>`);
+        if (obj["pokemon"][i]["next_evolution"]){
+          for (var j = 0; j < obj["pokemon"][i]["next_evolution"].length; j++){
+            response.write(`${obj["pokemon"][i]["next_evolution"][j]["name"]} <br>`);
           }
         }else {
-          response.write(`${obj["pokemon"][i]["name"]} does not have a pokemon it evolved from!`)
+          response.write(`${obj["pokemon"][i]["name"]} is in its final form!`)
         }
       }
     }
@@ -90,5 +90,25 @@ app.get('/nextevolution/:evolve',(request,response)=>{
   });
 })
 
+//search for pokemon's previous evolution, return no evolution if pokemon is a starter
+app.get('/previousevolution/:evolve',(request,response)=>{
+  var smallLetter = request.params.evolve.toLowerCase();
+  var capsFirst = smallLetter.charAt(0).toUpperCase();
+  var combined = capsFirst+smallLetter.slice(1);
+  jsonfile.readFile(file, function(err,obj){
+    for (var i = 0; i < obj["pokemon"].length; i++){
+      if (obj["pokemon"][i]["name"] === combined){
+        if (obj["pokemon"][i]["prev_evolution"]){
+          for (var j = 0; j < obj["pokemon"][i]["prev_evolution"].length; j++){
+            response.write(`${obj["pokemon"][i]["prev_evolution"][j]["name"]} <br>`);
+          }
+        }else {
+          response.write(`${obj["pokemon"][i]["name"]} is in its starter form!`)
+        }
+      }
+    }
+    response.end();
+  });
+})
 
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
