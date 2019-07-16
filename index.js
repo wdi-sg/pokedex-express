@@ -80,6 +80,43 @@ const pokemonDetails = (request, response) => {
     });
 }
 
+const pokemonType = (request, response) => {
+
+    let matchFound = false;
+
+    let pokemonTypeArray = [];
+
+    let pokemonTypeSearch = capitalizeFirstLetter(request.params.type);
+
+    jsonfile.readFile(file, (err,obj) => {
+
+        if(err) {
+            console.log('there is an error')
+
+        } else {
+
+            for (let i = 0; i < obj['pokemon'].length; i ++) {
+
+                let pokemonTypesInArray = obj['pokemon'][i].type;
+
+                if (pokemonTypesInArray.includes(pokemonTypeSearch)) {
+                    matchFound = true;
+                    pokemonTypeArray.push(obj['pokemon'][i].name)
+                }
+            }
+
+
+            if (matchFound === false) {
+                response.status( 404 );
+                response.send(`Could not find information about that Pokemon type - Is that a new pokemon? Gotta catch em' all!`)
+            } else {
+                response.send('Here is a list of Pokemon of the ' + pokemonTypeSearch + " type: <br><br>" + pokemonTypeArray.join(', '))
+            }
+
+        }
+    });
+}
+
 /**
  * ===================================
  * Routes
@@ -98,6 +135,7 @@ app.get('/pokedex', (request, response) => {
 
 app.get("/pokedex/:name/", pokemonDetails);
 
+app.get("/type/:type", pokemonType);
 
 
 
@@ -106,4 +144,4 @@ app.get("/pokedex/:name/", pokemonDetails);
  * Listen to requests on port 3000
  * ===================================
  */
-app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+app.listen(8080, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
