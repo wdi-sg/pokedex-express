@@ -14,6 +14,7 @@ const app = express();
 app.get("/pokemon/:name", (request, response) => {
     const name = request.params.name
     let pokemonWeight = "";
+    let noMatch = false;
 //read pokedex json
     jsonfile.readFile(file, (err, obj) => {
          //read obj
@@ -23,9 +24,14 @@ app.get("/pokemon/:name", (request, response) => {
             if (obj.pokemon[i].name === name) {
                 console.log(name);
                 pokemonWeight = obj.pokemon[i].weight;
+                response.send(name + "'s weight is " + pokemonWeight);
+            }
+            if (obj.pokemon[i].name !== name) {
+                noMatch === true;
+                console.log('not found');
+                response.send("Could not find information about " + name + " - Is that a new pokemon? Gotta catch em' all!");
             }
         }
-        response.send(name + "'s weight is " + pokemonWeight)
     });
 });
 
