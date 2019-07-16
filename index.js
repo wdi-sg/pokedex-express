@@ -134,24 +134,24 @@ app.get('/nextevolution/:name', (request, response) => {
    
    let name =  request.params.name;
 
-  	let pokemon = [];
+  	let pokemon ;
     
     for( let i=0; i<obj.pokemon.length; i++ ){
 
       let matchedPokemon = obj.pokemon[i];
     	for( let j=0; j<matchedPokemon.next_evolution.length; j++ ){
 	      if( matchedPokemon.next_evolution[j].name=== name){
-	      	pokemon.push(matchedPokemon.name);
-	      	console.log(pokemon);
+	      	
+	      	pokemon = matchedPokemon.name;
 	      }
     	};
     
     
-  if (pokemon===null) {
+  if (pokemon===undefined) {
 
       // send 404 back
       response.status(404);
-      response.send(`Could not find information about ${weakness} weakness- Is that a new pokemon? Gotta catch em' all!`);
+      response.send(`Could not find information about ${name} weakness- Is that a new pokemon? Gotta catch em' all!`);
     } else {
 
     var msg = ` ${name} evolved from ${pokemon}.`
