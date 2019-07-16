@@ -5,7 +5,6 @@ const app = express();
 const file = 'pokedex.json';
 
 
-
 /**
  * ===================================
  * Configurations and set up
@@ -121,6 +120,36 @@ var getPokemonByWeaknessRequest = function(request, response){
        let message = '';
        let arr = [];
 
+      //how to get returned values of a function into an js variable.
+       // let weaknessList = function(){
+       //   getAllPokemonWeakness();
+       // }
+
+       //get all pokemon weaknesses.
+       //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+       //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+       // get all pokemon weakness
+       //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+       //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+       var getAllPokemonWeakness = function(){
+
+         var weaknessList = [];
+
+         for (var i = 0; i < data.pokemon.length; i++) {
+             for (var j = 0; j < data.pokemon[i].weaknesses.length; j++) {
+                 var weakness = data.pokemon[i].weaknesses[j];
+                 if (weaknessList.includes(weakness) === false) {
+                     weaknessList.push(weakness);
+                 }
+             }
+         }
+
+         return weaknessList;
+       }
+
+       var allWeaknesses = getAllPokemonWeakness();
+       console.log(allWeaknesses);
+
        for (var i = 0; i< data.pokemon.length; i++){
          for (var j = 0; j< data.pokemon[i].weaknesses.length; j++){
            if(data.pokemon[i].weaknesses[j].toLowerCase() === request.params.weaknesses){
@@ -137,7 +166,7 @@ var getPokemonByWeaknessRequest = function(request, response){
 
 
        if(found === false){
-         message = `${request.params.weaknesses} is not a valid weakness. Try Bug, Ghost, Dark etc.`;
+         message = `${request.params.weaknesses} is not a valid weakness. Try list of ${allWeaknesses.toString()}`;
          response.send(404, message);
        }
 
