@@ -157,12 +157,52 @@ app.get('/pokedex/type/:someType', (request, response)=>{
                     </html>`;
 
             response.send(typePage);
-             // response.send(sameTypeList);
             // console.log(sameTypeList);
     });
 });
 
+//////////////////////////
+//      New Route      //
+//  Pokemon weakness  //
+////////////////////////
+app.get('/pokedex/weakness/:weaknessType', (request, response)=>{
+    console.log(request.params);
+    console.log(request.params.weaknessType);
 
+    jsonfile.readFile(file, (err, data) => {
+            let sameWeaknessList= "";
+            let sameWeakness = [];
+            let weaknessPage = "";
+
+            for (let i=0; i<data.pokemon.length; i++) {
+                for (let j=0; j<data.pokemon[i].weaknesses[j].length; j++) {
+                    if (data.pokemon[i].weaknesses[j].toLowerCase() === request.params.weaknessType.toLowerCase()) {
+                        console.log("pokemon weakness matched");
+                        let pokemon = {};
+                        pokemon.name = data.pokemon[i].name;
+                        pokemon.img = data.pokemon[i].img;
+                        sameWeakness.push(pokemon);
+                        console.log(sameWeakness);
+                    }
+                    break;
+                }
+            }
+            for (i=0; i<sameWeakness.length; i++) {
+                sameWeaknessList = `${sameWeaknessList}<br> <img style="display: block; margin: 0 auto" src='${sameWeakness[i].img}'<br>${sameWeakness[i].name}<br>`
+            }
+
+            weaknessPage = `
+                    <html>
+                    <body style="text-align: center; background-color: black; color: yellow">
+                    <img src="https://fontmeme.com/permalink/190715/f87c04db0b54e3b89caa3d1d3ee405fb.png">
+                    <h1>List of Pokemon with ${request.params.weaknessType} type weakness</h1><br>
+                    <br>${sameWeaknessList}
+                    </body>
+                    </html>`;
+
+            response.send(weaknessPage);
+    });
+});
 
 // app.get('*', (request, response) => {
 //   // send response with some data (a string)
