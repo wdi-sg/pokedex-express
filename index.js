@@ -160,26 +160,36 @@ var getPokemonNextEvolutionRequest = function(request, response){
      } else {
 
        let found = false;
+       let nextEvolute = false;
        let message = '';
        let arr = [];
 
-       for( var i = 0 ; i < data.pokemon.length; i++){
 
-         if( data.pokemon[i].name.toLowerCase() === request.params.name && data.pokemon[i].hasOwnProperty('next_evolution')){
-           for (let j = 0; j < data.pokemon[i].next_evolution.length; j ++){
-             arr.push(data.pokemon[i].next_evolution[j].name);
-             found = true;
+       for( var i = 0 ; i < data.pokemon.length; i++){
+         //if pokemon match
+         if( data.pokemon[i].name.toLowerCase() === request.params.name){
+           found = true;
+           // if pokemon has next evolutions
+           if(data.pokemon[i].hasOwnProperty('next_evolution')){
+             for (let j = 0; j < data.pokemon[i].next_evolution.length; j ++){
+               arr.push(data.pokemon[i].next_evolution[j].name);
+               nextEvolute = true;
+             }
+           } else {
+              // if pokemon dont'have next evolution
+             nextEvolute = false;
            }
          }
        }
 
-       if(found === true){
+       if(found === true && nextEvolute === true ){
          message = `${request.params.name} next evolution is ${arr.toString()}.`
          response.send(200, message);
-       }
-
-       if(found === false){
+       } else if (found === true && nextEvolute === false){
          message = `${request.params.name} does not have next evolution`;
+         response.send(200, message);
+       } else if (found === false && nextEvolute === false){
+         message = `Could not find information about ${request.params.name} - Is that a new pokemon? Gotta catch em' all!`;
          response.send(404, message);
        }
 
@@ -201,26 +211,36 @@ var getPokemonPrevEvolutionRequest = function(request, response){
      } else {
 
        let found = false;
+       let prevEvolute = false;
        let message = '';
        let arr = [];
 
-       for( var i = 0 ; i < data.pokemon.length; i++){
 
-         if( data.pokemon[i].name.toLowerCase() === request.params.name && data.pokemon[i].hasOwnProperty('prev_evolution')){
-           for (let j = 0; j < data.pokemon[i].prev_evolution.length; j ++){
-             arr.push(data.pokemon[i].prev_evolution[j].name);
-             found = true;
+       for( var i = 0 ; i < data.pokemon.length; i++){
+         //if pokemon match
+         if( data.pokemon[i].name.toLowerCase() === request.params.name){
+           found = true;
+           // if pokemon has prev evolutions
+           if(data.pokemon[i].hasOwnProperty('prev_evolution')){
+             for (let j = 0; j < data.pokemon[i].prev_evolution.length; j ++){
+               arr.push(data.pokemon[i].prev_evolution[j].name);
+               prevEvolute = true;
+             }
+           } else {
+              // if pokemon dont'have previous evolution
+             prevEvolute = false;
            }
          }
        }
 
-       if(found === true){
+       if(found === true && prevEvolute === true ){
          message = `${request.params.name} previous evolution is ${arr.toString()}.`
          response.send(200, message);
-       }
-
-       if(found === false){
+       } else if (found === true && prevEvolute === false){
          message = `${request.params.name} does not have previous evolution`;
+         response.send(200, message);
+       } else if (found === false && prevEvolute === false){
+         message = `Could not find information about ${request.params.name} - Is that a new pokemon? Gotta catch em' all!`;
          response.send(404, message);
        }
 
