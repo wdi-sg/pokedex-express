@@ -12,13 +12,15 @@ app.get('/pokemon/:name', (request, response) => {
 
         let pokeName = "";
         let pokeWeight = "";
-        let pokeFound = false;
-        let pokeToFind = request.params.name;
+        let pokemonFound = false;
+        let lowerCase = request.params.name.toLowerCase();
+        let capsFirst = lowerCase.charAt(0).toUpperCase();
+        let pokeToFind = capsFirst + lowerCase.slice(1);
 
         console.log(pokeToFind);
 
         //find pokeToFind in obj and return its name and weight
-        for (let i = 0; i < obj.pokemon.length-1; i++) {
+        for (let i = 0; i < obj.pokemon.length; i++) {
             if (obj.pokemon[i].name === pokeToFind) {
                 pokeName = obj.pokemon[i].name;
                 pokeWeight = obj.pokemon[i].weight;
@@ -29,9 +31,9 @@ app.get('/pokemon/:name', (request, response) => {
             }
         }
 
-        if (!pokeFound) {
+        if (!pokemonFound) {
             response.status(404).send(`<html><body><h1>Pikaboo:(</h1><br><p>Could not find information on ${pokeToFind} - Is that a new pokemon? Gotta catch em all!</p></body></html>`);
-        } else if (pokeFound) {
+        } else if (pokemonFound) {
             response.send(`<html><body><h1>${pokeName}</h1><br><p>Weight: ${pokeWeight}</p></body></html>`);
         }
     });
