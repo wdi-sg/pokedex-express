@@ -76,6 +76,33 @@ var getPokemonByTypeRequest = function(request, response){
        console.error(err);
      } else {
 
+       //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+       //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+       // get all pokemon types
+       //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+       //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+       var getAllPokemonType = function(){
+
+         var typeList = [];
+
+         for (var i = 0; i < data.pokemon.length; i++) {
+             for (var j = 0; j < data.pokemon[i].type.length; j++) {
+                 var type = data.pokemon[i].type[j];
+                 if (typeList.includes(type) === false) {
+                     typeList.push(type);
+                 }
+             }
+         }
+
+         return typeList;
+       }
+
+       var allTypes = getAllPokemonType();
+       console.log(allTypes);
+
+       // use the type entered in url and find a list of pokemon with that type.
+
        let found = false;
        let message = '';
        let arr = [];
@@ -96,7 +123,7 @@ var getPokemonByTypeRequest = function(request, response){
 
 
        if(found === false){
-         message = `${request.params.sometype} is not a valid type of Pokemon. Try Grass, Psychic, Electric etc.`;
+         message = `${request.params.type} is not a valid type of Pokemon. Try ${allTypes.toString()}`;
          response.send(404, message);
        }
 
@@ -115,22 +142,12 @@ var getPokemonByWeaknessRequest = function(request, response){
      if (err){
        console.error(err);
      } else {
-
-       let found = false;
-       let message = '';
-       let arr = [];
-
-      //how to get returned values of a function into an js variable.
-       // let weaknessList = function(){
-       //   getAllPokemonWeakness();
-       // }
-
-       //get all pokemon weaknesses.
        //----------------------------------------------------------------------------------------------------------------------------------------------------------------
        //----------------------------------------------------------------------------------------------------------------------------------------------------------------
        // get all pokemon weakness
        //----------------------------------------------------------------------------------------------------------------------------------------------------------------
        //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
        var getAllPokemonWeakness = function(){
 
          var weaknessList = [];
@@ -149,6 +166,13 @@ var getPokemonByWeaknessRequest = function(request, response){
 
        var allWeaknesses = getAllPokemonWeakness();
        console.log(allWeaknesses);
+
+       //use weakness in url and find the list of pokemon with that weaknesses
+
+       let found = false;
+       let message = '';
+       let arr = [];
+
 
        for (var i = 0; i< data.pokemon.length; i++){
          for (var j = 0; j< data.pokemon[i].weaknesses.length; j++){
@@ -299,4 +323,4 @@ var getPokemonPrevEvolutionRequest = function(request, response){
  */
 
 
-app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+app.listen(5000, () => console.log('~~~ Tuning in to the waves of port 5000 ~~~'));
