@@ -11,31 +11,31 @@ app.get('/pokemon/search', (request, response) => {
   var combined = capsFirst+smallLetter.slice(1);
   //flags if search for pokemon name turns up negative
   var search = false;
-  if (request.query.q === ""){
-    response.send(`Welcome to the online Pokdex!`)
-  }else{
-    jsonfile.readFile(file, function(err,obj){
-      for (var i = 0; i < obj["pokemon"].length; i++){
-        if (obj["pokemon"][i]["name"] === combined){
-          response.write(`
-            Name: ${obj["pokemon"][i]["name"]} <br>
-            Height: ${obj["pokemon"][i]["height"]} <br>
-            Weight: ${obj["pokemon"][i]["weight"]} <br>
-            Weaknesses: ${obj["pokemon"][i]["weaknesses"]} <br>
-            Type: ${obj["pokemon"][i]["type"]} <br>
-            This is ${obj["pokemon"][i]["name"]}, it weighs ${obj["pokemon"][i]["weight"]} and stands at ${obj["pokemon"][i]["height"]}. Its weaknesses are ${obj["pokemon"][i]["weaknesses"]}.
-          `);
-          search = true;
-        }
+  jsonfile.readFile(file, function(err,obj){
+    for (var i = 0; i < obj["pokemon"].length; i++){
+      if (obj["pokemon"][i]["name"] === combined){
+        response.write(`
+          Name: ${obj["pokemon"][i]["name"]} <br>
+          Height: ${obj["pokemon"][i]["height"]} <br>
+          Weight: ${obj["pokemon"][i]["weight"]} <br>
+          Weaknesses: ${obj["pokemon"][i]["weaknesses"]} <br>
+          Type: ${obj["pokemon"][i]["type"]} <br>
+          This is ${obj["pokemon"][i]["name"]}, it weighs ${obj["pokemon"][i]["weight"]} and stands at ${obj["pokemon"][i]["height"]}. Its weaknesses are ${obj["pokemon"][i]["weaknesses"]}.
+        `);
+        response.end();
+        search = true;
       }
-      response.end();
-      if (!search){
-        response.status(404).send(
-          `Could not find information about ${request.query.q} - Is that a new pokemon? Gotta catch em' all!`
-        );
-      }
-    });
-  }
+    }
+    if (combined === ""){
+      response.send(`Welcome to the online Pokedex!`)
+      search = true;
+    }
+    if (!search){
+      response.status(404).send(
+        `Could not find information about ${request.query.q} - Is that a new pokemon? Gotta catch em' all!`
+      );
+    }
+  });
 })
 //searching pokemon by type
 app.get('/type/:type',(request,response)=>{
