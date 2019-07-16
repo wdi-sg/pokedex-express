@@ -1,6 +1,9 @@
+console.log('jello')
 const express = require('express');
+const jsonfile = require('jsonfile');
+const file = 'pokedex.json'
 
-// const jsonfile = require('jsonfile');
+var found = false;
 
 /**
  * ===================================
@@ -16,11 +19,33 @@ const app = express();
  * Routes
  * ===================================
  */
-
-app.get('*', (request, response) => {
+app.get("/pokemon/:name/", (request, response) => {
   // send response with some data (a string)
-  response.send(request.path);
+    jsonfile.readFile(file, (err, obj) => {
+        if(err){
+            console.log(err)
+        }
+        else {
+            for (i = 0; i < obj.pokemon.length; i++) {
+                if (obj.pokemon[i].name.toLowerCase() === request.params.name.toLowerCase()){
+                    response.send(request.params.name + "'s weight is " + obj.pokemon[i].weight + ".");
+                    found = true;
+                }
+            }
+/**
+ * ===================================
+ * Error 404
+ * ===================================
+ */
+            if (found === false){
+            response.status(404);
+            response.send("Could not find information about " + request.params.name + " - Is that a new pokemon?")
+            }
+        }
+    })
 });
+
+
 
 /**
  * ===================================
