@@ -1,30 +1,47 @@
 const express = require('express');
-
-// const jsonfile = require('jsonfile');
-
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
-
-// Init express app
+const jsonfile = require('jsonfile');
+const file = 'pokedex.json';
 const app = express();
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
+app.get('/', (request, response) => {
+    response.send("Welcome to the online Pokedex!");
+})
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
-});
+var name = function(str) {
+    return str[0].toUpperCase() + str.substring(1).toLowerCase();
+}
 
-/**
- * ===================================
- * Listen to requests on port 3000
- * ===================================
- */
+//getting pokemon name
+app.get('/pokemon/:pokemon', (request, response) => {
+    let selectedPokemon = name(request.params['pokemon']);
+
+    jsonfile.readFile(file, (err, obj) => {
+
+        if (err) {
+            console.log(err)
+        } else {
+            let found = false;
+            for (let i = 0; i < obj.pokemon.length; i++) {
+                if (obj.pokemon[i].name === selectedPokemon) {
+                    let pok = obj.pokemon[i];
+                    response.send(`
+                        <h2>${pok.name}</h2>
+                        <img src="${pok.img}">
+                        <ul>
+                        <li>Type : ${pok.type}</li>
+                        <li>Height : ${pok.height}</li>
+                        <li>Weight : ${pok.weight}</li>
+                        <li>Weaknesses : ${pok.weaknesses}</li>
+                        </ul>`);
+                    found = true;
+                }
+            }
+            if (!found) {
+                response.status(404).send(`Could not find information about ${selectedPokemon} - Is that a new pokemon? Gotta catch em' all!`);
+
+            }
+        };
+    })
+})
+
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
