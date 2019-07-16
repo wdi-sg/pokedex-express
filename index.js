@@ -187,6 +187,47 @@ var getPokemonNextEvolutionRequest = function(request, response){
    })
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+// get pokemon prev evolution
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+var getPokemonPrevEvolutionRequest = function(request, response){
+  jsonfile.readFile(file, function (err, data) {
+     if (err){
+       console.error(err);
+     } else {
+
+       let found = false;
+       let message = '';
+       let arr = [];
+
+       for( var i = 0 ; i < data.pokemon.length; i++){
+
+         if( data.pokemon[i].name.toLowerCase() === request.params.name && data.pokemon[i].hasOwnProperty('prev_evolution')){
+           for (let j = 0; j < data.pokemon[i].prev_evolution.length; j ++){
+             arr.push(data.pokemon[i].prev_evolution[j].name);
+             found = true;
+           }
+         }
+       }
+
+       if(found === true){
+         message = `${request.params.name} previous evolution is ${arr.toString()}.`
+         response.send(200, message);
+       }
+
+       if(found === false){
+         message = `${request.params.name} does not have previous evolution`;
+         response.send(404, message);
+       }
+
+     }
+   })
+}
+
 /**
  * ===================================
  * Routes
@@ -198,6 +239,7 @@ var getPokemonNextEvolutionRequest = function(request, response){
  app.get('/type/:type', getPokemonByTypeRequest);
  app.get('/weaknesses/:weaknesses', getPokemonByWeaknessRequest);
  app.get('/nextevolution/:name', getPokemonNextEvolutionRequest);
+  app.get('/prevevolution/:name', getPokemonPrevEvolutionRequest);
 
 
 
