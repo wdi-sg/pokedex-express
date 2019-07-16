@@ -29,31 +29,31 @@ app.get('/pokemon/:name', (request, response) => {
 		let pokemonDetails = '';
 		let pokemonFound=false;
 
-		for(var i=0; i<obj.pokemon.length-1;i++){
+		for(var i=0; i<obj.pokemon.length;i++){
 			if (obj.pokemon[i].name === (request.params.name)){
 				pokemonDetails = pokemonDetails + `<img src=${obj.pokemon[i].img}><br>`; // Add Image
 				pokemonFound=true;
 
 				pokemonDetails = pokemonDetails + `This is ${obj.pokemon[i].name}. He is ${obj.pokemon[i].weight} in weight and ${obj.pokemon[i].height} in height.<br><br>This Pokemon has type:<br>`; //Pokemon Details
 
-				obj.pokemon[i].type.forEach(function(type){
+				obj.pokemon[i].type.forEach(function(type){ //Show Type
 					pokemonDetails = pokemonDetails + `${type}<br>`;
 				});
 
-				pokemonDetails = pokemonDetails + `<br>This Pokemon has the following weaknesses:<br>`;
+				pokemonDetails = pokemonDetails + `<br>This Pokemon has the following weaknesses:<br>`; //Show Weakness
 
 				obj.pokemon[i].weaknesses.forEach(function(weakness){
 					pokemonDetails = pokemonDetails + `${weakness}<br>`;
 				});
 
-				if (('next_evolution' in obj.pokemon[i])){
+				if (('next_evolution' in obj.pokemon[i])){  //Show Next Evolution
 					pokemonDetails = pokemonDetails + `<br>This Pokemon has the following next evolution:<br>`;
 					for(var j=0; j<obj.pokemon[i]['next_evolution'].length; j++){
 						pokemonDetails = pokemonDetails + `${obj.pokemon[i]['next_evolution'][j].num} - ${obj.pokemon[i]['next_evolution'][j].name}<br>`
 					}
 				}
 
-				if (('prev_evolution' in obj.pokemon[i])){
+				if (('prev_evolution' in obj.pokemon[i])){ //Show Previous Evolution
 					pokemonDetails = pokemonDetails + `<br>This Pokemon has the following previous evolution:<br>`;
 					for(var k=0; k<obj.pokemon[i]['prev_evolution'].length; k++){
 						pokemonDetails = pokemonDetails + `${obj.pokemon[i]['prev_evolution'][k].num} - ${obj.pokemon[i]['prev_evolution'][k].name}<br>`
@@ -99,7 +99,7 @@ app.get('/weaknesses/:weakness', (request, response) => {
 	jsonfile.readFile(file, (err, obj) => {
 		let allPokemonHaveWeakness = '';
 		let count = 0;
-		for(var i=0; i<obj.pokemon.length-1;i++){
+		for(var i=0; i<obj.pokemon.length;i++){
 			if (obj.pokemon[i].weaknesses.includes(request.params.weakness)){
 				count++;
 				allPokemonHaveWeakness= allPokemonHaveWeakness + `<img src=${obj.pokemon[i].img}><br>${obj.pokemon[i].id}. ${obj.pokemon[i].name}<br><br>`;
@@ -122,7 +122,7 @@ app.get('/nextevolution/:name', (request, response) => {
 		let allPokemonEvolutions = `Index - Pokemon Name<br>`;
 		let pokemonFound=false;
 		let evolution=false;
-		for(var i=0; i<obj.pokemon.length-1;i++){
+		for(var i=0; i<obj.pokemon.length;i++){
 			if (obj.pokemon[i].name === (request.params.name)){
 				pokemonFound = true;
 				if (('next_evolution' in obj.pokemon[i])){
