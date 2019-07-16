@@ -36,7 +36,7 @@ var getPokemonByNameRequest = function(request, response){
   jsonfile.readFile(file, function (err, data) {
      if (err){
        console.error(err);
-     } else {
+     }
 
        let found = false;
        let message = '';
@@ -58,7 +58,7 @@ var getPokemonByNameRequest = function(request, response){
          response.send(404, message);
        }
 
-     }
+
    })
 }
 
@@ -74,7 +74,7 @@ var getPokemonByTypeRequest = function(request, response){
   jsonfile.readFile(file, function (err, data) {
      if (err){
        console.error(err);
-     } else {
+     }
 
        //----------------------------------------------------------------------------------------------------------------------------------------------------------------
        //----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ var getPokemonByTypeRequest = function(request, response){
          response.send(404, message);
        }
 
-     }
+
    })
 }
 
@@ -141,7 +141,7 @@ var getPokemonByWeaknessRequest = function(request, response){
   jsonfile.readFile(file, function (err, data) {
      if (err){
        console.error(err);
-     } else {
+     }
        //----------------------------------------------------------------------------------------------------------------------------------------------------------------
        //----------------------------------------------------------------------------------------------------------------------------------------------------------------
        // get all pokemon weakness
@@ -176,7 +176,7 @@ var getPokemonByWeaknessRequest = function(request, response){
 
        for (var i = 0; i< data.pokemon.length; i++){
          for (var j = 0; j< data.pokemon[i].weaknesses.length; j++){
-           if(data.pokemon[i].weaknesses[j].toLowerCase() === request.params.weaknesses){
+           if(data.pokemon[i].weaknesses[j].toLowerCase() === request.params.weakness){
              arr.push(data.pokemon[i].name);
              found = true;
            }
@@ -184,17 +184,17 @@ var getPokemonByWeaknessRequest = function(request, response){
        }
 
        if(found === true){
-         message = `These pokemon <br> ${arr.toString()} <br>  are afraid of ${request.params.weaknesses}`;
+         message = `These pokemon <br> ${arr.toString()} <br>  are afraid of ${request.params.weakness}`;
          response.send(200, message);
        }
 
 
        if(found === false){
-         message = `${request.params.weaknesses} is not a valid weakness. Try list of ${allWeaknesses.toString()}`;
+         message = `${request.params.weakness} is not a valid weakness. Try list of ${allWeaknesses.toString()}`;
          response.send(404, message);
        }
 
-     }
+
    })
 }
 
@@ -210,7 +210,7 @@ var getPokemonNextEvolutionRequest = function(request, response){
   jsonfile.readFile(file, function (err, data) {
      if (err){
        console.error(err);
-     } else {
+     }
 
        let found = false;
        let nextEvolute = false;
@@ -246,7 +246,7 @@ var getPokemonNextEvolutionRequest = function(request, response){
          response.send(404, message);
        }
 
-     }
+
    })
 }
 
@@ -261,7 +261,7 @@ var getPokemonPrevEvolutionRequest = function(request, response){
   jsonfile.readFile(file, function (err, data) {
      if (err){
        console.error(err);
-     } else {
+     }
 
        let found = false;
        let prevEvolute = false;
@@ -297,7 +297,7 @@ var getPokemonPrevEvolutionRequest = function(request, response){
          response.send(404, message);
        }
 
-     }
+
    })
 }
 
@@ -310,7 +310,7 @@ var getPokemonPrevEvolutionRequest = function(request, response){
  app.get('/', defaultRequest);
  app.get('/pokemon/:name', getPokemonByNameRequest);
  app.get('/type/:type', getPokemonByTypeRequest);
- app.get('/weaknesses/:weaknesses', getPokemonByWeaknessRequest);
+ app.get('/weakness/:weakness', getPokemonByWeaknessRequest);
  app.get('/nextevolution/:name', getPokemonNextEvolutionRequest);
   app.get('/prevevolution/:name', getPokemonPrevEvolutionRequest);
 
