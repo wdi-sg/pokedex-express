@@ -312,7 +312,7 @@ var getPokemonPrevEvolutionRequest = function(request, response){
  app.get('/type/:type', getPokemonByTypeRequest);
  app.get('/weakness/:weakness', getPokemonByWeaknessRequest);
  app.get('/nextevolution/:name', getPokemonNextEvolutionRequest);
-  app.get('/prevevolution/:name', getPokemonPrevEvolutionRequest);
+ app.get('/prevevolution/:name', getPokemonPrevEvolutionRequest);
 
 
 
