@@ -10,7 +10,7 @@ const app = express();
 
 let data;
 const file = 'pokedex.json';
-
+const PORT = process.env.PORT || 3000
 
 //===================================
 // Server And Data Loader Function
@@ -22,7 +22,7 @@ var startServer = function () {
             data = JSONContent;
         })
         .then(() => {
-            app.listen(3000);
+            app.listen(PORT);
         });
 }
 
