@@ -11,6 +11,7 @@ const app = express();
 let data;
 const file = 'pokedex.json';
 
+
 //===================================
 // Server And Data Loader Function
 //===================================
@@ -24,6 +25,7 @@ var startServer = function () {
             app.listen(3000);
         });
 }
+
 
 // ===================================
 // Request Handlers
