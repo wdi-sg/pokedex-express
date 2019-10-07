@@ -24,7 +24,7 @@ const doPokemon = (request, response)=>{
       console.log("ERR", err );
     } else {
         for (let i = 0; i < pokeList.length; i++) {
-            if (i === parseInt(request.params.number)) {
+            if (i+1 === parseInt(request.params.name)) {
                 pokeList[i] = "You chose " + pokeList[i].name;
                 response.send(pokeList[i]);
             }
@@ -48,7 +48,7 @@ const startingPage = (request,response) => {
  * ===================================
  */
 
-app.get('/pokemon/:number', doPokemon)
+app.get('/pokemon/:name', doPokemon)
 app.get('*', startingPage);
 /**
  * ===================================
