@@ -35,7 +35,6 @@ const file = 'pokedex.json';
 // PART 2 - Construct HTTP Request to get user input by pokemon name
 app.get('/pokemon/:name', (request, response) => {
 
-
     // Get the name from the parameter
     let pokeName = request.params.name;
     console.log("Name entered is " + pokeName);
@@ -64,7 +63,6 @@ app.get('/pokemon/:name', (request, response) => {
         }
     });
 });
-
 /**
  * ===================================
  * Listen to requests on port 3000
