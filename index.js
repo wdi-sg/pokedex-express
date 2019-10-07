@@ -27,16 +27,21 @@ app.get('/pokemon/:name', (request, response) => {
 
     jsonfile.readFile(file, function(err, obj) {
         if (err) { console.error(err) }
+
         const pokemon = obj.pokemon;
 
-        const selectedPokemon = pokemon.filter(pokemon => pokemon.name === pokemonName)[0];
+        const selectedPokemon = pokemon.filter(pokemon => pokemon.name === pokemonName);
 
-        const responseStr = `Pokemon: ${selectedPokemon.name} --- Weight: ${selectedPokemon.weight}`;
+        if (selectedPokemon.length) {
+            const responseStr = `Pokemon: ${selectedPokemon[0].name} --- Weight: ${selectedPokemon[0].weight}`;
 
-        response.send(responseStr);
-    })
-
+            response.send(responseStr);
+        } else {
+            response.status(404).send(`Could not find information about ${pokemonName} - Is that a new pokemon? Gotta catch em' all!`);
+        }
+    });
 });
+
 
 /**
  * ===================================
