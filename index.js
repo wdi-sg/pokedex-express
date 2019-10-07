@@ -33,7 +33,7 @@ const getPokemon = (request, response) => {
             console.log(keys);
             let description = "";
             for ( let j=0; j<keys.length; j++) {
-                description += `${pokeMatched.name}'s ${keys[j]} is ${pokeMatched[keys[j]]}.\n`;
+                description += `${pokeMatched.name}'s ${keys[j]} is ${JSON.stringify(pokeMatched[keys[j]])}. `;
             }
             response.send( description );
         }
