@@ -33,7 +33,7 @@ app.get('/pokemon/:name', (request, response) => {
         const selectedPokemon = pokemon.filter(pokemon => pokemon.name === pokemonName);
 
         if (selectedPokemon.length) {
-            const responseStr = `Pokemon: ${selectedPokemon[0].name} --- Weight: ${selectedPokemon[0].weight}`;
+            const responseStr = `This is ${selectedPokemon[0].name}, it is ${selectedPokemon[0].weight} in weight.`;
 
             response.send(responseStr);
         } else {
