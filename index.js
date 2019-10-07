@@ -1,6 +1,6 @@
 const express = require('express');
 
-// const jsonfile = require('jsonfile');
+const jsonfile = require('jsonfile');
 
 /**
  * ===================================
@@ -8,6 +8,7 @@ const express = require('express');
  * ===================================
  */
 
+const file = './pokedex.json';
 // Init express app
 const app = express();
 
@@ -17,9 +18,18 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
+app.get("/c/:x/f", (request, response) => {
+  response.send(`Your temperature in Fahrenheit: ${convertCelsiusToFahrenheit(parseInt(request.params.x))}`)
+});
+
+
+app.get('/pokemon/:number', (request, response) => {
+    jsonfile.readFile(file, function (err, obj) {
+        if (err) console.error(err);
+        let searchNumber = parseInt(request.params.number);
+// send response with some data (a string)
+    response.send(obj["pokemon"][searchNumber]);
+    })
 });
 
 /**
