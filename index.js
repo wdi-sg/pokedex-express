@@ -18,17 +18,18 @@ const app = express();
  * ===================================
  */
 
-app.get("/c/:x/f", (request, response) => {
-  response.send(`Your temperature in Fahrenheit: ${convertCelsiusToFahrenheit(parseInt(request.params.x))}`)
-});
-
-
-app.get('/pokemon/:number', (request, response) => {
+app.get('/pokemon/:name', (request, response) => {
     jsonfile.readFile(file, function (err, obj) {
         if (err) console.error(err);
-        let searchNumber = parseInt(request.params.number);
+        let pokeName = request.params.name;
+        let foundPoke;
+        for (let i=0; i<obj["pokemon"].length; i++) {
+            if (obj["pokemon"][i]["name"] === pokeName) {
+                foundPoke = obj["pokemon"][i];
+            };
+        };
 // send response with some data (a string)
-    response.send(obj["pokemon"][searchNumber]);
+    response.send(foundPoke);
     })
 });
 
