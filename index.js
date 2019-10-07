@@ -21,16 +21,18 @@ const obj={};
 	console.log(upperCaseName);
 
 /// loop through the pokemon object and match the name
+let found = false;
 	 for (let i = 0; i < obj.pokemon.length; i++) {
 	 	if (obj.pokemon[i].name === upperCaseName) {
-	 		console.log(upperCaseName)
+	 		found = true;
 // display the info!
-	  response.send(`<html><h1>Name: ${upperCaseName}</h1>Height: ${obj.pokemon[i].height}<br>
-		Weight: ${obj.pokemon[i].weight}<br><img src='${obj.pokemon[i].img}'>`);	
-	 	} 
-
-	 }
-
+	 		response.send(`<html><h1>Name: ${upperCaseName}</h1>Height: ${obj.pokemon[i].height}<br>
+			Weight: ${obj.pokemon[i].weight}<br><img src='${obj.pokemon[i].img}'>`);	
+	 		}
+	 	}
+	 if (found != true) {
+	 		response.send(`Unable to match: ${upperCaseName}`);
+	 	}
 
 	});
 
