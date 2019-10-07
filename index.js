@@ -15,7 +15,7 @@ const getPokemon = (request, response) => {
 
   const file = 'pokedex.json';
 
-  let tofind = request.params.name;
+  let tofind = request.params.name.toLowerCase();
   console.log(tofind);
 
   jsonfile.readFile(file, (err, obj) => { //obj is only defined within this function
@@ -23,19 +23,31 @@ const getPokemon = (request, response) => {
     console.log(obj);
     }
 
-    for ( var i=0; i<obj["pokemon"].length; i++) {
+    let found = false;
+
+    for ( let i=0; i<obj["pokemon"].length; i++) {
         if ( tofind === (obj["pokemon"][i].name).toLowerCase() ) {
+            found = true;
             response.send(`${obj["pokemon"][i].name}'s weight is ${obj["pokemon"][i]["weight"]}`);
-        } else {
-            response.status(404).send(`Could not find information about ${tofind} - Is that a new pokemon? Gotta catch em' all!`);
         }
+    }
+
+    if ( found === false ) { //have to be outside nested loop
+            response.status(404).send(`Could not find information about ${tofind} - Is that a new pokemon? Gotta catch em' all!`);
     }
 
   })
   //response.send(request.path);
 };
 
+const welcome = (request, response) => {
+  response.send("Welcome to the online Pokdex!");
+}
+
 app.get('/pokemon/:name', getPokemon);
+app.get('/pokemon', welcome);
+
+
 
 /**
  * ===================================
