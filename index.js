@@ -1,30 +1,42 @@
 const express = require('express');
-
+// Init express app
+const app = express();
 // const jsonfile = require('jsonfile');
-
+const jsonfile = require('jsonfile');
+const file = 'pokedex.json'
 /**
  * ===================================
  * Configurations and set up
  * ===================================
  */
 
-// Init express app
-const app = express();
+// load up the json file wth the pokemon
+ jsonfile.readFile(file, (err, obj) => {
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
+  // console.log(obj.pokemon[0]);
+ console.log(obj.pokemon[0].name)
+// then wait for input from the user
+getUserInput();
+// then send the needed by the user.
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
 });
 
-/**
- * ===================================
- * Listen to requests on port 3000
- * ===================================
- */
-app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+
+
+const getUserInput = function (){
+	app.get("/pokemon/:i", (request, response) => {
+	// (0°C × 9/5) + 32 = 32°F
+	console.log(request.params.i);
+	  response.send(request.params.i)
+	});
+
+	app.listen(3090);
+
+}
+
+const findInObject = function () {
+
+	 console.log(obj.pokemon[0].name)
+
+	}
+
