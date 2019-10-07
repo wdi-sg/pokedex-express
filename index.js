@@ -42,6 +42,31 @@ app.get('/pokemon/:name', (request, response) => {
     });
 });
 
+app.get('/type/:type', (request, response) => {
+    // send response with some data (a string)
+    const file = 'pokedex.json';
+    const pokemonType = request.params.type;
+
+    jsonfile.readFile(file, function(err, obj) {
+        if (err) { console.error(err) }
+
+        const pokemon = obj.pokemon;
+
+        const selectedPokemon = pokemon.filter(pokemon => pokemon.type.includes(pokemonType));
+
+        if (selectedPokemon.length) {
+            let pokemonList = "";
+            selectedPokemon.forEach(pokemon => {pokemonList += `${pokemon.name} *** `});
+
+            const responseStr = `List of ${pokemonType} type Pokemon: ` + pokemonList;
+
+            response.send(responseStr);
+        } else {
+            response.status(404).send(`Could not find information about Pokemon type ${pokemonType} - Is that a new pokemon type? Gotta catch em' all!`);
+        }
+    });
+});
+
 
 app.get('/', (req,res) => {
     res.send("Welcome to the online Pokedex!");
