@@ -47,8 +47,6 @@ app.get('/pokemon/:name', (request, response) => {
     });
 });
 
-
-
 app.get('/pokemon/type/:pokeType', (request,response) => {
 
     let type = request.params.pokeType
@@ -82,6 +80,38 @@ app.get('/pokemon/type/:pokeType', (request,response) => {
     })
 })
 
+
+app.get('/pokemon/weaknesses/:pokeWeak', (request,response) => {
+
+    let weakness = request.params.pokeWeak
+
+
+    jsonfile.readFile(file, (err,obj)=> {
+
+        let namePokeWeak = []
+
+        for (let i=0; i<obj.pokemon.length; i++){
+
+              let typeIndex = obj.pokemon[i]
+
+            for (let j=0; j<obj.pokemon[i]["weaknesses"].length; j++){
+
+                let someWeak = obj.pokemon[i]["weaknesses"][j]
+
+                 if(weakness === someWeak || weakness === someWeak.toLowerCase()){
+
+                    // console.log(typeIndex.name)
+                    namePokeWeak.push( typeIndex.name )
+
+                }
+            }
+        }
+    let pokeList = namePokeWeak.join(", ")
+    console.log (pokeList)
+    response.send(`Here are other Pokemon with a weakness of ${weakness}:
+                        ${pokeList}`)
+    })
+})
 
 
 
