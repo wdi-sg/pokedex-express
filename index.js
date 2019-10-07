@@ -25,7 +25,8 @@ const obj={};
 	 	if (obj.pokemon[i].name === upperCaseName) {
 	 		console.log(upperCaseName)
 // display the info!
-	  response.send(upperCaseName + obj.pokemon[i].height)
+	  response.send(`<html><h1>Name: ${upperCaseName}</h1>Height: ${obj.pokemon[i].height}<br>
+		Weight: ${obj.pokemon[i].weight}<br><img src='${obj.pokemon[i].img}'>`);	
 	 	} 
 
 	 }
