@@ -5,48 +5,46 @@ const file = 'pokedex.json'
 
 const app = express();
 
-
+//if no path typed after pokemon
 app.get('/pokemon/', (request, response) => {
 
     response.send("Welcome to the Pokedex! What Pokemon are you looking for?")
 
 })
 
+//search for specific pokemon name
 app.get('/pokemon/:name', (request, response) => {
 
   let pokeName = request.params.name
   let pokeFound = false
 
-
     jsonfile.readFile(file, (err, obj) => {
 
         console.log("reading")
 
-          for (let i=0; i<obj.pokemon.length; i++){
+        for (let i=0; i<obj.pokemon.length; i++){
 
             let dataName = obj.pokemon[i].name
             let dataIndex = obj.pokemon[i]
 
-                 if (pokeName === dataName || pokeName === dataName.toLowerCase() ){
-                    response.send(`This is ${pokeName}! ${pokeName}'s ID number is ${dataIndex.id}. ${pokeName}'s height is ${dataIndex.height} and ${pokeName}'s weight is ${dataIndex.weight}.`)
-                    pokeFound = true
-                }
-          }
+            if (pokeName === dataName || pokeName === dataName.toLowerCase() ){
+                response.send(`This is ${pokeName}! ${pokeName}'s ID number is ${dataIndex.id}. ${pokeName}'s height is ${dataIndex.height} and ${pokeName}'s weight is ${dataIndex.weight}.`)
+                pokeFound = true
+            }
+        }
 
-          if (pokeFound === false){
-            response.status(404).send (`Could not find information about ${pokeName}. Is that a new Pokemon? Gotta catch em' all!`)
-          }
+        if (pokeFound === false){
+        response.status(404).send (`Could not find information about ${pokeName}. Is that a new Pokemon? Gotta catch em' all!`)
+        }
 
-          // if (pokeName === undefined){
-          //   response.status("Welcome to the online Pokedex! Which Pokemon are you looking for?")
-          // }
-          console.log(pokeName)
-          jsonfile.writeFile(file, obj, {spaces:2},(err) => {
-            console.log(err)
-          });
+        jsonfile.writeFile(file, obj, {spaces:2},(err) => {
+        console.log(err)
+        });
     });
+
 });
 
+//search for pokemon type
 app.get('/pokemon/type/:pokeType', (request,response) => {
 
     let type = request.params.pokeType
@@ -80,7 +78,7 @@ app.get('/pokemon/type/:pokeType', (request,response) => {
     })
 })
 
-
+//search for pokemon weakness
 app.get('/pokemon/weaknesses/:pokeWeak', (request,response) => {
 
     let weakness = request.params.pokeWeak
@@ -110,6 +108,52 @@ app.get('/pokemon/weaknesses/:pokeWeak', (request,response) => {
     console.log (pokeList)
     response.send(`Here are other Pokemon with a weakness of ${weakness}:
                         ${pokeList}`)
+    })
+})
+
+//search for pokemon original form
+app.get('/pokemon/nextevolution/:evolution', (request,response) => {
+
+    let evolved = request.params.evolution
+
+    let pokeOrigin = []
+
+    let evolveIndex;
+
+    let prevEvolution = false
+
+    jsonfile.readFile(file, (err,obj)=> {
+
+        for (let i=0; i<obj.pokemon.length;i++){
+            if (evolved === obj.pokemon[i].name || evolved === obj.pokemon[i].name.toLowerCase() ){
+                evolveIndex = obj.pokemon[i]
+
+                  if (evolveIndex.hasOwnProperty('prev_evolution') === true){
+                        prevEvolution = true
+                    for (let j=0; j<evolveIndex["prev_evolution"].length; j++){
+
+                        // pokeOrigin.push(evolveIndex["prev_evolution"][j]["name"])
+                        let originName = evolveIndex["prev_evolution"][j]["name"]
+
+                        pokeOrigin.push(originName)
+
+
+                    }
+                    let pokeList = pokeOrigin.join(", ")
+                     console.log (pokeList)
+                    response.send(`Here are the Pokemon that ${evolved} has evolved from:
+                        ${pokeList}`)
+                }
+            }
+        }
+
+        if (prevEvolution === false){
+         response.send (`${evolved} did not evolve from any other Pokemon.`)
+        }
+
+
+
+
     })
 })
 
