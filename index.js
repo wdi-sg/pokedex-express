@@ -35,7 +35,8 @@ app.get('/pokemon/:name', (request, response) => {
         };
         if (foundPoke === undefined) {
 // Set the status code to 404.
-            response.status(404).send(`Could not find information about ${pokeName} - Is that a new pokemon? Gotta catch em' all!`);
+            // response.status(404).send(`Could not find information about ${pokeName} - Is that a new pokemon? Gotta catch em' all!`);
+            response.status(404).send(`<html><body style="text-align: center;"><h1>ERROR 404</h1><img src="https://i.pinimg.com/originals/ed/ca/4b/edca4bc1f1c89aaf399e730f2ebf66d0.png"></body></html>`);
         } else {
 // send response with some data (a string)
             response.send(
@@ -74,6 +75,20 @@ app.get('/pokemon/weaknesses/:weakness', (request, response) => {
         for (let i=0; i<obj["pokemon"].length; i++) {
             if (obj["pokemon"][i]["weaknesses"].includes(pokeWeakness)) {
                 foundPoke.push(obj["pokemon"][i]["name"]);
+            };
+        };
+        response.send(foundPoke);
+    })
+});
+
+app.get('/pokemon/nextevolution/:name', (request, response) => {
+    jsonfile.readFile(file, function (err, obj) {
+        if (err) console.error(err);
+        let pokeName = request.params.name;
+        let foundPoke = [];
+        for (let i=0; i<obj["pokemon"].length; i++) {
+            if (obj["pokemon"][i]["name"].includes(pokeName)) {
+                foundPoke.push(obj["pokemon"][i]["next_evolution"]);
             };
         };
         response.send(foundPoke);
