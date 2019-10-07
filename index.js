@@ -20,11 +20,12 @@ jsonfile.readFile(file, (err, obj) => {
         var dataName = obj.pokemon[i].name
         var dataIndex = obj.pokemon[i]
 
+             if (pokeName === dataName || pokeName === dataName.toLowerCase() ){
+                response.send(`This is ${pokeName}! ${pokeName}'s ID number is ${dataIndex.id}. ${pokeName}'s height is ${dataIndex.height} and ${pokeName}'s weight is ${dataIndex.weight}.`)
 
-         if (pokeName === dataName){
-            response.send(`This is ${pokeName}! ${pokeName}'s ID number is ${dataIndex.id}. ${pokeName}'s height is ${dataIndex.height} and ${pokeName}'s weight is ${dataIndex.weight}.`)
+            }
 
-        }
+
       }
 
   //
