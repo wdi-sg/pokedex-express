@@ -2,6 +2,7 @@ const express = require('express');
 
 const jsonfile = require('jsonfile');
 
+//module exports function js
 const fun = require('./fun');
 // Init express app
 const app = express();
@@ -13,11 +14,12 @@ app.get('/', (request, response) => {
   response.send("Welcome to the online Pokedex!");
 });
 
+//use :fun params to call functions
 app.get('/:fun/:value', (request, response) => {
-  // send response with some data (a string)
   jsonfile.readFile(file, (err, obj) => {
     let output = fun[request.params.fun](obj, request.params.value);
     if (output === "") {
+      //add status 404 if output is empty
       response.status(404).send(`Could not find information about ${request.params.value} - Is that new? Gotta catch em' all!`);
     } else {
       response.send(output);
