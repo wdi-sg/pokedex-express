@@ -70,7 +70,7 @@ module.exports.nextevolution = (obj, evo) => {
             pokeEvo.push(obj.pokemon[i].prev_evolution[j].name);
         }
       } else {
-        pokeEvo.push("no previous evolution");
+        pokeEvo.push("No previous evolution");
       }
       if (obj.pokemon[i].hasOwnProperty("next_evolution")){
         let nEvoLen = obj.pokemon[i].next_evolution.length;
@@ -78,7 +78,7 @@ module.exports.nextevolution = (obj, evo) => {
           pokeEvo.push(obj.pokemon[i].next_evolution[j].name);
         }
       } else {
-        pokeEvo.push("no next evolution");
+        pokeEvo.push("No next evolution");
       }
     }
   }
