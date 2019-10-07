@@ -28,7 +28,14 @@ const getPokemon = (request, response) => {
     for ( let i=0; i<obj["pokemon"].length; i++) {
         if ( tofind === (obj["pokemon"][i].name).toLowerCase() ) {
             found = true;
-            response.send(`${obj["pokemon"][i].name}'s weight is ${obj["pokemon"][i]["weight"]}`);
+            let pokeMatched = obj["pokemon"][i];
+            let keys = Object.keys(pokeMatched);
+            console.log(keys);
+            let description = "";
+            for ( let j=0; j<keys.length; j++) {
+                description += `${pokeMatched.name}'s ${keys[j]} is ${pokeMatched[keys[j]]}.\n`;
+            }
+            response.send( description );
         }
     }
 
