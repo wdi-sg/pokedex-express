@@ -19,7 +19,6 @@ const file = "pokedex.json";
  */
 
 function printResult(result) {
-  console.log(result);
   return `This is ${result.name}, it is ${result.weight} in weight!`+
     `<br>The following are it's characteristics:<br>id: ${result.id}`+
     `<br>Number: ${result.num}<br><img src=${result.img}>`+
@@ -119,7 +118,6 @@ app.get("/nextevolution/:name", function(req, res) {
       }
     }
     if (result.length !== 0) {
-      console.log(result);
       result = `The next evolutions for ${req.params.name} are ` + result.join(", ");
       return res.send(result);
     }
@@ -127,6 +125,15 @@ app.get("/nextevolution/:name", function(req, res) {
     res.send(result);
   });
 });
+
+app.get("/*", (request, response) => {
+  const myParams = request.params[0].split("/");
+  // send response with some data (a string)
+  if (myParams[myParams.length - 1] === "") {
+    response.send("Welcome to the online Pokdex!");
+  }
+});
+
 
 /**
  * ===================================
