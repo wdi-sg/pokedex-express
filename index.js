@@ -67,6 +67,31 @@ app.get('/type/:type', (request, response) => {
     });
 });
 
+app.get('/weakness/:weakness', (request, response) => {
+    // send response with some data (a string)
+    const file = 'pokedex.json';
+    const pokemonWeakness = request.params.weakness;
+
+    jsonfile.readFile(file, function(err, obj) {
+        if (err) { console.error(err) }
+
+        const pokemon = obj.pokemon;
+
+        const selectedPokemon = pokemon.filter(pokemon => pokemon.weaknesses.includes(pokemonWeakness));
+
+        if (selectedPokemon.length) {
+            let pokemonList = "";
+            selectedPokemon.forEach(pokemon => {pokemonList += `${pokemon.name} *** `});
+
+            const responseStr = `List of Pokemon with weakness ${pokemonWeakness}: ` + pokemonList;
+
+            response.send(responseStr);
+        } else {
+            response.status(404).send(`Could not find information about Pokemon with weakness ${pokemonWeakness} - Is that a new pokemon type? Gotta catch em' all!`);
+        }
+    });
+});
+
 
 app.get('/', (req,res) => {
     res.send("Welcome to the online Pokedex!");
