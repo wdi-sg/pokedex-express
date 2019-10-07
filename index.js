@@ -38,7 +38,7 @@ const getName = (request, response) => {
       if (input === name) {
         foundPoke = true;
         response.send(
-          ` <img src=${img}> <br> The Pokemon is ${name}, his weight is ${weight}. His Type is ${type}`
+          ` <img src=${img}> <br> <h2>The Pokemon is ${name}, his weight is ${weight}. His Type is ${type}</h2>`
         );
       
       } 
@@ -75,14 +75,62 @@ const pokeType = (request, response) => {
       }
 
     }
-    response.send(`The List of Pokemon for ${input} are: 
-    ${listType}`)
+    response.send(`<h1>The List of Pokemon for ${input} are:</h1> 
+    ${listType.join(`, `)}`)
 })
 }
+
+const pokeWeakness = (request, response) => {
+  let input = request.params.weakness;
+  const file = "pokedex.json"
+
+  jsonfile.readFile(file, (err, obj) => {
+    if (err) {
+      console.log("err", err);
+    }
+    const pokeDex = obj.pokemon;
+    let listType = [];
+    for(let i = 0; i<pokeDex.length; i++){
+      
+      let inputType = pokeDex[i].weaknesses
+      for(let j = 0; j<inputType.length; j++){
+        if(input.toLowerCase() === inputType[j].toLowerCase()){
+          listType.push(pokeDex[i].name)
+          
+        }
+      }
+
+    }
+   
+    response.send(`<h1>The List of Pokemon whos weakness is ${input} are:</h1>  
+   ${listType.join(`,
+   `)} `)
+})
+}
+
+// const evolve = (request, response) => {
+//   let input = request.params.evolution;
+//   const file = "pokedex.json"
+
+//   jsonfile.readFile(file, (err, obj) => {
+//     if (err) {
+//       console.log("err", err);
+//     }
+//     const pokeDex = obj.pokemon;
+   
+//     for(let i = 0; i<pokeDex.length; i++){
+      
+//       let inputType = pokeDex[i].weaknesses
+//      if(input === pokeDex[i]) {
+//        response.send(pokeDex[i].)
+//      }
+// }
 
 app.get("/pokemon/:name", getName);
 app.get("/pokemon", welcome)
 app.get("/pokemon/type/:types", pokeType)
+app.get("/pokemon/weaknesses/:weakness", pokeWeakness)
+// app.get("/pokemon/nextevolution/:evolution", evolve)
 
 /**
  * ===================================
