@@ -43,6 +43,10 @@ app.get('/pokemon/:name', (request, response) => {
 });
 
 
+app.get('/', (req,res) => {
+    res.send("Welcome to the online Pokedex!");
+})
+
 /**
  * ===================================
  * Listen to requests on port 3000
