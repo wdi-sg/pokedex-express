@@ -29,16 +29,19 @@ const doPokemon = (request, response)=>{
       console.log("ERR", err );
       response.send('404 @@@@@ error!!!!!')
     } else {
-        // for (let i = 0; i < pokeList.length; i++) {
-        //     if (i+1 === parseInt(request.params.name)) {
-        //         pokeList[i] = "You chose " + pokeList[i].name;
-        //         response.send(pokeList[i]);
-        //     }
-        // }
         let message;
+        let pokeName = request.params.name;
+        let status;
         for (let i = 0; i < pokeList.length; i++) {
-            if (pokeList[i].name === request.params.name) {
-                message = "The weight of " +pokeList[i].name + " is " + pokeList[i].weight;
+            if (pokeList[i].name === pokeName) {
+            console.log("checking from pokedex")
+                message = "This is " +pokeList[i].name + ". His weight is " + pokeList[i].weight + " and type[s] is/are " + pokeList[i].type + "."
+                status = true;
+// created boolean statement above to see determine that match is 'true'.
+            console.log("printed from pokedex");
+            } else if (status != true) {
+                console.log("wrong pokemon");
+                message = "Could not find weight information about " + request.params.name + "." + " Is that a new pokemon? Gotta catch em' all!"
             }
         }
 
@@ -55,7 +58,7 @@ const doPokemon = (request, response)=>{
 };
 
 const startingPage = (request,response) => {
-    response.send("Pokedex homepage.")
+    response.send("Welcome to the online pokedex!")
 }
 /**
  * ===================================
