@@ -1,6 +1,5 @@
 const express = require('express');
-
-// const jsonfile = require('jsonfile');
+const jsonfile = require('jsonfile');
 
 /**
  * ===================================
@@ -10,6 +9,7 @@ const express = require('express');
 
 // Init express app
 const app = express();
+const file = 'pokedex.json';
 
 /**
  * ===================================
@@ -17,9 +17,23 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
+jsonfile.readFile(file, (err, obj) => {
+
+    // Construct URL
+    app.get('/pokemon/:number', (request, response) => {
+
+        // send response with some data (a string)
+        // response.send(request.path);
+
+        // Get the number from the parameter
+            // Save it as an integer
+        let pokeNum = parseInt(request.params.number);
+        console.log("Poke's number is " + pokeNum);
+
+        // Get the pokemon information matching the number entered by user
+        response.send("This is the pokemon information you have requested for is " + obj.pokemon[pokeNum].name + " and its weight is " + obj.pokemon[pokeNum].weight);
+    });
+
 });
 
 /**
