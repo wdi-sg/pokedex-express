@@ -9,34 +9,36 @@ const file = 'pokedex.json'
  * Configurations and set up
  * ===================================
  */
-
+const obj={};
 // load up the json file wth the pokemon
  jsonfile.readFile(file, (err, obj) => {
+	  // console.log(obj.pokemon[0]);
+	// console.log(obj.pokemon[0].name)
+	// then wait for input from the user
+	// then send the needed by the user.
+	app.get("/pokemon/:name", (request, response) => {
+ 	let upperCaseName = request.params.name.charAt(0).toUpperCase() + request.params.name.slice(1)
+	console.log(upperCaseName);
 
-  // console.log(obj.pokemon[0]);
- console.log(obj.pokemon[0].name)
-// then wait for input from the user
-getUserInput();
-// then send the needed by the user.
+/// loop through the pokemon object and match the name
+	 for (let i = 0; i < obj.pokemon.length; i++) {
+	 	if (obj.pokemon[i].name === upperCaseName) {
+	 		console.log(upperCaseName)
+// display the info!
+	  response.send(upperCaseName + obj.pokemon[i].height)
+	 	} 
 
-});
+	 }
 
 
-
-const getUserInput = function (){
-	app.get("/pokemon/:i", (request, response) => {
-	// (0°C × 9/5) + 32 = 32°F
-	console.log(request.params.i);
-	  response.send(request.params.i)
 	});
 
 	app.listen(3090);
+	});
 
-}
 
-const findInObject = function () {
 
-	 console.log(obj.pokemon[0].name)
 
-	}
+
+
 
