@@ -10,10 +10,24 @@ jsonfile.readFile(file, (err, obj) => {
 
     console.log("reading")
 
-    app.get('/pokemon/:index', (request, response) => {
+    app.get('/pokemon/:name', (request, response) => {
       // send response with some data (a string)
-      let index = request.params.index
-      response.send("WEIGHT: " + obj.pokemon[index].weight);
+      // let index = request.params.index
+      let pokeName = request.params.name
+
+      for (let i=0; i<obj.pokemon.length; i++){
+
+        var dataName = obj.pokemon[i].name
+        var dataIndex = obj.pokemon[i]
+
+
+         if (pokeName === dataName){
+            response.send(`This is ${pokeName}! ${pokeName}'s ID number is ${dataIndex.id}. ${pokeName}'s height is ${dataIndex.height} and ${pokeName}'s weight is ${dataIndex.weight}.`)
+
+        }
+      }
+
+  //
 });
 
       jsonfile.writeFile(file, obj, {spaces:2},(err) => {
