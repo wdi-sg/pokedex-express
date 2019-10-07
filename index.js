@@ -11,7 +11,7 @@ const app = express();
  */
 
 const getPokemon = (request, response) => {
-  console.log("running");
+  console.log("Getting Pokemon data");
 
   const file = 'pokedex.json';
 
@@ -26,6 +26,8 @@ const getPokemon = (request, response) => {
     for ( var i=0; i<obj["pokemon"].length; i++) {
         if ( tofind === (obj["pokemon"][i].name).toLowerCase() ) {
             response.send(`${obj["pokemon"][i].name}'s weight is ${obj["pokemon"][i]["weight"]}`);
+        } else {
+            response.status(404).send(`Could not find information about ${tofind} - Is that a new pokemon? Gotta catch em' all!`);
         }
     }
 
