@@ -32,6 +32,11 @@ const file = 'pokedex.json';
         });
 });*/
 
+// PART 3 - If there is no params in the path, show welcome message
+app.get('/pokemon/', (request, response) => {
+    response.send("Welcome to the online Pokdex!");
+});
+
 // PART 2 - Construct HTTP Request to get user input by pokemon name
 app.get('/pokemon/:name', (request, response) => {
 
@@ -41,28 +46,34 @@ app.get('/pokemon/:name', (request, response) => {
 
     jsonfile.readFile(file, (err, obj) => {
 
-        // Loop through JSON file to look for matching name
-        for (let i = 0; i < obj.pokemon.length; i++) {
+        // Filter for the object that is contained in the array
+        let pokeNameFound = obj.pokemon.filter(data => (data.name == pokeName));
 
-            console.log(obj.pokemon[i].name);
+        // Returned result is an object
+            // If length is more than 0, match name with JSON file and get the information to display
+        if (pokeNameFound.length > 0) {
 
-            // If found, return pokemon name and weight
-            if (obj.pokemon[i].name.includes(pokeName)) {
+            console.log(pokeNameFound);
 
-                console.log(i);
-
-                response.send("This is the pokemon information you have requested for is " + obj.pokemon[i].name + " and its weight is " + obj.pokemon[i].weight);
-            } else {
-
-                // If not found, return error and set status code to 404
-                response.statusCode = 404;
-                console.log("Status code is " + response.statusCode);
-
-                response.send("Could not find information about " + pokeName + " - Is that a new pokemon? Gotta catch em' all!");
+            for(let i = 0; i < obj.pokemon.length; i++) {
+                if(obj.pokemon[i].name === pokeName) {
+                    response.send("This is " + obj.pokemon[i].name + ". He is " + obj.pokemon[i].weight + " in weight and " + obj.pokemon[i].height);
+                }
             }
+
+        } else {
+
+            // If not found, return error and set status code to 404
+            response.statusCode = 404;
+
+            console.log("Status code is " + response.statusCode);
+
+            response.send("Could not find information about " + pokeName + " - Is that a new pokemon? Gotta catch em' all!");
         }
+
     });
 });
+
 /**
  * ===================================
  * Listen to requests on port 3000
