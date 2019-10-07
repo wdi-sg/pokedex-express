@@ -10,6 +10,13 @@ const app = express();
  * ===================================
  */
 
+const welcome = (request, response) => {
+  response.send("Welcome to the online Pokdex!");
+}
+
+app.get('/pokemon', welcome);
+
+
 const getPokemon = (request, response) => {
   console.log("Getting Pokemon data");
 
@@ -23,17 +30,18 @@ const getPokemon = (request, response) => {
     console.log(obj);
     }
 
-    let found = false;
+    let found = false; //set key to check if matched
 
     for ( let i=0; i<obj["pokemon"].length; i++) {
         if ( tofind === (obj["pokemon"][i].name).toLowerCase() ) {
             found = true;
+
             let pokeMatched = obj["pokemon"][i];
+            //get attributes of pokemon
             let keys = Object.keys(pokeMatched);
-            console.log(keys);
             let description = "";
             for ( let j=0; j<keys.length; j++) {
-                description += `${pokeMatched.name}'s ${keys[j]} is ${JSON.stringify(pokeMatched[keys[j]])}. `;
+                description += `${pokeMatched.name}'s ${keys[j]} is ${JSON.stringify(pokeMatched[keys[j]])}. \n`;
             }
             response.send( description );
         }
@@ -47,14 +55,41 @@ const getPokemon = (request, response) => {
   //response.send(request.path);
 };
 
-const welcome = (request, response) => {
-  response.send("Welcome to the online Pokdex!");
-}
-
 app.get('/pokemon/:name', getPokemon);
-app.get('/pokemon', welcome);
 
 
+const getType = (request, response) => {
+  console.log("Getting Pokemon data");
+
+  const file = 'pokedex.json';
+
+  let findType = request.params.type.toLowerCase();
+  console.log(findType);
+  let foundType = [];
+
+  jsonfile.readFile(file, (err, obj) => { //obj is only defined within this function
+    if (err) {
+    console.log(obj);
+    }
+
+    for ( let i=0; i<obj["pokemon"].length; i++) {
+        for ( let j=0; j<obj["pokemon"][i]["type"].length; j++) {
+            if ( findType === obj["pokemon"][i]["type"][j].toLowerCase() ) {
+                foundType.push(obj["pokemon"][i].name);
+            }
+        }
+    }
+    console.log(foundType);
+
+    let typeResult = "";
+    for ( let k=0; k<foundType.length; k++) {
+        typeResult += foundType[k] + ' \n';
+    }
+    response.send(`Pokemons of type ${findType}:\n ${typeResult}`);
+  })
+};
+
+app.get('/type/:type', getType);
 
 /**
  * ===================================
