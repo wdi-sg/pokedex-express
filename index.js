@@ -1,25 +1,58 @@
 const express = require('express');
-
 const jsonfile = require('jsonfile');
+
+// const jsonfile = require('jsonfile');
+
+/**
+ * ===================================
+ * Configurations and set up
+ * ===================================
+ */
+
+// Init express app
 const app = express();
 
-const selectPoke = (request, response) => {
-    console.log("choosing pokemon")
-    const file = 'pokedex.json';
+const doPokemon = (request, response)=>{
+  console.log("pokemon request");
 
-    jsonfile.readFile(file, (err, obj) => {
-        if (err) {
-            console.log("ERR", err);
-        } else {
-            console.log("Detected" + obj.pokemon[0]);
-            let firstPoke = obj.pokemon[0];
-            console.log("You chose" + firstPoke.name)
-            response.send("Whoa " + firstPoke.name);
+  const file = 'pokedex.json'
+
+  jsonfile.readFile(file, (err, obj) => {
+    let pokeList = obj["pokemon"];
+
+    if( err ){
+      console.log("ERR", err );
+    } else {
+        for (let i = 0; i < pokeList.length; i++) {
+            if (i === parseInt(request.params.number)) {
+                pokeList[i] = "You chose " + pokeList[i].name;
+                response.send(pokeList[i]);
+            }
         }
-    })
+
+    // console.log("WOW FINISHED READING",obj.pokemon[1])
+    // const firstPoke = obj.pokemon[1];
+
+    // console.log("NAME: "+firstPoke.name );
+    // response.send("WHOA: "+firstPoke.name);
+    }
+  })
 };
 
-app.get('/pokemon-example/:name', selectPoke);
+const startingPage = (request,response) => {
+    response.send("Pokedex homepage.")
+}
+/**
+ * ===================================
+ * Routes
+ * ===================================
+ */
 
-
+app.get('/pokemon/:number', doPokemon)
+app.get('*', startingPage);
+/**
+ * ===================================
+ * Listen to requests on port 3000
+ * ===================================
+ */
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
