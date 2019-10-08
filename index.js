@@ -41,7 +41,7 @@ const getPokemon = (request, response) => {
             let keys = Object.keys(pokeMatched);
             let description = "";
             for ( let j=0; j<keys.length; j++) {
-                description += `${pokeMatched.name}'s ${keys[j]} is ${JSON.stringify(pokeMatched[keys[j]])}. \n`;
+                description += `${pokeMatched.name}'s ${keys[j]} is ${JSON.stringify(pokeMatched[keys[j]])}.<br>`;
             }
             response.send( description );
         }
@@ -83,13 +83,13 @@ const getType = (request, response) => {
 
     let typeResult = "";
     for ( let k=0; k<foundType.length; k++) {
-        typeResult += foundType[k] + ' \n';
+        typeResult += foundType[k] + '<br>';
     }
-    response.send(`Pokemons of type ${findType}:\n ${typeResult}`);
+    response.send(`Pokemons of type ${findType}:<br> ${typeResult}`);
   })
 };
 
-app.get('/type/:type', getType);
+app.get('/pokemon/type/:type', getType);
 
 /**
  * ===================================
