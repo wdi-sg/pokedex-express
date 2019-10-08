@@ -22,6 +22,7 @@ const doPokemon = (request, response) => {
 
     const file = 'pokedex.json';
     // var pokedex = obj["pokemon"];
+    app.get('/pokemon/:pokemonName', doPokemon);
 
     jsonfile.readFile(file, (err, obj) => {
          const pokedex = obj["pokemon"];
@@ -41,11 +42,11 @@ const doPokemon = (request, response) => {
 
         }
 
-        console.log("WOW FINISHED READING", obj.pokemon[1])
-        const firstPoke = obj.pokemon[1];
+        // console.log("WOW FINISHED READING", obj.pokemon[1])
+        // const firstPoke = obj.pokemon[1];
 
-        console.log("NAME: " + firstPoke.name);
-        response.send("WHOA: " + firstPoke.name);
+        // console.log("NAME: " + firstPoke.name);
+        // response.send("WHOA: " + firstPoke.name);
     })
 
 
@@ -53,7 +54,7 @@ const doPokemon = (request, response) => {
 
 
 
-app.get('/pokemon/:pokemonName', doPokemon);
+
 
 
 
