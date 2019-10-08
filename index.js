@@ -1,7 +1,7 @@
 const express = require("express");
 
 const jsonfile = require("jsonfile");
-
+const file = "pokedex.json"
 /**
  * ===================================
  * Configurations and set up
@@ -19,7 +19,7 @@ const app = express();
 
 const getName = (request, response) => {
   
-  const file = "pokedex.json";
+  ;
   let input = request.params.name.toLowerCase();
  
   jsonfile.readFile(file, (err, obj) => {
@@ -38,7 +38,7 @@ const getName = (request, response) => {
       if (input === name) {
         foundPoke = true;
         response.send(
-          ` <img src=${img}> <br> <h2>The Pokemon is ${name}, his weight is ${weight}. His Type is ${type}</h2>`
+          ` <img src=${img}> <br> <h2>The Pokemon is ${name.toUpperCase()}, his weight is ${weight}. His Type is ${type.join(", ")}</h2>`
         );
       
       } 
@@ -56,7 +56,7 @@ response.send(`Welcome to the online Pokdex!`)
 }
 const pokeType = (request, response) => {
   let input = request.params.types;
-  const file = "pokedex.json"
+  
 
   jsonfile.readFile(file, (err, obj) => {
     if (err) {
@@ -68,21 +68,21 @@ const pokeType = (request, response) => {
       
       let inputType = pokeDex[i].type
       for(let j = 0; j<inputType.length; j++){
-        if(input === inputType[j]){
+        if(input.toLowerCase() === inputType[j].toLowerCase()){
           listType.push(pokeDex[i].name)
           
         }
       }
 
     }
-    response.send(`<h1>The List of Pokemon for ${input} are:</h1> 
+    response.send(`<h1>The List of Pokemon for ${input.toUpperCase()} are:</h1> 
     ${listType.join(`, `)}`)
 })
 }
 
 const pokeWeakness = (request, response) => {
   let input = request.params.weakness;
-  const file = "pokedex.json"
+  
 
   jsonfile.readFile(file, (err, obj) => {
     if (err) {
@@ -108,23 +108,7 @@ const pokeWeakness = (request, response) => {
 })
 }
 
-// const evolve = (request, response) => {
-//   let input = request.params.evolution;
-//   const file = "pokedex.json"
 
-//   jsonfile.readFile(file, (err, obj) => {
-//     if (err) {
-//       console.log("err", err);
-//     }
-//     const pokeDex = obj.pokemon;
-   
-//     for(let i = 0; i<pokeDex.length; i++){
-      
-//       let inputType = pokeDex[i].weaknesses
-//      if(input === pokeDex[i]) {
-//        response.send(pokeDex[i].)
-//      }
-// }
 
 app.get("/pokemon/:name", getName);
 app.get("/pokemon", welcome)
