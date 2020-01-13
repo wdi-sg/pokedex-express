@@ -1,30 +1,40 @@
+/*
+Personal Notes 
+
+JSON.parse -> JSON to string
+JSON.stringify --> string to JSON
+
+*/
+
+
 const express = require('express');
-
-// const jsonfile = require('jsonfile');
-
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
-
-// Init express app
+const jsonfile = require('jsonfile');
+const file = 'pokedex.json';
 const app = express();
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
+var returnInformation = (request, response) => {
+  jsonfile.readFile(file, (err, obj) => {
+    let array = obj["pokemon"];
+    console.log(array[request.params.id])
+    response.send(array[request.params.id])
+  })
+}
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
-});
+
+
+// Routes 
+
+app.get('/pokemon/:id', returnInformation);
+
+
+
+
+
+
 
 /**
  * ===================================
  * Listen to requests on port 3000
  * ===================================
  */
-app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+app.listen(3000, () => {console.log("Listening for requests at port 3000")})
