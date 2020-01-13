@@ -35,7 +35,7 @@ app.get('/pokemon/:nameOfPokemon', (request, response) => {
             response.send(pokemon["name"] + " weighs "+ pokemon["weight"] );
            }
        }
-           response.send("Pokemon does not exist");
+           response.status("404").send(`Could not find information about ${name} - Is that a new pokemon? Gotta catch em' all!`);
 
         }else{
             response.send(err);
