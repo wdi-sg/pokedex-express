@@ -79,6 +79,8 @@ const nextEvo = (pokemon) =>{
     }
     return nextEvolution;
 }
+
+
 /**
  * ===================================
  * Routes
@@ -94,17 +96,16 @@ const nextEvo = (pokemon) =>{
         for(let i = 0 ; i< listOfPokemon.length; i ++){
            if(listOfPokemon[i]["name"] == name){
             let pokemon = listOfPokemon[i];
-            let displayPokemon = `This is ${ pokemon["name"]}, he is ${ pokemon["weight"]} in weight and ${pokemon["height"]
-        } in height.`;
-        let listOfTypes = pokemon["type"];
-        displayPokemon += getTypes(listOfTypes);
-        displayPokemon += getSpawn(pokemon);
-        displayPokemon += getWeakness(pokemon);
-        displayPokemon += prevEvo(pokemon);
-        displayPokemon += nextEvo(pokemon);
-        response.send(displayPokemon);
-}
-}
+            let displayPokemon = `<img src='${pokemon["img"]}'><br>This is ${ pokemon["name"]}, he is ${ pokemon["weight"]} in weight and ${pokemon["height"]} in height.`;
+            let listOfTypes = pokemon["type"];
+            displayPokemon += getTypes(listOfTypes);
+            displayPokemon += getSpawn(pokemon);
+            displayPokemon += getWeakness(pokemon);
+            displayPokemon += prevEvo(pokemon);
+            displayPokemon += nextEvo(pokemon);
+            response.send(displayPokemon);
+        }
+    }
 response.status("404").send(`Could not find information about ${name} - Is that a new pokemon? Gotta catch em' all!`);
 
 }else{
@@ -112,6 +113,29 @@ response.status("404").send(`Could not find information about ${name} - Is that 
 }
 });
 });
+
+ app.get('/type/:someType', (request, response) => {
+  // send response with some data (a string)
+  jsonfile.readFile(file, (err, obj)=>{
+    if(err === null){
+        let type = request.params.someType;
+        let listOfPokemon = obj["pokemon"];
+        let pokemonOfType = "<h1>Type "+type +"</h1><ul>";
+        for(let i = 0 ; i< listOfPokemon.length; i ++){
+            for(let j = 0; j < listOfPokemon[i]["type"].length; j++){
+           if(listOfPokemon[i]["type"][j] == type){
+            pokemonOfType += `<li>${listOfPokemon[i]["name"]}</li>`;
+        }
+    }
+}
+pokemonOfType+="</ul>";
+response.send(pokemonOfType);
+}else{
+    response.send(err);
+}
+});
+});
+
 
  app.get('/',(request, response) =>{
     response.send('Welcome to the online Pokdex!');
