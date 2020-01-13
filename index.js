@@ -32,10 +32,10 @@ const displayPokemon = (request, response) => {
       if (pokemon.name.toLowerCase() === request.params.name.toLowerCase()) {
         console.log
         response.send(returnPokemonByName(pokemon));
-        break;
+        return;
       }
     }
-
+    response.status(404).send(`Could not find information about ${request.params.name} - Is that a new pokemon? Gotta catch em' all!`)
   })
 }
 
@@ -46,6 +46,11 @@ const returnPokemonByName = (pokemon) => {
   return responseString;
 }
 
+const displayIndexPage = () => {
+  let responseString = `Welcome to the online Pokedex!`;
+  return responseString;
+}
+
 /**
  * ===================================
  * Routes
@@ -53,6 +58,11 @@ const returnPokemonByName = (pokemon) => {
  */
 
 app.get('/pokemon/:name', displayPokemon)
+
+app.get('/pokemon/', (request, response) => {
+  console.log('sending index page');
+  response.send(displayIndexPage());
+})
 
 app.get('*', (request, response) => {
   // send response with some data (a string)
