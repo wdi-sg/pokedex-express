@@ -22,22 +22,41 @@ app.get('/pokemon/:name', (request, response) => {
   // send response with some data (a string)
 
   jsonfile.readFile(file, (err, obj) => {
-
-    for (let i=0; i<pokemon.length; i++ ){
+    var matchName = false;//for status 404
+    var pokeIndex; 
+    for (let i=0; i<obj.pokemon.length; i++ ){
         
-        if (pokemon[i].name === request.params.name) {//why isn't there a need for request.params[0].split("/")
-            console.log('pokemon name is: ' + pokemon[i].name);
-            response.send(`poke name is: ${pokemon[i].name}, poke weight is: ${pokemon[i].weight}`);//${} means?
-        }
-        else if (pokemon[i].name!== request.params.name) {//defaults to else statement
-          response.status(404).send("Could not find information about " + (request.params.name) + "- Is that a new pokemon? Gotta catch em' all!" );;
+        if (obj.pokemon[i].name === request.params.name) {
+            matchName = true;
+            pokeIndex = i;
         }
     }
+    if (matchName === true) {
+            console.log('Pokemon name is: ' + obj.pokemon[pokeIndex].name);
+            response.send(`This is: ${obj.pokemon[pokeIndex].name}. His weight is: ${obj.pokemon[pokeIndex].weight}. His height is: ${obj.pokemon[pokeIndex].height}.`);//${} must be accompanied by backticks
+        }
+        else {
+          response.status(404).send("Could not find information about " + (request.params.name) + "- Is that a new pokemon? Gotta catch em' all!" );
+        }
+
   });
 });
   // send response with some data (a string)
   app.get('/', (request, response) => {
     response.send('Welcome to the online pokedex!')
+  });
+
+  app.get('/type/:some_type', (request, response) => {
+    jsonfile.readFile(file, (err, obj) => {
+      let matchType = [];//array vs obj 
+      for (let i=0; i<obj.pokemon.length; i++ ){
+          let currentType = obj.pokemon[i].type;// calling for current pokemon selected ie pokemon[i]. assign current pokemon type into an array
+          if (currentType.includes(request.params.some_type) === true) {//if type input in the browser includes any of the array index, . includes returns a value of true
+              matchType.push(obj.pokemon[i].name);//insert current string as the last item in the array
+          }
+      }
+      response.send(matchType);//always put it outside the "for loop" to prevent errors
+    });
   });
   
  /* ===================================
