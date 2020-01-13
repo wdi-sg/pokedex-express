@@ -5,20 +5,9 @@ const pokemonData = 'pokedex.json';
 
 
 
-/*app.get('/pokemon/:index', (request, response) => {
-    let index = parseInt(request.params.index) - 1;
-    jsonfile.readFile(pokemonData, (err, obj) => {
-        let pokemon = obj.pokemon[index]
-        if (pokemon !== null) {
-            response.send("Name : " + pokemon.name + "<br>Weight : " + pokemon.weight);
-        } else {
-            response.redirect(404, "/pokemon")
-        }
-    })
-});*/
-
-app.get('/pokemon/:iden', (request, response) => {
-    if (parseInt(request.params.iden) !== NaN) {
+/*app.get('/pokemon/:iden', (request, response) => {
+    console.log(parseInt(request.params.iden));
+    if (parseInt(request.params.iden) != NaN) {
         let index = parseInt(request.params.iden) -1;
         jsonfile.readFile(pokemonData, (err, obj) => {
             let pokemon = obj.pokemon[index];
@@ -30,12 +19,30 @@ app.get('/pokemon/:iden', (request, response) => {
             }//else statement
         })//readFile closing
     } else {
+        console.log("Why isn't this happening?")
         response.send("This ends here for now");
     }//else statement. this should execute if path is not a number
 })//app.get end
+*/
+app.get('/pokemon/:iden', (request, response) => {
+    let idenNum = parseInt(request.params.iden);
+    jsonfile.readFile(pokemonData, (err, obj) => {
+        if (idenNum > 0) {
+            let pokemon = obj.pokemon[idenNum-1];
+            if (pokemon !==  undefined) {
+                response.send("Name : " + pokemon.name + "<br>Weight : " + pokemon.weight);
+            } else {
+                response.redirect(301, "/");
+            } //else 1 close
+        } else {
+            response.send("This is a string input. Probably")
+        }
+    })//readFile end
+})//app.get end
 
-
-
+app.get('*', (request, response) => {
+    response.send("Type /pokemon/'number or name' in the address bar");
+})
 
 
 
