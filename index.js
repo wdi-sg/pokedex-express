@@ -18,7 +18,11 @@ const app = express();
  */
 
 app.get('/', (request, response) => {
-  response.send('Hello! Go to /pokemon/ for more.');
+  response.send('Hello! Go to /pokemon for more.');
+});
+
+app.get('/pokemon', (request, response) => {
+  response.send("Welcome to the online Pokdex!");
 });
 
 app.get('/pokemon/:id', (request, response, obj) => {
@@ -27,23 +31,19 @@ app.get('/pokemon/:id', (request, response, obj) => {
     const checkPokemon = request.params.id;
     const listOfPokemon = obj.pokemon.length;
     if (!isNaN(checkPokemon)) {
-      console.log("You got: " + obj.pokemon[checkPokemon].name);
-      response.send("You got: " + obj.pokemon[checkPokemon].name);
+      response.send("This is " + obj.pokemon[checkPokemon].name + "! He is " + obj.pokemon[checkPokemon].weight + " in weight! He also " );
     } else if (isNaN(checkPokemon)) {
         //console.log(request.path + "this is " + checkPokemon + obj.pokemon.length);
-        const pokemonName = checkPokemon.toLowerCase();
+        let pokemonName = checkPokemon.toUpperCase();
         for (i = 0; i < listOfPokemon; i++) {
-        const checkPokemonName = obj.pokemon[i].name.toLowerCase();
-          if (checkPokemon === checkPokemonName) {
+        let checkPokemonName = obj.pokemon[i].name.toUpperCase();
+          if (pokemonName === checkPokemonName) {
             console.log(obj.pokemon[i].name);
             console.log(obj.pokemon[i].id);
             response.send("Name: " + obj.pokemon[i].name + "<br> Weight: " + obj.pokemon[i].weight);
-          } else {
-              response.send("Could not find information about " + checkPokemon + "!  Is that a new pokemon? Gotta catch em' all!");
-              response.status(404);
-            }
+          }
         }
-        //response.send("You got: " + obj.pokemon.name);
+        response.send("You got: " + obj.pokemon.name);
       }
   });
 });
