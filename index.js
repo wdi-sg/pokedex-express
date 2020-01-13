@@ -40,10 +40,11 @@ app.get("/pokemon/:name", (request, response) => {
       </ul>
       `);
     } else {
-      request.statusCode = 404;
-      response.send(
-        `Error ${request.statusCode}: could not find information on ${name}. Is that a new Pokemon? Gotta catch em' all! `
-      );
+      response
+        .status(404)
+        .send(
+          `Error: could not find information on ${name}. Is that a new Pokemon? Gotta catch em' all! `
+        );
     }
   });
 });
@@ -98,8 +99,47 @@ app.get("/weaknesses/:weakness", (request, response) => {
     const joinWeaknessName = firstLetter.concat(remainingLetters);
     response.send(`You searched for <h1>${joinWeaknessName}!</h1>
     <p>Pokemon weak to ${joinWeaknessName}:</p>
-    <p>${foundPokemon.join(", ")}</p>`)
+    <p>${foundPokemon.join(", ")}</p>`);
   });
+});
+
+app.get("/nextevolution/:name", (request, response) => {
+  let foundPokemon;
+  let notFoundString = "<h1>No such Pokemon!</h1>";
+  const evoParam = request.params.name.toLowerCase();
+  let foundEvo = [];
+  jsonfile.readFile(file, (err, obj) => {
+    const pokemonArray = obj["pokemon"];
+    for (let i = 0; i < pokemonArray.length; i++) {
+      const pokemon = pokemonArray[i];
+      const pokemonName = pokemon["name"].toLowerCase();
+      const previousEvos = pokemon["prev_evolution"];
+      if (evoParam === pokemonName) {
+        if (previousEvos !== undefined) {
+          for (let j = 0; j < previousEvos.length; j++) {
+            foundEvo.push(previousEvos[j]["name"]);
+          }
+        } else {
+          notFoundString = "No evolutions were found!";
+        }
+      }
+    }
+    const firstLetter = evoParam.charAt(0).toUpperCase();
+    const remainingLetters = evoParam.slice(1);
+    const joinName = firstLetter.concat(remainingLetters);
+    if (foundEvo.length > 0) {
+      response.send(`You searched for evolutions of <h1>${joinName}!</h1>
+    ${foundEvo.join(", ")}`);
+    } else {
+      response.send(`You searched for evolutions of <h1>${joinName}!</h1>
+      <p>${notFoundString}</p>`);
+    }
+    console.log(foundPokemon);
+  });
+});
+
+app.get("*", (request, response) => {
+  response.send("NO SUCH PAGE")
 });
 
 app.listen(3000, () =>
