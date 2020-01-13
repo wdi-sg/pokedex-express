@@ -157,6 +157,30 @@ const app = express();
     });
  });
 
+
+app.get('/nextevolution/:someName', (request, response)=>{
+ jsonfile.readFile(file, (err, obj)=>{
+        if(err === null){
+            let pokemon = request.params.someName;
+            let listOfPokemon = obj["pokemon"];
+            let pokemonDisplay = "<h1>"+pokemon +" evolved from:</h1><ul>";
+            for(let i = 0 ; i< listOfPokemon.length; i ++){
+             if(listOfPokemon[i]["name"]=== pokemon && typeof listOfPokemon[i]["prev_evolution"] !== "undefined"){
+                            console.log("Matched");
+                for(let j = 0; j < listOfPokemon[i]["prev_evolution"].length; j++ ){
+                    pokemonDisplay += "<li>"+listOfPokemon[i]["prev_evolution"][j]["name"]+"</li>";
+                }
+                    }
+                }
+                pokemon += "</ul>";
+            response.send(pokemonDisplay);
+        }else{
+            response.send(err);
+        }
+    });
+});
+
+
  app.get('/',(request, response) =>{
     response.send('Welcome to the online Pokdex!');
  });
