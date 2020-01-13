@@ -1,7 +1,6 @@
 const express = require('express');
-
-// const jsonfile = require('jsonfile');
-
+const jsonfile = require('jsonfile');
+const file = 'pokedex.json';
 /**
  * ===================================
  * Configurations and set up
@@ -13,13 +12,26 @@ const app = express();
 
 /**
  * ===================================
+ * Read pokedex file
+ * ===================================
+ */
+
+
+/**
+ * ===================================
  * Routes
  * ===================================
  */
 
 app.get('*', (request, response) => {
   // send response with some data (a string)
-  response.send(request.path);
+    jsonfile.readFile(file, (err, obj)=>{
+        if(err === null){
+            response.send(obj);
+        }else{
+            response.send(err);
+        }
+    });
 });
 
 /**
