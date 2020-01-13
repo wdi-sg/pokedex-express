@@ -53,6 +53,7 @@ app.get('/pokemon/type/:type', (request, response) => {
     const checkTypes = request.params.type.toLowerCase();
     const listOfPokemon = obj.pokemon.length;
     if (isNaN(checkTypes)) {
+      const searchedType = [];
       for (i = 0; i < listOfPokemon; i++) {
         let checkPokemonType = obj.pokemon[i].type;
         let listOfTypes = checkPokemonType.length;
@@ -61,12 +62,42 @@ app.get('/pokemon/type/:type', (request, response) => {
           //console.log(checkPokemonType); // this prints
           const checkNumberTypes = checkPokemonType[j].toLowerCase();
           if (checkTypes === checkNumberTypes) {
-            console.log(obj.pokemon[i].name + obj.pokemon[i].type[j] + obj.pokemon[i].id)
+            searchedType.push(obj.pokemon[i].name);
+            console.log(obj.pokemon[i].name + " " + obj.pokemon[i].type[j] + " " + obj.pokemon[i].id)
+            //
           }
         }
       }
-      //response.send(pokemonTypes);
+      response.send("List of <strong>" + checkTypes.toUpperCase() + "</strong> type Pokemons: " + searchedType);
+      //response.send(checkTypes);
       //console.log(checkTypes);
+    }
+  });
+});
+
+app.get('/pokemon/weakness/:weakness', (request, response) => {
+  jsonfile.readFile(file, (err,obj) => {
+    const checkWeakness = request.params.weakness.toLowerCase();
+    const listOfPokemon = obj.pokemon.length;
+    if (isNaN(checkWeakness)) {
+      const searchedWeakness = [];
+      for (i = 0; i < listOfPokemon; i++) {
+        let checkPokemonWeaknesses = obj.pokemon[i].weaknesses;
+        let listOfWeaknesses = checkPokemonWeaknesses.length;
+        for (j = 0; j < listOfWeaknesses; j++) {
+          //console.log(checkPokemonType); // this prints
+          const checkNumberWeaknesses = checkPokemonWeaknesses[j].toLowerCase();
+          if (checkNumberWeaknesses === checkWeakness) {
+            var displayName = obj.pokemon[i].name.toString();
+            searchedWeakness.push(displayName);
+            console.log(obj.pokemon[i].name + " " + obj.pokemon[i].weaknesses[j] + " " + obj.pokemon[i].id)
+            //
+          }
+        }
+      }
+      //response.send(checkTypes);
+      //console.log(checkTypes);
+      response.send("List of Pokemon with <strong>" + checkWeakness.toUpperCase() + "</strong> weakness: " + searchedWeakness);
     }
   });
 });
