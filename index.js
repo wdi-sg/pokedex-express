@@ -4,26 +4,6 @@ const app = express();
 const pokemonData = 'pokedex.json';
 
 
-
-/*app.get('/pokemon/:iden', (request, response) => {
-    console.log(parseInt(request.params.iden));
-    if (parseInt(request.params.iden) != NaN) {
-        let index = parseInt(request.params.iden) -1;
-        jsonfile.readFile(pokemonData, (err, obj) => {
-            let pokemon = obj.pokemon[index];
-            if (pokemon !==  undefined) {
-                response.send("Name : " + pokemon.name + "<br>Weight : " + pokemon.weight);
-            } else {
-                console.log(parseInt(request.params.iden));
-                response.redirect(404, "/pokemon");
-            }//else statement
-        })//readFile closing
-    } else {
-        console.log("Why isn't this happening?")
-        response.send("This ends here for now");
-    }//else statement. this should execute if path is not a number
-})//app.get end
-*/
 app.get('/pokemon/:iden', (request, response) => {
     let idenNum = parseInt(request.params.iden);
     jsonfile.readFile(pokemonData, (err, obj) => {
@@ -35,11 +15,25 @@ app.get('/pokemon/:iden', (request, response) => {
                 response.redirect(301, "/");
             } //else 1 close
         } else {
-            response.send("This is a string input. Probably")
-        }
+            let iden = request.params.iden;
+            let pokedex = obj.pokemon;
+            let count = 0;
+            for (i = 0; i < pokedex.length; i++) {
+                if (iden.toLowerCase() == pokedex[i].name.toLowerCase()) {
+                    response.send("Name : " + pokedex[i].name + "<br>Weight : " + pokedex[i].weight);
+                } else {
+                    count++
+                }
+                if (count == pokedex.length) {
+                    response.send("Unable to find pokemon with that name. Please Try again");
+                }
+            }//for loop end
+        }// number check else end
     })//readFile end
 })//app.get end
 
+
+//catch all if wrong input is entered
 app.get('*', (request, response) => {
     response.send("Type /pokemon/'number or name' in the address bar");
 })
