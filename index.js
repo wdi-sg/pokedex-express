@@ -1,24 +1,12 @@
 const express = require("express");
 const jsonfile = require("jsonfile");
 const file = "./pokedex.json";
-
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
-
-// Init express app
 const app = express();
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
-
-app.get("/pokemon/", (request, response) => {
-  response.send("Welcome to the online Pokedex!");
+app.get("/", (request, response) => {
+  response.send(`Welcome to the online Pokedex!
+  <p>Search Pokemon: <i>localhost:3000/pokemon/pokemon-name</i></p>
+  <p>Search Pokemon types: <i>localhost:3000/pokemon/type/pokemon-type</i></p>`);
 });
 
 app.get("/pokemon/:name", (request, response) => {
@@ -37,15 +25,20 @@ app.get("/pokemon/:name", (request, response) => {
       }
     }
     if (foundPokemon !== undefined) {
-      response.send(`<html>You searched for <b>${foundPokemon.name}</b>.
-      <p>Id: ${foundPokemon.id}</p>
-      <p>Num: ${foundPokemon.num}</p>
-      <p>Name: ${foundPokemon.name}</p>
-      <p>Image: <img src="${foundPokemon.img}"></p>
-      <p>Type: ${foundPokemon.type.join(", ")}</p>
-      <p>Height: ${foundPokemon.height}</p>
-      <p>Weight: ${foundPokemon.weight}</p>
-      </html>`);
+      response.send(`<p>You searched for: <h1 style="color:#3C59A3; text-decoration: underline;">${
+        foundPokemon.name
+      }!</h1></p> 
+      <ul>
+      <li>Id: ${foundPokemon.id}</li>
+      <li>Num: ${foundPokemon.num}</li>
+      <li>Name: ${foundPokemon.name}</li>
+      <li>Image: <img src="${foundPokemon.img}"></li>
+      <li>Type: ${foundPokemon.type.join(", ")}</li>
+      <li>Height: ${foundPokemon.height}</li>
+      <li>Weight: ${foundPokemon.weight}</li>
+      <li>Weaknesses: ${foundPokemon.weaknesses.join(", ")}</li>
+      </ul>
+      `);
     } else {
       request.statusCode = 404;
       response.send(
@@ -55,7 +48,7 @@ app.get("/pokemon/:name", (request, response) => {
   });
 });
 
-app.get("/pokemon/type/:type", (request, response) => {
+app.get("/type/:type", (request, response) => {
   const typeParam = request.params.type.toLowerCase();
   const foundType = [];
   jsonfile.readFile(file, function(err, obj) {
@@ -74,7 +67,7 @@ app.get("/pokemon/type/:type", (request, response) => {
     const remainingLetters = typeParam.slice(1);
     const joinTypeName = firstLetter.concat(remainingLetters);
     if (foundType.length !== 0) {
-      response.send(`You searched for <b>${joinTypeName}</b>!
+      response.send(`You searched for <h1>${joinTypeName}!</h1>
     <p>Pokemon with ${typeParam} type:</p>
     <p>${foundType.join(", ")}</p>`);
     } else {
@@ -85,11 +78,30 @@ app.get("/pokemon/type/:type", (request, response) => {
   });
 });
 
-/**
- * ===================================
- * Listen to requests on port 3000
- * ===================================
- */
+app.get("/weaknesses/:weakness", (request, response) => {
+  const foundPokemon = [];
+  const weaknessParam = request.params.weakness.toLowerCase();
+  jsonfile.readFile(file, (err, obj) => {
+    const pokemonArray = obj["pokemon"];
+    for (let i = 0; i < pokemonArray.length; i++) {
+      let pokemon = pokemonArray[i];
+      let pokemonWeaknesses = pokemon["weaknesses"];
+      for (let j = 0; j < pokemonWeaknesses.length; j++) {
+        const pokemonWeakness = pokemonWeaknesses[j].toLowerCase();
+        if (weaknessParam === pokemonWeakness) {
+          foundPokemon.push(pokemon["name"]);
+        }
+      }
+    }
+    const firstLetter = weaknessParam.charAt(0).toUpperCase();
+    const remainingLetters = weaknessParam.slice(1);
+    const joinWeaknessName = firstLetter.concat(remainingLetters);
+    response.send(`You searched for <h1>${joinWeaknessName}!</h1>
+    <p>Pokemon weak to ${joinWeaknessName}:</p>
+    <p>${foundPokemon.join(", ")}</p>`)
+  });
+});
+
 app.listen(3000, () =>
   console.log("~~~ Tuning in to the waves of port 3000 ~~~")
 );
