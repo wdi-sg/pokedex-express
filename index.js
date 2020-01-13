@@ -25,6 +25,7 @@ const displayPokemon = (request, response) => {
             return;
         }
         const pokemonArray = obj.pokemon;
+
         const requestName = request.params.name
 
         // If input is a number, display the pokemon by its number;
@@ -39,7 +40,6 @@ const displayPokemon = (request, response) => {
         for (const pokemon of pokemonArray) {
             // console.log(`name: ${pokemon.name}, weight ${pokemon.weight}`);
             if (pokemon.name.toLowerCase() === requestName.toLowerCase()) {
-                console.log
                 response.send(returnPokemon(pokemon));
                 return;
             }
@@ -82,27 +82,64 @@ const listByType = (request, response) => {
         const resultsArray = [];
 
         for (const pokemon of pokemonArray) {
-          for (const type of pokemon.type) {
-            if (type.toLowerCase() === inputType) {
-              console.log(`${pokemon.name} is of type ${type}.`)
-              resultsArray.push(pokemon);
+            for (const type of pokemon.type) {
+                if (type.toLowerCase() === inputType) {
+                    console.log(`${pokemon.name} is of type ${type}.`)
+                    resultsArray.push(pokemon);
+                }
             }
-          }
         }
 
         console.log(resultsArray);
 
         if (resultsArray.length === 0) {
-          console.log('not found type')
-          response.status(401).send(`Error, ${inputType} not found!`);
-          return;
+            console.log('not found type')
+            response.status(401).send(`Error, ${inputType} not found!`);
+            return;
         } else {
-          let returnString = "";
-          for (const pokemon of resultsArray) {
-            returnString += pokemon.name + "\n";
-          }
-          response.send(returnString);
-          return;
+            let returnString = "";
+            for (const pokemon of resultsArray) {
+                returnString += pokemon.name + "\n";
+            }
+            response.send(returnString);
+            return;
+        }
+    })
+}
+
+const listByWeakness = (request, response) => {
+    console.log('listing of type: ' + request.params.inputType);
+    jsonfile.readFile(dataFile, (err, obj) => {
+        if (err) {
+            response.status(500).send('Error: ' + err);
+            return;
+        };
+        const pokemonArray = obj.pokemon;
+        const inputWeakness = request.params.inputWeakness.toLowerCase();
+        const resultsArray = [];
+
+        for (const pokemon of pokemonArray) {
+            for (const weakness of pokemon.weaknesses) {
+                if (weakness.toLowerCase() === inputWeakness) {
+                    console.log(`${pokemon.name} is weak to ${inputWeakness}.`)
+                    resultsArray.push(pokemon);
+                }
+            }
+        }
+
+        console.log(resultsArray);
+
+        if (resultsArray.length === 0) {
+            console.log('not found weakness')
+            response.status(401).send(`Error, ${inputWeakness} not found!`);
+            return;
+        } else {
+            let returnString = "";
+            for (const pokemon of resultsArray) {
+                returnString += pokemon.name + "\n";
+            }
+            response.send(returnString);
+            return;
         }
     })
 }
@@ -123,9 +160,9 @@ app.get('/pokemon/', (request, response) => {
     response.send(displayIndexPage());
 })
 
-app.get('/type/:inputType', listByType)
+app.get('/type/:inputType', listByType);
 
-
+app.get('/weaknesses/:inputWeakness', listByWeakness);
 
 app.get('*', (request, response) => {
     // send response with some data (a string)
