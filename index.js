@@ -12,7 +12,7 @@ const app = express();
 const dataFile = 'pokedex.json';
 
 const pageHeader = (pageTitle) => {
-  const pageHeaderContent = `<!DOCTYPE html>
+    const pageHeaderContent = `<!DOCTYPE html>
   <html lang="en">
   <head>
       <meta charset="UTF-8">
@@ -28,10 +28,10 @@ const pageHeader = (pageTitle) => {
 }
 
 const pageFooter = () => {
-  const pageFooterContent = `</div>
+    const pageFooterContent = `</div>
   </body>
   </html>`;
-  return pageFooterContent;
+    return pageFooterContent;
 }
 
 /**
@@ -67,10 +67,11 @@ const displayPokemon = (request, response) => {
                 return;
             }
         }
-        response.status(404).send(`Could not find information about ${requestName} - Is that a new pokemon? Gotta catch em' all!`)
+        response.status(404).send(`${pageHeader('404 Error')}Could not find information about ${requestName} - Is that a new pokemon? Gotta catch em' all!${pageFooter()}`)
     })
 }
 
+// A dedicated function for returning information about a pokemon object, formatted in a HTML string.
 const returnPokemon = (pokemon) => {
     const name = pokemon.name;
     const weight = pokemon.weight;
@@ -84,7 +85,7 @@ const returnPokemon = (pokemon) => {
             types += `<a href="../type/${pokemon.type[i]}">${pokemon.type[i]}</a>, `;
         }
     }
-    let responseString = `${pageHeader()}<div class="display-4">${name}</div>
+    let responseString = `${pageHeader(name)}<div class="display-4">${name}</div>
     <img class="img-fluid" src="${pokemon.img}">
     <p>Type: ${types}</p>
     <p>Height: ${pokemon.height}</p>
@@ -92,10 +93,12 @@ const returnPokemon = (pokemon) => {
     return responseString;
 }
 
+
 const displayIndexPage = () => {
     let responseString = `Welcome to the online Pokedex!`;
     return responseString;
 }
+
 
 const listByType = (request, response) => {
     console.log('listing of type: ' + request.params.inputType);
@@ -129,11 +132,12 @@ const listByType = (request, response) => {
                 returnString += `<li><a href="../pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
             }
             returnString += "</ul>"
-            response.send(`${pageHeader()}${returnString}${pageFooter()}`);
+            response.send(`${pageHeader(inputType + ' type')}${returnString}${pageFooter()}`);
             return;
         }
     })
 }
+
 
 const listByWeakness = (request, response) => {
     console.log('listing of type: ' + request.params.inputType);
@@ -159,19 +163,20 @@ const listByWeakness = (request, response) => {
 
         if (resultsArray.length === 0) {
             console.log('not found weakness')
-            response.status(401).send(`Error, ${inputWeakness} not found!`);
+            response.status(401).send(`${pageHeader('404 Error!')} Error, ${inputWeakness} not found!${pageFooter()}`);
             return;
         } else {
             let returnString = `<div class="display-4">Weak to ${inputWeakness}</div><ul>`;
             for (const pokemon of resultsArray) {
-              returnString += `<li><a href="../pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
+                returnString += `<li><a href="../pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
             }
             returnString += "</ul>"
-            response.send(`${pageHeader()}${returnString}${pageFooter()}`);
+            response.send(`${pageHeader('Weak to ' + inputWeakness)}${returnString}${pageFooter()}`);
             return;
         }
     })
 }
+
 
 const listNextEvolution = (request, response) => {
     let isActuallyAPokemon = false;
@@ -186,36 +191,36 @@ const listNextEvolution = (request, response) => {
         const resultsArray = [];
 
         for (const pokemon of pokemonArray) {
-          if (inputPokemonName === pokemon.name.toLowerCase()) {
-            isActuallyAPokemon = true;
-          }
-          // console.log(pokemon.prev_evolution);
+            if (inputPokemonName === pokemon.name.toLowerCase()) {
+                isActuallyAPokemon = true;
+            }
+            // console.log(pokemon.prev_evolution);
             if (pokemon.next_evolution) {
                 for (const evolutions of pokemon.next_evolution) {
-                  console.log(evolutions.name);
-                        if (evolutions.name.toLowerCase() === inputPokemonName) {
-                            resultsArray.push(pokemon);
-                        }
+                    console.log(evolutions.name);
+                    if (evolutions.name.toLowerCase() === inputPokemonName) {
+                        resultsArray.push(pokemon);
                     }
                 }
             }
+        }
 
         // console.log(resultsArray);
 
         if (resultsArray.length === 0) {
             if (isActuallyAPokemon) {
-              response.send(`${pageHeader()}${inputPokemonName} has no previous evolutions.${pageFooter()}`);
-              return;
+                response.send(`${pageHeader('No previous evolutions')}${inputPokemonName} has no previous evolutions.${pageFooter()}`);
+                return;
             }
-            response.status(401).send(`${pageHeader()}<div class="display-4">Error, ${inputPokemonName} is not a pokemon!</div>${pageFooter()}`);
+            response.status(401).send(`${pageHeader('401 Error')}<div class="display-4">Error, ${inputPokemonName} is not a pokemon!</div>${pageFooter()}`);
             return;
         } else {
             let returnString = `<div class="display-4">${inputPokemonName} evolves from</div><ul>`;
             for (const pokemon of resultsArray) {
-              returnString += `<li><a href="../pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
+                returnString += `<li><a href="../pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
             }
             returnString += "</ul>"
-            response.send(`${pageHeader()}${returnString}${pageFooter()}`);
+            response.send(`${pageHeader(inputPokemonName + ' evolutions')}${returnString}${pageFooter()}`);
             return;
         }
     })
