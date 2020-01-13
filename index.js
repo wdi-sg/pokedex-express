@@ -45,13 +45,14 @@ app.get('/type/:type', (request, response) => {
                 }//if end
             }// for j loop
         }// for i loop
-        if (pokemonNames == []) {
+        if (pokemonNames[0] == undefined) {
             response.send("There are no pokemon with that Type. Please try something else.");
         } else {
-            response.send(pokemonNames);
-            /*for (let i = 0; i < pokemonNames.length; i++) {
-                response.send(pokemonNames)
-            }//for i loop*/
+                let pokemonNameStr = "";
+            for (let i = 0; i < pokemonNames.length; i++) {
+                pokemonNameStr = pokemonNameStr + "<br>" + pokemonNames[i];
+            }//for i loop
+            response.send(pokemonNameStr);
         } //else end
     })//readFile end
 })//app.get end
