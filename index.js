@@ -10,8 +10,6 @@ app.get("/", (request, response) => {
 });
 
 app.get("/pokemon/:name", (request, response) => {
-  // send response with some data (a string)
-  // response.send(request.path);
   let foundPokemon;
   const name = request.params.name.toLowerCase();
   jsonfile.readFile(file, function(err, obj) {
@@ -68,8 +66,8 @@ app.get("/type/:type", (request, response) => {
     const remainingLetters = typeParam.slice(1);
     const joinTypeName = firstLetter.concat(remainingLetters);
     if (foundType.length !== 0) {
-      response.send(`You searched for <h1>${joinTypeName}!</h1>
-    <p>Pokemon with ${typeParam} type:</p>
+      response.send(`You searched for <h1 style="color:#3C59A3; text-decoration: underline;">${joinTypeName}!</h1>
+    <p>Pokemon with <b><u>${typeParam}</u></b> type:</p>
     <p>${foundType.join(", ")}</p>`);
     } else {
       response.send(
@@ -104,8 +102,7 @@ app.get("/weaknesses/:weakness", (request, response) => {
 });
 
 app.get("/nextevolution/:name", (request, response) => {
-  let foundPokemon;
-  let notFoundString = "<h1>No such Pokemon!</h1>";
+  let notFoundString = "No such Pokemon!";
   const evoParam = request.params.name.toLowerCase();
   let foundEvo = [];
   jsonfile.readFile(file, (err, obj) => {
@@ -128,18 +125,20 @@ app.get("/nextevolution/:name", (request, response) => {
     const remainingLetters = evoParam.slice(1);
     const joinName = firstLetter.concat(remainingLetters);
     if (foundEvo.length > 0) {
-      response.send(`You searched for evolutions of <h1>${joinName}!</h1>
-    ${foundEvo.join(", ")}`);
+      response.send(`You searched for evolutions of <h1 style="color:#3C59A3; text-decoration: underline;">${joinName}!</h1>
+    <p>Evolves from: ${foundEvo.join(", ")}</p>`);
     } else {
-      response.send(`You searched for evolutions of <h1>${joinName}!</h1>
+      response.send(`You searched for evolutions of <h1 style="color:#3C59A3; text-decoration: underline;">${joinName}!</h1>
       <p>${notFoundString}</p>`);
     }
-    console.log(foundPokemon);
   });
 });
 
 app.get("*", (request, response) => {
-  response.send("NO SUCH PAGE")
+  response.send(`<h1 style="text-align: center;">No such page!</h1>
+  <div>
+  <img style="display:block;margin: 0 auto; width: 50%;" src="https://pokeoneguide.com/wp-content/uploads/2018/08/snorlax.png">
+  </div>`);
 });
 
 app.listen(3000, () =>
