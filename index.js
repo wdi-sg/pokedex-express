@@ -70,11 +70,11 @@ app.get('/type/:type', (request, response) => {
     }
     //loop through pokemon
     for (let i = 0; i < obj.pokemon.length; i++) {
-      for(let j = 0; j < obj.pokemon[i].type.length; j++)
-      //check if input matches a pokemon
-      if (input.toLowerCase() === obj.pokemon[i].type[j].toLowerCase()) {
-        pokemon.push(obj.pokemon[i].name)
-      }
+      for (let j = 0; j < obj.pokemon[i].type.length; j++)
+        //check if input matches a pokemon
+        if (input.toLowerCase() === obj.pokemon[i].type[j].toLowerCase()) {
+          pokemon.push(obj.pokemon[i].name)
+        }
     }
 
     //if pokemon has content, send it
@@ -105,11 +105,11 @@ app.get('/weaknesses/:weakness', (request, response) => {
     }
     //loop through pokemon
     for (let i = 0; i < obj.pokemon.length; i++) {
-      for(let j = 0; j < obj.pokemon[i].weaknesses.length; j++)
-      //check if input matches a pokemon
-      if (input.toLowerCase() === obj.pokemon[i].weaknesses[j].toLowerCase()) {
-        pokemon.push(obj.pokemon[i].name)
-      }
+      for (let j = 0; j < obj.pokemon[i].weaknesses.length; j++)
+        //check if input matches a pokemon
+        if (input.toLowerCase() === obj.pokemon[i].weaknesses[j].toLowerCase()) {
+          pokemon.push(obj.pokemon[i].name)
+        }
     }
 
     //if pokemon has content, send it
@@ -119,6 +119,45 @@ app.get('/weaknesses/:weakness', (request, response) => {
       // if pokemon has no content, error message
       response.status(404).send(`Could not find information about ${input} - Is that a new pokemon? Gotta catch em' all!`)
     }
+    //end of readFile
+  })
+});
+
+app.get('/nextevolution', (request, response) => {
+  response.send("Please choose a Pokemon!")
+});
+
+app.get('/nextevolution/:name', (request, response) => {
+
+  const input = request.params.name
+  let evolution = []
+
+  //readFile is async, so all code inside of here
+  jsonfile.readFile(file, (err, obj) => {
+    //check for error first
+    if (err) {
+      return console.log(err)
+    }
+    //loop through pokemon 
+    for (let i = 0; i < obj.pokemon.length; i++) {
+      //if prev_evolution exists run the loop
+      if (obj.pokemon[i].prev_evolution) {
+        for (let j = 0; j < obj.pokemon[i].prev_evolution.length; j++)
+          //check if input matches a pokemon
+          if (input.toLowerCase() === obj.pokemon[i].name.toLowerCase()) {
+            evolution.push(obj.pokemon[i].prev_evolution[j].name)
+          } 
+      }
+    }
+
+        //if pokemon has content, send it
+        if (evolution.length > 0) {
+          response.send(evolution.join(`, `))
+        } else {
+          // if pokemon has no content, error message
+          response.status(404).send(`${input} does not have a previous evolution or is not a Pokemon!`)
+    }
+
     //end of readFile
   })
 });
