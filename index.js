@@ -39,15 +39,45 @@ app.get('/pokemon/:name', (request, response) => {
     }
     //if pokemon has content, send it
     if (pokemon) {
-      response.send(`This is ${pokemon.name}. It weighs ${pokemon.weight} and has a height of ${pokemon.height} - Main Type: ${pokemon.type[0]} - Weakness: ${pokemon.weaknesses[0]}`)
+      response.send(`This is ${pokemon.name}. It weighs ${pokemon.weight} and has a height of ${pokemon.height} - <div>Types: ${pokemon.type} - Weakness: ${pokemon.weaknesses[0]}</div>`)
     } else {
       // if pokemon has no content, error message
-      response.status(404)
-      response.send(`Could not find information about ${input} - Is that a new pokemon? Gotta catch em' all!`)
+      response.status(404).send(`Could not find information about ${input} - Is that a new pokemon? Gotta catch em' all!`)
+    }
+    //end of readFile
+  })
+  //end of app.get
+});
+
+app.get('/pokemon/type/:type', (request, response) => {
+
+  const input = request.params.type
+  let pokemon = []
+
+  //readFile is async, so all code inside of here
+  jsonfile.readFile(file, (err, obj) => {
+    //check for error first
+    if (err) {
+      return console.log(err)
+    }
+    //loop through pokemon
+    for (let i = 0; i < obj.pokemon.length; i++) {
+      for(let j = 0; j < obj.pokemon[i].type.length; j++)
+      //check if input matches a pokemon
+      if (input.toLowerCase() === obj.pokemon[i].type[j].toLowerCase()) {
+        pokemon.push(obj.pokemon[i].name)
+      }
     }
 
+    //if pokemon has content, send it
+    if (pokemon) {
+      response.send(pokemon.join(`, `))
+    } else {
+      // if pokemon has no content, error message
+      response.status(404).send(`Could not find information about ${input} - Is that a new pokemon? Gotta catch em' all!`)
+    }
+    //end of readFile
   })
-
 });
 
 app.get('/pokemon/', (request, response) => {
