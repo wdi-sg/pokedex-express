@@ -37,7 +37,7 @@ app.get('/pokemon/:id', (request, response, obj) => {
           if (checkPokemon === checkPokemonName) {
             console.log(obj.pokemon[i].name);
             console.log(obj.pokemon[i].id);
-            response.send("You got: " + obj.pokemon[i].name);
+            response.send("Name: " + obj.pokemon[i].name + "<br> Weight: " + obj.pokemon[i].weight);
           }
         }
         //response.send("You got: " + obj.pokemon.name);
