@@ -2,6 +2,7 @@ const express = require('express');
 
 const jsonfile = require('jsonfile');
 
+const file = 'pokedex.json';
 /**
  * ===================================
  * Configurations and set up
@@ -16,27 +17,24 @@ const app = express();
  * Routes
  * ===================================
  */
-const whenRequestisReceived = (request,response) => 
-{
-  const file = 'pokedex.json'
+
+app.get('/pokemon/:name', (request, response) => {
+  // send response with some data (a string)
 
   jsonfile.readFile(file, (err, obj) => {
-      console.log(request.path)
-    if(request.path === '/pokemon/:i'){
-      let i = req.params[0].split("/");
-      for (let i = 0; i< pokemon.length; i++);
-      response.send(pokemon.weight[i]);
-    }
-    // else{
-    //   let name = request.params.some-name;
-    //   response.status(404).send("Could not find information about" + name + "- Is that a new pokemon? Gotta catch em' all!" );
-    // }
-  })
-}
 
-// app.get('/pokemon/:some-name', whenRequestisReceived) => {
-//   // send response with some data (a string)
-//   response.send(pokemon.weight[i]);
+    for (let i=0; i<obj.pokemon.length; i++ ){
+        console.log('pokemon name is: ' + obj.pokemon[i].name);
+        if (obj.pokemon[i].name === request.params.name) {//why isn't there a need for request.params[0].split("/")
+            response.send(`poke name is: ${obj.pokemon[i].name}, poke weight is: ${obj.pokemon[i].weight}`);//${} means
+        }
+        else if (obj.pokemon[i].name!== request.params.name) {//defaults to else statement
+          response.status(404).send("Could not find information about " + (request.params.name) + "- Is that a new pokemon? Gotta catch em' all!" );;
+        }
+    }
+  });
+});
+  // send response with some data (a string)
 
 /**
  * ===================================
