@@ -33,7 +33,6 @@ app.get('/pokemon/:id', (request, response, obj) => {
     if (!isNaN(checkPokemon)) {
       response.send("This is " + obj.pokemon[checkPokemon].name + "! He is " + obj.pokemon[checkPokemon].weight + " in weight and is also " + obj.pokemon[checkPokemon].height +  " in height." );
     } else if (isNaN(checkPokemon)) {
-        //console.log(request.path + "this is " + checkPokemon + obj.pokemon.length);
         let pokemonName = checkPokemon.toLowerCase();
         for (i = 0; i < listOfPokemon; i++) {
         let checkPokemonName = obj.pokemon[i].name.toLowerCase();
@@ -57,9 +56,7 @@ app.get('/pokemon/type/:type', (request, response) => {
       for (i = 0; i < listOfPokemon; i++) {
         let checkPokemonType = obj.pokemon[i].type;
         let listOfTypes = checkPokemonType.length;
-        //console.log(obj.pokemon[i].name + checkTypes + checkPokemonType);
         for (j = 0; j < listOfTypes; j++) {
-          //console.log(checkPokemonType); // this prints
           const checkNumberTypes = checkPokemonType[j].toLowerCase();
           if (checkTypes === checkNumberTypes) {
             searchedType.push(obj.pokemon[i].name);
@@ -69,8 +66,6 @@ app.get('/pokemon/type/:type', (request, response) => {
         }
       }
       response.send("List of <strong>" + checkTypes.toUpperCase() + "</strong> type Pokemons: " + searchedType);
-      //response.send(checkTypes);
-      //console.log(checkTypes);
     }
   });
 });
@@ -95,17 +90,27 @@ app.get('/pokemon/weakness/:weakness', (request, response) => {
           }
         }
       }
-      //response.send(checkTypes);
-      //console.log(checkTypes);
       response.send("List of Pokemon with <strong>" + checkWeakness.toUpperCase() + "</strong> weakness: " + searchedWeakness);
     }
   });
 });
 
-          // if (checkTypes === checkNumberTypes) {
-          //   console.log(obj.pokemon[i].type[j]);
-          //   response.send(obj.pokemon[i].name + obj.pokemon[i].type[j]);
-          // }
+
+app.get('/pokemon/nextevolution/:id', (request, response, obj) => {
+  // send response with some data (a string)
+  jsonfile.readFile(file, (err,obj) => {
+    const checkPokemon = request.params.id.toLowerCase();
+    const listOfPokemon = obj.pokemon.length;
+    if (isNaN(checkPokemon)) {
+      const checkedPokemon = [];
+      for (i = 0; i < listOfPokemon; i++) {
+        console.log(obj.pokemon[i].next_evolution[i]);
+      }
+      //response.send("List of Pokemon with <strong>" + checkWeakness.toUpperCase() + "</strong> weakness: " + searchedWeakness);
+    }
+  });
+});
+
 /**
  * ===================================
  * Listen to requests on port 3000
