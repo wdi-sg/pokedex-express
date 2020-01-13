@@ -10,7 +10,7 @@ app.get('/pokemon/:iden', (request, response) => {
         if (idenNum > 0) {
             let pokemon = obj.pokemon[idenNum-1];
             if (pokemon !==  undefined) {
-                response.send("Name : " + pokemon.name + "<br>Weight : " + pokemon.weight);
+                response.send("<img src=" + pokemon.img + "><br>This is " + pokemon.name + "<br>It weights " + pokemon.weight + "<br>It is " + pokemon.height + " tall.<br>It is a " + pokemon.type + " Type");
             } else {
                 response.redirect(301, "/");
             } //else 1 close
@@ -50,7 +50,7 @@ app.get('/type/:type', (request, response) => {
         } else {
                 let pokemonNameStr = "";
             for (let i = 0; i < pokemonNames.length; i++) {
-                pokemonNameStr = pokemonNameStr + "<br>" + pokemonNames[i];
+                pokemonNameStr = pokemonNameStr + "<br><a href='../pokemon/" + pokemonNames[i] + "'>" + pokemonNames[i] + "</a>";
             }//for i loop
             response.send(pokemonNameStr);
         } //else end
@@ -75,7 +75,7 @@ app.get('/weakness/:weak', (request, response) => {
         } else {
                 let pokemonNameStr = "";
             for (let i = 0; i < pokemonNames.length; i++) {
-                pokemonNameStr = pokemonNameStr + "<br>" + pokemonNames[i];
+                pokemonNameStr = pokemonNameStr + "<br><a href='../pokemon/" + pokemonNames[i] + "'>" + pokemonNames[i] + "</a>";
             }//for i loop
             response.send(pokemonNameStr);
         } //else end
