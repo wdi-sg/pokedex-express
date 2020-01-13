@@ -38,7 +38,10 @@ app.get('/pokemon/:id', (request, response, obj) => {
             console.log(obj.pokemon[i].name);
             console.log(obj.pokemon[i].id);
             response.send("Name: " + obj.pokemon[i].name + "<br> Weight: " + obj.pokemon[i].weight);
-          }
+          } else {
+              response.send("Could not find information about " + checkPokemon + "!  Is that a new pokemon? Gotta catch em' all!");
+              response.status(404);
+            }
         }
         //response.send("You got: " + obj.pokemon.name);
       }
