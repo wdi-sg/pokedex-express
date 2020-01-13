@@ -23,21 +23,24 @@ app.get('/pokemon/:name', (request, response) => {
 
   jsonfile.readFile(file, (err, obj) => {
 
-    for (let i=0; i<obj.pokemon.length; i++ ){
-        console.log('pokemon name is: ' + obj.pokemon[i].name);
-        if (obj.pokemon[i].name === request.params.name) {//why isn't there a need for request.params[0].split("/")
-            response.send(`poke name is: ${obj.pokemon[i].name}, poke weight is: ${obj.pokemon[i].weight}`);//${} means
+    for (let i=0; i<pokemon.length; i++ ){
+        
+        if (pokemon[i].name === request.params.name) {//why isn't there a need for request.params[0].split("/")
+            console.log('pokemon name is: ' + pokemon[i].name);
+            response.send(`poke name is: ${pokemon[i].name}, poke weight is: ${pokemon[i].weight}`);//${} means?
         }
-        else if (obj.pokemon[i].name!== request.params.name) {//defaults to else statement
+        else if (pokemon[i].name!== request.params.name) {//defaults to else statement
           response.status(404).send("Could not find information about " + (request.params.name) + "- Is that a new pokemon? Gotta catch em' all!" );;
         }
     }
   });
 });
   // send response with some data (a string)
-
-/**
- * ===================================
+  app.get('/', (request, response) => {
+    response.send('Welcome to the online pokedex!')
+  });
+  
+ /* ===================================
  * Listen to requests on port 3000
  * ===================================
  */
