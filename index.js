@@ -1,5 +1,4 @@
 const express = require('express');
-
 const jsonfile = require('jsonfile');
 
 const file = 'pokedex.json'
@@ -24,7 +23,7 @@ app.get('/pokemon/:name', (request, response) => {
   const input = request.params.name
   let pokemon
 
-//readFile is async, so all code inside of here
+  //readFile is async, so all code inside of here
   jsonfile.readFile(file, (err, obj) => {
     //check for error first
     if (err) {
@@ -48,7 +47,11 @@ app.get('/pokemon/:name', (request, response) => {
     }
 
   })
-  // send response with some data (a string)
+
+});
+
+app.get('/pokemon/', (request, response) => {
+  response.send("Welcome to the online Pokdex!")
 });
 
 /**
