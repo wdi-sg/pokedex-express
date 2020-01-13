@@ -16,11 +16,21 @@ const app = express();
  * ===================================
  */
 
+
+//when request path is empty, return welcome msg
+const welcome = (request, response) => {
+    response.send(`Welcome to the online Pokdex!`);
+}
+
+app.get('/', welcome);
+
+
 app.get('/pokemon/:name', (request, response) => {
 
     const file = 'pokedex.json'; //pokemon array inside object
 
     jsonfile.readFile(file, (err, obj) => {
+
         //loop over array to validate name
         let userInput = request.params.name;
         var found = 'N';
