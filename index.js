@@ -144,6 +144,55 @@ const listByWeakness = (request, response) => {
     })
 }
 
+const listNextEvolution = (request, response) => {
+    let isActuallyAPokemon = false;
+    console.log('listing of type: ' + request.params.inputType);
+    jsonfile.readFile(dataFile, (err, obj) => {
+        if (err) {
+            response.status(500).send('Error: ' + err);
+            return;
+        };
+        const pokemonArray = obj.pokemon;
+        const inputPokemonName = request.params.inputPokemonName.toLowerCase();
+        const resultsArray = [];
+
+        for (const pokemon of pokemonArray) {
+          if (inputPokemonName === pokemon.name.toLowerCase()) {
+            isActuallyAPokemon = true;
+          }
+          // console.log(pokemon.prev_evolution);
+            if (pokemon.next_evolution) {
+                for (const evolutions of pokemon.next_evolution) {
+                  console.log(evolutions.name);
+                        if (evolutions.name.toLowerCase() === inputPokemonName) {
+                            resultsArray.push(pokemon);
+                        }
+                    }
+                }
+            }
+
+        console.log(resultsArray);
+
+        if (resultsArray.length === 0) {
+            if (isActuallyAPokemon) {
+              response.send(`${inputPokemonName} has no previous evolutions.`);
+              return;
+            }
+            console.log('not found weakness')
+            response.status(401).send(`Error, ${inputPokemonName} is not a pokemon!`);
+            return;
+        } else {
+            let returnString = "";
+            for (const pokemon of resultsArray) {
+                returnString += pokemon.name + "\n";
+            }
+            response.send(returnString);
+            return;
+        }
+    })
+}
+
+
 /**
  * ===================================
  * Routes
@@ -163,6 +212,8 @@ app.get('/pokemon/', (request, response) => {
 app.get('/type/:inputType', listByType);
 
 app.get('/weaknesses/:inputWeakness', listByWeakness);
+
+app.get('/nextevolution/:inputPokemonName', listNextEvolution);
 
 app.get('*', (request, response) => {
     // send response with some data (a string)
