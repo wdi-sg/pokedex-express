@@ -23,11 +23,13 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
+app.get('/pokemon/:idOfPokemon', (request, response) => {
   // send response with some data (a string)
     jsonfile.readFile(file, (err, obj)=>{
         if(err === null){
-            response.send(obj);
+            let index = parseInt(request.params.idOfPokemon)-1;
+            let pokemon = obj["pokemon"][index];
+            response.send(pokemon);
         }else{
             response.send(err);
         }
