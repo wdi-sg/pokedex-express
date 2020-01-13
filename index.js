@@ -42,14 +42,14 @@ app.get('/pokemon/:name', (request, response) => {
                 }
             }
             if (found === 'Y') {
-                console.log(obj.pokemon[i].weight);
-                response.send(`Weight of ${pokeCharacter} is ${obj.pokemon[i].weight}.`);
+            console.log(pokeCharacter);
+            response.send(`This is ${pokeCharacter}, it is ${obj.pokemon[i].weight} in weight and ${obj.pokemon[i].height} in height. It's type is/are: ${obj.pokemon[i].type}`);
             }
             else {
                 response.status('404').send(`Could not find information about ${userInput} - Is that a new pokemon? Gotta catch em' all!`);
                 }
             console.log(userInput);
-            console.log(pokeCharacter);
+
    })
 
 });
