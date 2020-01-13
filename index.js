@@ -12,11 +12,12 @@ const jsonfile = require('jsonfile');
 const file = 'pokedex.json';
 const app = express();
 
-var returnInformation = (request, response) => {
+const returnInformation = (request, response) => {
   jsonfile.readFile(file, (err, obj) => {
     let array = obj["pokemon"];
-    console.log(array[request.params.id])
-    response.send(array[request.params.id])
+    let index = request.params.id;
+    console.log(array[index])
+    response.send(array[index])
   })
 }
 
