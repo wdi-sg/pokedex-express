@@ -11,6 +11,29 @@ const jsonfile = require('jsonfile');
 const app = express();
 const dataFile = 'pokedex.json';
 
+const pageHeader = (pageTitle) => {
+  const pageHeaderContent = `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <link rel="stylesheet" href="../style.css">
+      <title>${pageTitle}</title>
+  </head>
+  <body>
+      <div class="container">`;
+    return pageHeaderContent;
+}
+
+const pageFooter = () => {
+  const pageFooterContent = `</div>
+  </body>
+  </html>`;
+  return pageFooterContent;
+}
+
 /**
  * ===================================
  * Functions
@@ -54,14 +77,18 @@ const returnPokemon = (pokemon) => {
     const height = pokemon.height;
     let types = "";
     for (let i = 0; i < pokemon.type.length; i++) {
-        console.log(pokemon.type[i]);
+        // console.log(pokemon.type[i]);
         if (i === pokemon.type.length - 1) {
-            types += pokemon.type[i];
+            types += `<a href="../type/${pokemon.type[i]}">${pokemon.type[i]}</a>`;
         } else {
-            types += pokemon.type[i] + ", ";
+            types += `<a href="../type/${pokemon.type[i]}">${pokemon.type[i]}</a>, `;
         }
     }
-    let responseString = `This is ${name}, they weigh ${weight} and stand ${height} tall. They are ${types} type.`
+    let responseString = `${pageHeader()}<div class="display-4">${name}</div>
+    <img class="img-fluid" src="${pokemon.img}">
+    <p>Type: ${types}</p>
+    <p>Height: ${pokemon.height}</p>
+    <p>Weight: ${pokemon.weight}</p>${pageFooter()}`
     return responseString;
 }
 
@@ -84,24 +111,25 @@ const listByType = (request, response) => {
         for (const pokemon of pokemonArray) {
             for (const type of pokemon.type) {
                 if (type.toLowerCase() === inputType) {
-                    console.log(`${pokemon.name} is of type ${type}.`)
+                    // console.log(`${pokemon.name} is of type ${type}.`)
                     resultsArray.push(pokemon);
                 }
             }
         }
 
-        console.log(resultsArray);
+        // console.log(resultsArray);
 
         if (resultsArray.length === 0) {
             console.log('not found type')
-            response.status(401).send(`Error, ${inputType} not found!`);
+            response.status(401).send(`${pageHeader()}<div class="display-4">Error, ${inputType} not found!</div>${pageFooter()}`);
             return;
         } else {
-            let returnString = "";
+            let returnString = `<div class="display-4">${inputType} type</div><ul>`;
             for (const pokemon of resultsArray) {
-                returnString += pokemon.name + "\n";
+                returnString += `<li><a href="../pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
             }
-            response.send(returnString);
+            returnString += "</ul>"
+            response.send(`${pageHeader()}${returnString}${pageFooter()}`);
             return;
         }
     })
@@ -121,24 +149,25 @@ const listByWeakness = (request, response) => {
         for (const pokemon of pokemonArray) {
             for (const weakness of pokemon.weaknesses) {
                 if (weakness.toLowerCase() === inputWeakness) {
-                    console.log(`${pokemon.name} is weak to ${inputWeakness}.`)
+                    // console.log(`${pokemon.name} is weak to ${inputWeakness}.`)
                     resultsArray.push(pokemon);
                 }
             }
         }
 
-        console.log(resultsArray);
+        // console.log(resultsArray);
 
         if (resultsArray.length === 0) {
             console.log('not found weakness')
             response.status(401).send(`Error, ${inputWeakness} not found!`);
             return;
         } else {
-            let returnString = "";
+            let returnString = `<div class="display-4">Weak to ${inputWeakness}</div><ul>`;
             for (const pokemon of resultsArray) {
-                returnString += pokemon.name + "\n";
+              returnString += `<li><a href="../pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
             }
-            response.send(returnString);
+            returnString += "</ul>"
+            response.send(`${pageHeader()}${returnString}${pageFooter()}`);
             return;
         }
     })
@@ -171,22 +200,22 @@ const listNextEvolution = (request, response) => {
                 }
             }
 
-        console.log(resultsArray);
+        // console.log(resultsArray);
 
         if (resultsArray.length === 0) {
             if (isActuallyAPokemon) {
-              response.send(`${inputPokemonName} has no previous evolutions.`);
+              response.send(`${pageHeader()}${inputPokemonName} has no previous evolutions.${pageFooter()}`);
               return;
             }
-            console.log('not found weakness')
-            response.status(401).send(`Error, ${inputPokemonName} is not a pokemon!`);
+            response.status(401).send(`${pageHeader()}<div class="display-4">Error, ${inputPokemonName} is not a pokemon!</div>${pageFooter()}`);
             return;
         } else {
-            let returnString = "";
+            let returnString = `<div class="display-4">${inputPokemonName} evolves from</div><ul>`;
             for (const pokemon of resultsArray) {
-                returnString += pokemon.name + "\n";
+              returnString += `<li><a href="../pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
             }
-            response.send(returnString);
+            returnString += "</ul>"
+            response.send(`${pageHeader()}${returnString}${pageFooter()}`);
             return;
         }
     })
