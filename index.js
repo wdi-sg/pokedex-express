@@ -33,9 +33,33 @@ app.get('/pokemon/:iden', (request, response) => {
 })//app.get end
 
 
+app.get('/type/:type', (request, response) => {
+    let type = request.params.type;
+    let pokemonNames = [];
+    jsonfile.readFile(pokemonData, (err, obj) => {
+        for (let i = 0; i < obj.pokemon.length; i++) {
+            let pokemonType = obj.pokemon[i].type;
+            for (let j = 0; j < pokemonType.length; j++) {
+                if (type.toLowerCase() == pokemonType[j].toLowerCase()) {
+                    pokemonNames.push(obj.pokemon[i].name);
+                }//if end
+            }// for j loop
+        }// for i loop
+        if (pokemonNames == []) {
+            response.send("There are no pokemon with that Type. Please try something else.");
+        } else {
+            response.send(pokemonNames);
+            /*for (let i = 0; i < pokemonNames.length; i++) {
+                response.send(pokemonNames)
+            }//for i loop*/
+        } //else end
+    })//readFile end
+})//app.get end
+
+
 //catch all if wrong input is entered
 app.get('*', (request, response) => {
-    response.send("Type /pokemon/'number or name' in the address bar");
+    response.send("Welcome to the online Pokedex!<br>Type /pokemon/'number or name' in the address bar");
 })
 
 
