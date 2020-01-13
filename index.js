@@ -58,6 +58,32 @@ app.get('/type/:type', (request, response) => {
 })//app.get end
 
 
+app.get('/weakness/:weak', (request, response) => {
+    let weak = request.params.weak;
+    let pokemonNames = [];
+    jsonfile.readFile(pokemonData, (err, obj) => {
+        for (let i = 0; i < obj.pokemon.length; i++) {
+            let pokemonWeak = obj.pokemon[i].weaknesses;
+            for (let j = 0; j < pokemonWeak.length; j++) {
+                if (weak.toLowerCase() == pokemonWeak[j].toLowerCase()) {
+                    pokemonNames.push(obj.pokemon[i].name);
+                }//if end
+            }// for j loop
+        }// for i loop
+        if (pokemonNames[0] == undefined) {
+            response.send("There are no pokemon with that Weakness. Please try something else.");
+        } else {
+                let pokemonNameStr = "";
+            for (let i = 0; i < pokemonNames.length; i++) {
+                pokemonNameStr = pokemonNameStr + "<br>" + pokemonNames[i];
+            }//for i loop
+            response.send(pokemonNameStr);
+        } //else end
+    })//readFile end
+})//app.get end
+
+
+
 //catch all if wrong input is entered
 app.get('*', (request, response) => {
     response.send("Welcome to the online Pokedex!<br>Type /pokemon/'number or name' in the address bar");
