@@ -124,7 +124,7 @@ const listByType = (request, response) => {
 
         if (resultsArray.length === 0) {
             console.log('not found type')
-            response.status(401).send(`${pageHeader()}<div class="display-4">Error, ${inputType} not found!</div>${pageFooter()}`);
+            response.status(401).send(`${pageHeader('401 Error!')}<div class="display-4">Error, ${inputType} not found!</div>${pageFooter()}`);
             return;
         } else {
             let returnString = `<div class="display-4">${inputType} type</div><ul>`;
