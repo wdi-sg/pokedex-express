@@ -18,6 +18,10 @@ const app = express();
  * ===================================
  */
 
+app.get('/pokemon/', (request, response) => {
+  response.send("Welcome to the online Pokdex!")
+});
+
 app.get('/pokemon/:name', (request, response) => {
 
   const input = request.params.name
@@ -49,7 +53,11 @@ app.get('/pokemon/:name', (request, response) => {
   //end of app.get
 });
 
-app.get('/pokemon/type/:type', (request, response) => {
+app.get('/type', (request, response) => {
+  response.send("Please choose a type!")
+});
+
+app.get('/type/:type', (request, response) => {
 
   const input = request.params.type
   let pokemon = []
@@ -80,8 +88,39 @@ app.get('/pokemon/type/:type', (request, response) => {
   })
 });
 
-app.get('/pokemon/', (request, response) => {
-  response.send("Welcome to the online Pokdex!")
+app.get('/weaknesses', (request, response) => {
+  response.send("Please choose a weakness!")
+});
+
+app.get('/weaknesses/:weakness', (request, response) => {
+
+  const input = request.params.weakness
+  let pokemon = []
+
+  //readFile is async, so all code inside of here
+  jsonfile.readFile(file, (err, obj) => {
+    //check for error first
+    if (err) {
+      return console.log(err)
+    }
+    //loop through pokemon
+    for (let i = 0; i < obj.pokemon.length; i++) {
+      for(let j = 0; j < obj.pokemon[i].weaknesses.length; j++)
+      //check if input matches a pokemon
+      if (input.toLowerCase() === obj.pokemon[i].weaknesses[j].toLowerCase()) {
+        pokemon.push(obj.pokemon[i].name)
+      }
+    }
+
+    //if pokemon has content, send it
+    if (pokemon) {
+      response.send(pokemon.join(`, `))
+    } else {
+      // if pokemon has no content, error message
+      response.status(404).send(`Could not find information about ${input} - Is that a new pokemon? Gotta catch em' all!`)
+    }
+    //end of readFile
+  })
 });
 
 /**
