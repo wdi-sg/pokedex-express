@@ -39,7 +39,7 @@ app.get('/pokemon/:name', (request, response) => {
     }
     //if pokemon has content, send it
     if (pokemon) {
-      response.send(pokemon)
+      response.send(`This is ${pokemon.name}. It weighs ${pokemon.weight} and has a height of ${pokemon.height} - Main Type: ${pokemon.type[0]} - Weakness: ${pokemon.weaknesses[0]}`)
     } else {
       // if pokemon has no content, error message
       response.status(404)
