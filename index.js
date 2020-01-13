@@ -55,6 +55,36 @@ app.get("/pokemon/:name", (request, response) => {
   });
 });
 
+app.get("/pokemon/type/:type", (request, response) => {
+  const typeParam = request.params.type.toLowerCase();
+  const foundType = [];
+  jsonfile.readFile(file, function(err, obj) {
+    const pokemonArray = obj["pokemon"];
+    for (let i = 0; i < pokemonArray.length; i++) {
+      const pokemon = pokemonArray[i];
+      const typeArray = pokemon["type"];
+      for (let j = 0; j < typeArray.length; j++) {
+        const type = typeArray[j].toLowerCase();
+        if (typeParam === type) {
+          foundType.push(pokemon["name"]);
+        }
+      }
+    }
+    const firstLetter = typeParam.charAt(0).toUpperCase();
+    const remainingLetters = typeParam.slice(1);
+    const joinTypeName = firstLetter.concat(remainingLetters);
+    if (foundType.length !== 0) {
+      response.send(`You searched for <b>${joinTypeName}</b>!
+    <p>Pokemon with ${typeParam} type:</p>
+    <p>${foundType.join(", ")}</p>`);
+    } else {
+      response.send(
+        `Didn't find any Pokemon with ${joinTypeName}! Are you sure you typed ${joinTypeName} correctly?`
+      );
+    }
+  });
+});
+
 /**
  * ===================================
  * Listen to requests on port 3000
