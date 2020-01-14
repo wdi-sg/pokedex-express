@@ -58,27 +58,27 @@ app.get('/pokemon/:name', (request, response) => {
       response.send(matchType);//always put it outside the "for loop" to prevent errors
     });
   });
-  
-  app.get('/weakness/:some_weakness', (request, response) => {
+  //Below doesn't work yet
+  app.get('/weaknesses/:some_weakness', (request, response) => {
     jsonfile.readFile(file, (err, obj) => {
-      let matchWeak = [];//array vs obj 
+      let matchWeak = [];
       for (let i=0; i<obj.pokemon.length; i++ ){
-          let currentWeak = obj.pokemon[i].weaknesses;// calling for current pokemon selected ie pokemon[i]. assign current pokemon type into an array
-          if (currentWeak.includes(request.params.some_weakness) === true) {//if type input in the browser includes any of the array index, . includes returns a value of true
-              matchWeak.push(obj.pokemon[i].name);//insert current string as the last item in the array that will be displayed
+          let currentWeak = obj.pokemon[i].weaknesses;
+          if (currentWeak.includes(request.params.some_weakness) === true) {
+              matchWeak.push(obj.pokemon[i].name);
           }
       }
-      response.send(matchWeak);//always put it outside the "for loop" to prevent errors
+      response.send(matchWeak);
     });
   });
   
   app.get('/next_evolution/:name', (request, response) => {
     jsonfile.readFile(file, (err, obj) => {
-      let matchEvolve = {};//array vs obj 
+      let matchEvolve = {}; 
       for (let i=0; i<obj.pokemon.length; i++ ){
-          let currentEvolve = obj.pokemon[i].next_evolution;// calling for current pokemon selected ie pokemon[i]. assign current pokemon weakness into an array
-          if (currentEvolve.includes(request.params.next_evolution) === true) {//if type input in the browser includes any of the array index, . includes returns a value of true
-              matchEvolve.push(obj.pokemon[i].name);//insert current string as the last item in the array
+          let currentEvolve = obj.pokemon[i].next_evolution
+          if (currentEvolve.includes(request.params.next_evolution) === true) {
+              matchEvolve.push(Array.pokemon[i].name);
           }
       }
       response.send(name);
