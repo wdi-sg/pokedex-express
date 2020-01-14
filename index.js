@@ -159,8 +159,6 @@ const listByWeakness = (request, response) => {
             }
         }
 
-        // console.log(resultsArray);
-
         if (resultsArray.length === 0) {
             console.log('not found weakness')
             response.status(401).send(`${pageHeader('401 Error!')} Error, ${inputWeakness} not found!${pageFooter()}`);
