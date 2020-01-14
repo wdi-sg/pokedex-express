@@ -19,7 +19,7 @@ const pageHeader = (pageTitle) => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-      <link rel="stylesheet" href="../style.css">
+      <link rel="stylesheet" href="/style.css">
       <title>${pageTitle}</title>
   </head>
   <body>
@@ -80,9 +80,9 @@ const returnPokemon = (pokemon) => {
     for (let i = 0; i < pokemon.type.length; i++) {
         // console.log(pokemon.type[i]);
         if (i === pokemon.type.length - 1) {
-            types += `<a href="../type/${pokemon.type[i]}">${pokemon.type[i]}</a>`;
+            types += `<a href="/type/${pokemon.type[i]}">${pokemon.type[i]}</a>`;
         } else {
-            types += `<a href="../type/${pokemon.type[i]}">${pokemon.type[i]}</a>, `;
+            types += `<a href="/type/${pokemon.type[i]}">${pokemon.type[i]}</a>, `;
         }
     }
     let responseString = `${pageHeader(name)}<div class="display-4">${name}</div>
@@ -92,6 +92,8 @@ const returnPokemon = (pokemon) => {
     <p>Weight: ${pokemon.weight}</p>${pageFooter()}`
     return responseString;
 }
+
+// sadjkhgfadsjhgfsjhgfsd
 
 
 const displayIndexPage = () => {
@@ -124,12 +126,12 @@ const listByType = (request, response) => {
 
         if (resultsArray.length === 0) {
             console.log('not found type')
-            response.status(401).send(`${pageHeader('401 Error!')}<div class="display-4">Error, ${inputType} not found!</div>${pageFooter()}`);
+            response.status(401).send(`${pageHeader('401')}<div class="display-4">Error, ${inputType} not found!</div>${pageFooter()}`);
             return;
         } else {
             let returnString = `<div class="display-4">${inputType} type</div><ul>`;
             for (const pokemon of resultsArray) {
-                returnString += `<li><a href="../pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
+                returnString += `<li><a href="/pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
             }
             returnString += "</ul>"
             response.send(`${pageHeader(inputType + ' type')}${returnString}${pageFooter()}`);
@@ -168,7 +170,7 @@ const listByWeakness = (request, response) => {
         } else {
             let returnString = `<div class="display-4">Weak to ${inputWeakness}</div><ul>`;
             for (const pokemon of resultsArray) {
-                returnString += `<li><a href="../pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
+                returnString += `<li><a href="/pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
             }
             returnString += "</ul>"
             response.send(`${pageHeader('Weak to ' + inputWeakness)}${returnString}${pageFooter()}`);
@@ -212,12 +214,12 @@ const listNextEvolution = (request, response) => {
                 response.send(`${pageHeader('No previous evolutions')}${inputPokemonName} has no previous evolutions.${pageFooter()}`);
                 return;
             }
-            response.status(401).send(`${pageHeader('401 Error')}<div class="display-4">Error, ${inputPokemonName} is not a pokemon!</div>${pageFooter()}`);
+            response.status(401).send(`${pageHeader('404 Error')}Could not find information about ${inputPokemonName} - Is that a new pokemon? Gotta catch em' all!${pageFooter()}`);
             return;
         } else {
             let returnString = `<div class="display-4">${inputPokemonName} evolves from</div><ul>`;
             for (const pokemon of resultsArray) {
-                returnString += `<li><a href="../pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
+                returnString += `<li><a href="/pokemon/${pokemon.name}">${pokemon.name}</a></li>`;
             }
             returnString += "</ul>"
             response.send(`${pageHeader(inputPokemonName + ' evolutions')}${returnString}${pageFooter()}`);
