@@ -10,7 +10,11 @@ app.get('/pokemon/:iden', (request, response) => {
         if (idenNum > 0) {
             let pokemon = obj.pokemon[idenNum-1];
             if (pokemon !==  undefined) {
-                response.send("<img src=" + pokemon.img + "><br>This is " + pokemon.name + "<br>It weights " + pokemon.weight + "<br>It is " + pokemon.height + " tall.<br>It is a " + pokemon.type + " Type");
+                if (pokemon.next_evolution[0]    !== undefined) {
+                    response.send("<img src=" + pokemon.img + "><br>This is " + pokemon.name + "<br>It weights " + pokemon.weight + "<br>It is " + pokemon.height + " tall.<br>It is a " + pokemon.type + " Type<br>It evolves into <a href='./" + pokemon.next_evolution[0].name + "'>" + pokemon.next_evolution[0].name + "</a>");
+                } else {
+                    response.send("<img src=" + pokemon.img + "><br>This is " + pokemon.name + "<br>It weights " + pokemon.weight + "<br>It is " + pokemon.height + " tall.<br>It is a " + pokemon.type + " Type");
+                } // end of else
             } else {
                 response.redirect(301, "/");
             } //else 1 close
@@ -20,7 +24,11 @@ app.get('/pokemon/:iden', (request, response) => {
             let count = 0;
             for (i = 0; i < pokedex.length; i++) {
                 if (iden.toLowerCase() == pokedex[i].name.toLowerCase()) {
-                    response.send("Name : " + pokedex[i].name + "<br>Weight : " + pokedex[i].weight);
+                    if (pokedex[i].next_evolution !== undefined) {
+                        response.send("<img src=" + pokedex[i].img + "><br>This is " + pokedex[i].name + "<br>It weights " + pokedex[i].weight + "<br>It is " + pokedex[i].height + " tall.<br>It is a " + pokedex[i].type + " Type<br>It evolves into <a href='./" + pokedex[i].next_evolution[0].name + "'>" + pokedex[i].next_evolution[0].name + "</a>");
+                    } else {
+                        response.send("<img src=" + pokedex[i].img + "><br>This is " + pokedex[i].name + "<br>It weights " + pokedex[i].weight + "<br>It is " + pokedex[i].height + " tall.<br>It is a " + pokedex[i].type + " Type");
+                    }
                 } else {
                     count++
                 }
