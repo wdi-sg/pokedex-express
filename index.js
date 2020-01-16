@@ -58,7 +58,7 @@ app.get('/pokemon/:name', (request, response) => {
       response.send(matchType);//always put it outside the "for loop" to prevent errors
     });
   });
-  
+
   app.get('/weaknesses/:some_weakness', (request, response) => {
     jsonfile.readFile(file, (err, obj) => {
       let matchWeak = [];
@@ -75,7 +75,7 @@ app.get('/pokemon/:name', (request, response) => {
   app.get('/next_evolution/:name', (request, response) => {
     jsonfile.readFile(file, (err, obj) => {
       let matchEvolve = {}; 
-      for (let i=0; i<obj.pokemon.length; i++ ){
+      for (let i=0; i<obj.pokemon.length; i++ );{
         let currentEvolve = obj.pokemon[i].next_evolution;
         console.log("evolve");
         for (let i=0; i<(obj.pokemon.next_evolution).length; i++);
@@ -83,7 +83,7 @@ app.get('/pokemon/:name', (request, response) => {
               matchEvolve.push(Array.pokemon[i].name);
           }
       }
-      response.send(name);
+      response.send(matchEvolve);
     });
   });
  /* ===================================
