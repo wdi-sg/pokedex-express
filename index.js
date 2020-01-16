@@ -58,7 +58,7 @@ app.get('/pokemon/:name', (request, response) => {
       response.send(matchType);//always put it outside the "for loop" to prevent errors
     });
   });
-  //Below doesn't work yet
+  
   app.get('/weaknesses/:some_weakness', (request, response) => {
     jsonfile.readFile(file, (err, obj) => {
       let matchWeak = [];
