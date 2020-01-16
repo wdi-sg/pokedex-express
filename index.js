@@ -75,13 +75,15 @@ app.get('/pokemon/:name', (request, response) => {
   app.get('/next_evolution/:name', (request, response) => {
     jsonfile.readFile(file, (err, obj) => {
       let matchEvolve = {}; 
-      for (let i=0; i<obj.pokemon.length; i++ );{
-        let currentEvolve = obj.pokemon[i].next_evolution;
-        console.log("evolve");
-        for (let i=0; i<(obj.pokemon.next_evolution).length; i++);
+      for (let i=0; i<obj.pokemon.length; i++ ) {
+        if (obj.pokemon[i].name.toLowerCase() === request.params.name.toLowerCase()){
+          let currentEvolve = obj.pokemon[i].next_evolution;
+            console.log(currentEvolve);
+          for (let j=0; j<(obj.pokemon[i].next_evolution).length; j++);
           if (currentEvolve.includes(request.params.next_evolution) === true) {
               matchEvolve.push(Array.pokemon[i].name);
           }
+        }
       }
       response.send(matchEvolve);
     });
