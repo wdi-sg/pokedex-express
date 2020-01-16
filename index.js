@@ -76,7 +76,9 @@ app.get('/pokemon/:name', (request, response) => {
     jsonfile.readFile(file, (err, obj) => {
       let matchEvolve = {}; 
       for (let i=0; i<obj.pokemon.length; i++ ){
-          let currentEvolve = obj.pokemon[i].next_evolution
+        let currentEvolve = obj.pokemon[i].next_evolution;
+        console.log("evolve");
+        for (let i=0; i<(obj.pokemon.next_evolution).length; i++);
           if (currentEvolve.includes(request.params.next_evolution) === true) {
               matchEvolve.push(Array.pokemon[i].name);
           }
