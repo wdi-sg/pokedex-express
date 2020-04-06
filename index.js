@@ -27,16 +27,18 @@ app.get('/pokemon/:name', (request, response) => {
   jsonfile.readFile(allPokemon, (err, obj) => {
     let i = 0;
     let pokemonWeight;
+    let pokemonType = [];
     while(i < obj.pokemon.length){
       if(obj.pokemon[i].name.toLowerCase() === request.params.name){
         pokemonWeight = obj.pokemon[i].weight;
+        pokemonType = obj.pokemon[i].type;
       }
       i++
     }
     if(pokemonWeight === undefined){
       response.status(404).send("Could not find information about " + request.params.name + " - Is that a new pokemon? Gotta catch em' all!");
     }else {
-      response.send("Weight of " + request.params.name + " = " + pokemonWeight);
+      response.send(`This is ${request.params.name}!, he weighs ${pokemonWeight} in weight! He has a type of ${pokemonType}`);
     }
   });
 
