@@ -29,7 +29,11 @@ app.get('/pokemon/:name', (request, response) => {
       }
       i++
     }
-    response.send("Weight of " + request.params.name + " = " + pokemonWeight);
+    if(pokemonWeight === undefined){
+      response.status(404).send("Could not find information about " + request.params.name + " - Is that a new pokemon? Gotta catch em' all!");
+    }else {
+      response.send("Weight of " + request.params.name + " = " + pokemonWeight);
+    }
   });
 
 });
