@@ -129,10 +129,83 @@ app.get('/pokemon/:id', (request, response) => {
 });
 
 
-app.get('/type/:typing', (request, response) => {
+app.get('/type/*', (request, response) => {
   // send response with some data (a string)
+  let something=[];
+let someArray=[];
+  jsonfile.readFile(file, (err, obj) => {
+    let pokemonCount=0;
+    let weaknessCount=0;
+    let pokemonTypeCount=0;
+    let pokeType=false;
+    let checkPoke=true;
+    let newOutputString="";
+    let outputString="";
+    let typeCollect=request.params[0].split("/");
+    something=xpermute(typeCollect);
+    something=something.filter((item,index)=>something.indexOf(item)===index);
+    console.log(something);
+    for(let i=0; i<something.length;i++)
+    {
+        let somevalue=something[i].split("_");
+        somevalue.shift();
+        someArray.push(somevalue);
+
+    }
+    //console.log(someArray);
+
+    for(let outerloop=0; outerloop<someArray.length; outerloop++)
+    {
+        newOutputString+="<ol>Pokemons with type/s for "
+        for(let innerloop=0; innerloop<someArray[outerloop].length; innerloop++)
+        {
+            newOutputString +=someArray[outerloop][innerloop]+", ";
+        }
 
 
+        for(pokemonCount=0;pokemonCount<obj["pokemon"].length;pokemonCount++)
+            {
+        //console.log("something happened");
+        let check=0;
+                for(pokemonTypeCount=0;pokemonTypeCount<obj["pokemon"][pokemonCount]["type"].length;pokemonTypeCount++)
+                        {
+                            let checkPoke=true;
+
+                            let innerloop=0;
+                            for(innerloop=0; innerloop<someArray[outerloop].length; innerloop++)
+                                {
+                                    if(someArray[outerloop][innerloop]===obj["pokemon"][pokemonCount]["type"][pokemonTypeCount])
+                                    {
+                                        pokeType=true;
+                                        checkPoke=true;
+                                        check++;
+
+                                    }
+                                    else
+                                    {
+                                        checkPoke=false
+                                    }
+                                }
+                                console.log(check);
+
+                        }
+                        if(check===someArray[outerloop].length){
+                                    newOutputString += `<li>${obj["pokemon"][pokemonCount]["name"]}</li>`;
+                                }
+                }
+                newOutputString+=`</ol>`
+        console.log(newOutputString);
+    }
+
+    if(pokeType){
+                response.send(newOutputString);
+                return;
+            }
+    else
+                {
+                    response.send("There are no such Type");
+                }
+/*
   jsonfile.readFile(file, (err, obj) => {
     let pokemonCount=0;
     let typeCount=0;
@@ -160,7 +233,7 @@ app.get('/type/:typing', (request, response) => {
 
     response.send("No pokemon has this type");
                         return;
-
+*/
     });
 });
 
@@ -244,34 +317,7 @@ let someArray=[];
                 {
                     response.send("There are no such weaknesses");
                 }
-   // console.log(weaknessCollect);
-    //console.log(obj["pokemon"][1]["weaknesses"][1])
-  /*  for(weaknessCount=0;weaknessCount<weaknessCollect.length;weaknessCount++)
-    {
-        outputString+=`<ol>${weaknessCollect[weaknessCount]}`
 
-            for(pokemonCount=0;pokemonCount<obj["pokemon"].length;pokemonCount++)
-            {
-        //console.log("something happened");
-                for(pokemonWeaknessCount=0;pokemonWeaknessCount<obj["pokemon"][pokemonCount]["weaknesses"].length;pokemonWeaknessCount++)
-                        {
-                            if(weaknessCollect[weaknessCount]===obj["pokemon"][pokemonCount]["weaknesses"][pokemonWeaknessCount])
-                            {
-                                outputString += `<li>${obj["pokemon"][pokemonCount]["name"]}</li>`;
-                                weakType=true;
-                            }
-                        }
-
-                }
-                outputString+=`</ol>`;
-        }
-        if(weakType){
-                response.send(outputString);
-                return;}
-                else
-                {
-                    response.send("There are no such weaknesses");
-                }*/
 
 
     });
