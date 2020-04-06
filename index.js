@@ -130,7 +130,7 @@ app.get('/nextevolution/:end', (req, res) => {
 
 app.get('*', (req, res) => {
   // send res with some data (a string)
-  res.send("Welcome to the online Pokedex! You might want to try <a href='list'>browsing the main list</a>");
+  res.send("Welcome to the online Pokedex! You might want to try <a href='list'>browsing the main list</a>!");
 });
 
 /**
