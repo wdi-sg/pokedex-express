@@ -22,23 +22,29 @@ app.get('/pokemon', (request, response) => {
     response.send("Welcome to the Pokedex!\n Start by entering a number like so : pokemon/2");
 });
 
-app.get("/pokemon/:id", (request, response) => {
-    const editStuff = (err, obj) => {
-        var pokeId = parseInt(request.params.id) - 1;
-        var pokemon = obj.pokemon[pokeId].name;
-        response.send('Your chosen pokemon is ' + pokemon)
+app.get("/pokemon/:name", (request, response) => {
+    const readPokedex = (err, obj) => {
+        var pokemonCount = obj.pokemon.length;
+        var pokeName = request.params.name;
+        pokeName = pokeName.substring(0,1).toUpperCase() + pokeName.substring(1).toLowerCase();
+        for(let i = 0; i < pokemonCount; i++){
+          if(obj.pokemon[i].name == pokeName){
+            var pokeWeight = obj.pokemon[i].weight;
+          }
+        }
+        response.send(`You have chosen ${pokeName} and it weighs ${pokeWeight}`)
         const doneReading = (err) => {
-            console.log('done editing')
+            console.log('done reading')
         }
         jsonfile.writeFile(pokedex, obj, doneReading)
     };
 
-    jsonfile.readFile(pokedex, editStuff);
+    jsonfile.readFile(pokedex, readPokedex);
     console.log("file read called");
 });
 
 // app.get('*', (request, response) => {
-    // send response with some data (a string)
+// send response with some data (a string)
 //     response.send(request.path);
 // });
 
