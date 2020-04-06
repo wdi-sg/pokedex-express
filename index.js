@@ -31,11 +31,11 @@ app.get('/pokemon', (request, response) => {
 app.get('/type', (request, response) => {
   response.send('Welcome to the online Pokdex!')
 });
-/*
+
 app.get('/weaknesses', (request, response) => {
   response.send('Welcome to the online Pokdex!')
 });
-*/
+
 app.get('/nextevolution', (request, response) => {
   response.send('Welcome to the online Pokdex!')
 });
@@ -164,6 +164,50 @@ app.get('/weaknesses/*', (request, response) => {
                 }
 
 
+    });
+});
+
+app.get('/nextevolution/:pokemon', (request, response) => {
+  // send response with some data (a string)
+
+
+  jsonfile.readFile(file, (err, obj) => {
+    let pokemonCount=0;
+    let evolutionChain=0;
+    let PokeExist=false;
+    let EvolveExist=false;
+    let outputString=`<ol>The evolution chain of ${request.params.pokemon} is`;
+
+        for(pokemonCount=0;pokemonCount<obj["pokemon"].length;pokemonCount++)
+        {
+
+                    if(request.params.pokemon===obj["pokemon"][pokemonCount]["name"])
+                    {
+                        PokeExist=true;
+                        for(const key in obj["pokemon"][pokemonCount])
+                        {
+                            console.log(key);
+                            if(key==="next_evolution")
+                            {
+                                for(evolutionChain=0;evolutionChain<obj["pokemon"][pokemonCount]["next_evolution"].length;evolutionChain++)
+                                {
+                                    outputString+=`<li>${obj["pokemon"][pokemonCount]["next_evolution"][evolutionChain].name}</li>`;
+                                }
+                                outputString+="</ol">
+                                response.send(outputString);
+                                return;
+
+                            }
+
+                        }
+                    }
+        }
+        if(PokeExist){
+            response.send(`There is no evolution for ${request.params.pokemon}`);
+                                return;
+        }
+        response.send(`No such pokemon as ${request.params.pokemon}`);
+        return;
     });
 });
 
