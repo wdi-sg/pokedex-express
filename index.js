@@ -20,9 +20,22 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
+app.get('/list', (req, res) => {
+  let results = [];
+  for (let i = 0; i < pokedex.length; i++) {
+    let mon = pokedex[i].name;
+    results.push(`<a href="pokemon/${mon.toLowerCase()}">${mon}</a>`);
+  }
+  res.send(results.join("<br>"));
+});
+
+app.get('/pokemon/:name', (req, res) => {
+  res.send(`pokemon: ${req.params.name} ${req.path}`);
+});
+
+app.get('*', (req, res) => {
+  // send res with some data (a string)
+  res.send(req.path);
 });
 
 /**
