@@ -18,9 +18,15 @@ app.get("/pokemon/:name", (request, response) => {
     if (matchingPokemonObj === undefined) {
       response.status(404).send("Could not find information about " + request.params.name + " - Is that a new pokemon? Gotta catch em' all!");
     } else {
-      response.send(request.params.name + " weight: " + matchingPokemonObj.weight);
+      // response.send(request.params.name + " weight: " + matchingPokemonObj.weight);
+      console.log(matchingPokemonObj);
+      response.send(matchingPokemonObj);
     }
   });
+});
+
+app.get("*", (request, response) => {
+  response.send("Welcome to the online Pokedex!");
 });
 
 app.listen(3000, () => {
