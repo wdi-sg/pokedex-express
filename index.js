@@ -2,18 +2,11 @@ const express = require('express');
 
 const jsonfile = require('jsonfile');
 const pokedex = 'pokedex.json';
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
+
 // Init express app
 const app = express();
-/**
- * ===================================
- * Routes
- * ===================================
- */
+const allTypes = ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'];
+
 app.get('/', (request, response) => {
     response.send('Hello! Go to ../pokemon for more.');
 });
@@ -24,14 +17,16 @@ app.get('/pokemon', (request, response) => {
 
 app.get("/pokemon/:name", (request, response) => {
     const readPokedex = (err, obj) => {
-        var pokemonCount = obj.pokemon.length;
-        var pokeName = request.params.name;
-        pokeName = pokeName.substring(0,1).toUpperCase() + pokeName.substring(1).toLowerCase();
-        for(let i = 0; i < pokemonCount; i++){
-          if(obj.pokemon[i].name == pokeName){
-            var pokeWeight = obj.pokemon[i].weight;
-            response.send(`You have chosen ${pokeName} and it weighs ${pokeWeight}`)
-          }
+        let pokemonCount = obj.pokemon.length;
+        let pokeName = request.params.name;
+        pokeName = pokeName.substring(0, 1).toUpperCase() + pokeName.substring(1).toLowerCase();
+        for (let i = 0; i < pokemonCount; i++) {
+            if (obj.pokemon[i].name == pokeName) {
+                let pokeWeight = obj.pokemon[i].weight;
+                let pokeHeight = obj.pokemon[i].height;
+                let pokeImage = obj.pokemon[i].img;
+                response.send(`<img src = ${pokeImage}> <div>You have chosen ${pokeName}! It weight ${pokeWeight} and is ${pokeHeight} tall!</div>`)
+            }
         }
         const doneReading = (err) => {
             response.status(404)
@@ -41,6 +36,93 @@ app.get("/pokemon/:name", (request, response) => {
     };
 
     jsonfile.readFile(pokedex, readPokedex);
+    console.log("file read called");
+});
+
+app.get("/type/:typeName", (request, response) => {
+    const readType = (err, obj) => {
+        let pokemonList = [];
+        let pokemonCount = obj.pokemon.length;
+        let pokeType = request.params.typeName;
+        pokeType = pokeType.substring(0, 1).toUpperCase() + pokeType.substring(1).toLowerCase();
+        for (let i = 0; i < allTypes.length; i++) {
+            if (pokeType == allTypes[i]) {
+                for (let j = 0; j < pokemonCount; j++) {
+                    for (let k = 0; k < obk.pokemon[j].type.length; k++) {
+                        if (obj.pokemon[j].type[k] == pokeType) {
+                            pokemonList.push(`<li>${obj.pokemon[j].name}</li>`)
+                        }
+                    }
+                }
+                response.send(`You have chosen ${pokeType} and the following pokemon has ${pokeType} as its type. \n ${pokemonList}`)
+            }
+        }
+        const doneReading = (err) => {
+            response.status(404)
+            response.send(`${pokeType} is not a valid type!`)
+        }
+        jsonfile.writeFile(pokedex, obj, doneReading)
+    };
+
+    jsonfile.readFile(pokedex, readType);
+    console.log("file read called");
+});
+
+app.get("/weakness/:weakness", (request, response) => {
+    const readType = (err, obj) => {
+        let pokemonList = [];
+        let pokemonCount = obj.pokemon.length;
+        let pokeWeakness = request.params.weakness;
+        pokeWeakness = pokeWeakness.substring(0, 1).toUpperCase() + pokeWeakness.substring(1).toLowerCase();
+        for (let i = 0; i < allTypes.length; i++) {
+            if (pokeWeakness == allTypes[i]) {
+                for (let j = 0; j < pokemonCount; j++) {
+                    for (let k = 0; k < obj.pokemon[j].weaknesses.length; k++) {
+                        if (obj.pokemon[j].weaknesses[k] == pokeWeakness) {
+                            pokemonList.push(`<li>${obj.pokemon[j].name}</li>`)
+                        }
+                    }
+                }
+                response.send(`You have chosen ${pokeWeakness} and the following pokemon are weak to ${pokeWeakness }. \n ${pokemonList}`)
+            }
+        }
+        const doneReading = (err) => {
+            response.status(404)
+            response.send(`${pokeWeakness} is not a valid type!`)
+        }
+        jsonfile.writeFile(pokedex, obj, doneReading)
+    };
+
+    jsonfile.readFile(pokedex, readType);
+    console.log("file read called");
+});
+
+app.get("/nextevolution/:name", (request, response) => {
+    const readType = (err, obj) => {
+        let pokemonList = [];
+        let pokemonCount = obj.pokemon.length;
+        let pokeName = request.params.name;
+        pokeName = pokeName.substring(0, 1).toUpperCase() + pokeName.substring(1).toLowerCase();
+        for (let i = 0; i < pokemonCount; i++) {
+            if (obj.pokemon[i].name == pokeName) {
+                if (obj.pokemon[i].next_evolution) {
+                    for (let j = 0; j < obj.pokemon[i].next_evolution.length; j++) {
+                        pokemonList.push(`<li>${obj.pokemon[i].next_evolution[j].name}</li>`)
+                    }
+                } else {
+                    response.send(`${pokeName} does not have an evolution!`)
+                }
+            }
+        }
+        response.send(`You have chosen ${pokeName} its next evolutions are: \n ${pokemonList}`)
+        const doneReading = (err) => {
+            response.status(404)
+            response.send(`Could not find information about ${pokeName}!`)
+        }
+        jsonfile.writeFile(pokedex, obj, doneReading)
+    };
+
+    jsonfile.readFile(pokedex, readType);
     console.log("file read called");
 });
 
