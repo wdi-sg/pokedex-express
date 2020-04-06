@@ -56,7 +56,9 @@ app.get("/pokemon/:name", (request, response) => {
   }
   else {
     var properName = toProperCase(request.params.name);
+    response.status(404);
     response.send(`Could not find information about ${properName} - Is that a new pokemon? Gotta catch em' all!`);
+    
   }
 
 });
