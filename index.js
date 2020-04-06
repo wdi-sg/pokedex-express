@@ -35,7 +35,7 @@ app.get('/pokemon/:name', (req, res) => {
 
 app.get('*', (req, res) => {
   // send res with some data (a string)
-  res.send(req.path);
+  res.send("Welcome to the online Pokedex! You might want to try <a href='list'>browsing the main list</a>");
 });
 
 /**
