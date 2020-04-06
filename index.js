@@ -57,6 +57,23 @@ app.get('/pokemon/:name', (req, res) => {
   res.send(monFormat.join('<br>'));
 });
 
+app.get('/type/:type', (req, res) => {
+  let results = [];
+
+  for (let mon of pokedex) {
+    let monType = mon.type.map(ele => ele.toLowerCase());
+    console.log(monType);
+    if (monType.includes(req.params.type.toLowerCase())) {
+      results.push(mon);
+    }
+  }
+
+  results = results.map(function (mon) {
+    return `<a href='../pokemon/${mon.name.toLowerCase()}'>${mon.num}: ${mon.name}</a>`;
+  });
+  res.send(results.join('<br>'));
+});
+
 app.get('*', (req, res) => {
   // send res with some data (a string)
   res.send("Welcome to the online Pokedex! You might want to try <a href='list'>browsing the main list</a>");
