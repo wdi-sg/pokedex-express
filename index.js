@@ -17,6 +17,8 @@ jsonfile.readFile(pokedex, (error, obj) => {
         for (i=0;i<obj["pokemon"].length; i++){
             if(obj["pokemon"][i].name === request.params.pokemonName ){
                 response.send(obj["pokemon"][i]);
+            }else {
+                response.status(404).send("Could not find information about " + request.params.pokemonName + " - Is that a new pokemon? Gotta catch em' all!");
             }
         }
 
