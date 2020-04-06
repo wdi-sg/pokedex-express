@@ -31,24 +31,32 @@ app.get('/pokemon/:pokemon', (request, response) => {
     const file = './pokedex.json'
     // find the type of pokemon from pokedex
     jsonfile.readFile(file, (err, obj) => {
+        let pokemonArray = obj.pokemon;
+
         let foundPokemon = false;
+
         for (let i = 0; i < obj.pokemon.length; i++) {
-            if (obj.pokemon[i].name.toLowerCase() == pokemonName){
+            if (pokemonArray[i].name.toLowerCase() == pokemonName){
                 foundPokemon = true;
-                response.send(obj.pokemon[i].weight);
+                response.send(
+                    `
+                    This is ${pokemonArray[i].name}, he is ${pokemonArray[i].weight} in weight and ${pokemonArray[i].height} in height.
+
+                    `
+                );
             }
         }
 
         if(!foundPokemon){
             response.status(404).send(`Could not find information about ${pokemonName} - Is that a new pokemon? Gotta catch em' all!`);
         }
-
-
     })
 })
 
-app.get('/pokemon/')
 
+app.get('/', (request,response) => {
+   response.send('Welcome to the online pokedex');
+})
 
 app.get('*', (request, response) => {
   // send response with some data (a string)
