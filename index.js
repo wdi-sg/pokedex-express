@@ -17,6 +17,10 @@ const app = express();
  * ===================================
  */
 
+app.get('/pokemon', (request, response) =>{
+  response.send("Welcome to the online Pokedex!");
+})
+
 app.get('/pokemon/:name', (request, response) => {
   // send response with some data (a string)
 
