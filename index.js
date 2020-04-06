@@ -1,14 +1,17 @@
-const express = require('express');
-
-// const jsonfile = require('jsonfile');
-
 /**
  * ===================================
  * Configurations and set up
  * ===================================
  */
+const jsonfile = require('jsonfile');
+const file = 'pokedex.json';
+let pokedex = [];
+let filePromise = jsonfile.readFile(file).then((obj) => {
+  console.log("get!");
+  pokedex = obj.pokemon;
+});
 
-// Init express app
+const express = require('express');
 const app = express();
 
 /**
