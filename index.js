@@ -3,11 +3,6 @@ const express = require('express');
 const jsonfile = require('jsonfile');
 const file = 'pokedex.json';
 
-    // jsonfile.readFile(file, (err, obj) => {
-    //     console.log(obj.pokemon.length);
-    // });
-
-
 /**
  * ===================================
  * Configurations and set up
