@@ -1,30 +1,114 @@
 const express = require('express');
-
-// const jsonfile = require('jsonfile');
-
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
-
-// Init express app
+const jsonfile = require('jsonfile');
 const app = express();
+const file = "pokedex.json"
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
+//search for pokemon
+app.get('/pokemon/search', (request, response) => {
+  //allows case-insensitive entry
+  var smallLetter = request.query.q.toLowerCase();
+  var capsFirst = smallLetter.charAt(0).toUpperCase();
+  var combined = capsFirst+smallLetter.slice(1);
+  //flags if search for pokemon name turns up negative
+  var search = false;
+  jsonfile.readFile(file, function(err,obj){
+    for (var i = 0; i < obj["pokemon"].length; i++){
+      if (obj["pokemon"][i]["name"] === combined){
+        response.write(`
+          Name: ${obj["pokemon"][i]["name"]} <br>
+          Height: ${obj["pokemon"][i]["height"]} <br>
+          Weight: ${obj["pokemon"][i]["weight"]} <br>
+          Weaknesses: ${obj["pokemon"][i]["weaknesses"]} <br>
+          Type: ${obj["pokemon"][i]["type"]} <br>
+          This is ${obj["pokemon"][i]["name"]}, it weighs ${obj["pokemon"][i]["weight"]} and stands at ${obj["pokemon"][i]["height"]}. Its weaknesses are ${obj["pokemon"][i]["weaknesses"]}.
+        `);
+        response.end();
+        search = true;
+      }
+    }
+    if (combined === ""){
+      response.send(`Welcome to the online Pokedex!`)
+      search = true;
+    }
+    if (!search){
+      response.status(404).send(
+        `Could not find information about ${request.query.q} - Is that a new pokemon? Gotta catch em' all!`
+      );
+    }
+  });
+})
+//searching pokemon by type
+app.get('/type/:type',(request,response)=>{
+  var smallLetter = request.params.type.toLowerCase();
+  var capsFirst = smallLetter.charAt(0).toUpperCase();
+  var combined = capsFirst+smallLetter.slice(1);
+  jsonfile.readFile(file, function(err,obj){
+    for (var i = 0; i < obj["pokemon"].length; i++){
+      for (var j = 0; j < obj["pokemon"][i]["type"].length; j++){
+        if (obj["pokemon"][i]["type"][j] === combined){
+          response.write(`${obj["pokemon"][i]["name"]}<br>`)
+        }
+      }
+    }
+    response.end();
+  });
+})
+//searching pokemon by weakness
+app.get('/weakness/:weakness',(request,response)=>{
+  var smallLetter = request.params.weakness.toLowerCase();
+  var capsFirst = smallLetter.charAt(0).toUpperCase();
+  var combined = capsFirst+smallLetter.slice(1);
+  jsonfile.readFile(file, function(err,obj){
+    for (var i = 0; i < obj["pokemon"].length; i++){
+      for (var j = 0; j < obj["pokemon"][i]["weaknesses"].length; j++){
+        if (obj["pokemon"][i]["weaknesses"][j] === combined){
+          response.write(`${obj["pokemon"][i]["name"]}<br>`)
+        }
+      }
+    }
+    response.end();
+  });
+})
+//search for pokemon's next evolution, return final evolution if there is no further
+app.get('/nextevolution/:evolve',(request,response)=>{
+  var smallLetter = request.params.evolve.toLowerCase();
+  var capsFirst = smallLetter.charAt(0).toUpperCase();
+  var combined = capsFirst+smallLetter.slice(1);
+  jsonfile.readFile(file, function(err,obj){
+    for (var i = 0; i < obj["pokemon"].length; i++){
+      if (obj["pokemon"][i]["name"] === combined){
+        if (obj["pokemon"][i]["next_evolution"]){
+          for (var j = 0; j < obj["pokemon"][i]["next_evolution"].length; j++){
+            response.write(`${obj["pokemon"][i]["next_evolution"][j]["name"]} <br>`);
+          }
+        }else {
+          response.write(`${obj["pokemon"][i]["name"]} is in its final form!`)
+        }
+      }
+    }
+    response.end();
+  });
+})
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
-});
+//search for pokemon's previous evolution, return no evolution if pokemon is a starter
+app.get('/previousevolution/:evolve',(request,response)=>{
+  var smallLetter = request.params.evolve.toLowerCase();
+  var capsFirst = smallLetter.charAt(0).toUpperCase();
+  var combined = capsFirst+smallLetter.slice(1);
+  jsonfile.readFile(file, function(err,obj){
+    for (var i = 0; i < obj["pokemon"].length; i++){
+      if (obj["pokemon"][i]["name"] === combined){
+        if (obj["pokemon"][i]["prev_evolution"]){
+          for (var j = 0; j < obj["pokemon"][i]["prev_evolution"].length; j++){
+            response.write(`${obj["pokemon"][i]["prev_evolution"][j]["name"]} <br>`);
+          }
+        }else {
+          response.write(`${obj["pokemon"][i]["name"]} is in its starter form!`)
+        }
+      }
+    }
+    response.end();
+  });
+})
 
-/**
- * ===================================
- * Listen to requests on port 3000
- * ===================================
- */
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
