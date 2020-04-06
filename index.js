@@ -26,7 +26,9 @@ jsonfile.readFile(pokedex, (error, obj) => {
 });
 // Init express app
 
-
+app.get('/pokemon/', (request, response) => {
+    response.send("Welcome to the online Pokedex");
+});
 
 
 /**
