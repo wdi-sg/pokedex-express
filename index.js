@@ -30,6 +30,8 @@ const pokedex = 'pokedex.json'
                     <h2>${pokemonList[i].type.join(', ')}</h2>
                     <img src='${pokemonList[i].img}'>
                     `);
+            } else {
+                response.status(404).send(`Could not find information about ${request.params[0]} - Is that a new pokemon? Gotta catch em' all!`);
             }
         }
      });
