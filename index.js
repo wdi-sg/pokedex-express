@@ -53,6 +53,11 @@ app.get('/pokemon/:name', (req, res) => {
     `<img src=${mon.img}>`,
     `This is Pokemon #${mon.num}, ${mon.name}!`,
     `They are of type(s): ${[...mon.type].join(', ')}`,
+    `They are weak against Pokemon of these type(s): ${mon.weaknesses.join(', ')}`,
+    `They are known to grow to ${mon.height} and weigh ${mon.weight} fully grown.`,
+    mon.candy === "None" ? `${mon.name} don't really like candy.` : `${mon.name} love ${mon.candy}!`,
+    mon.egg === "Not in Eggs" ? `They are not in eggs.` : `Their eggs take ${mon.egg} to hatch.`,
+    mon.next_evolution ? `They'll evolve into ${mon.next_evolution[0].name}!` : `They don't have any evolutions.`,
   ];
   res.send(monFormat.join('<br>'));
 });
