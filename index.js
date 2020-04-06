@@ -200,6 +200,10 @@ app.get('/nextevolution/:query', (req, res) => {
     })
 });
 
+app.get('*', (req,res) => {
+  res.send(`Welcome to the online Pokedex!`)
+})
+
 /**
  * ===================================
  * Listen to requests on port 3000
