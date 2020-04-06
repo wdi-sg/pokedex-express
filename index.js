@@ -26,7 +26,7 @@ app.get('/list', (req, res) => {
     let mon = pokedex[i];
     results.push(`<a href='pokemon/${mon.name.toLowerCase()}'>${mon.num}: ${mon.name}</a>`);
   }
-  res.send(results.join("<br>"));
+  res.send(results.join('<br>'));
 });
 
 app.get('/pokemon/:name', (req, res) => {
