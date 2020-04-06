@@ -36,6 +36,17 @@ app.get("/type/:sometype", (request, response) => {
   });
 });
 
+app.get("/weaknesses/:someweakness", (request, response) => {
+  jsonFile.readFile(dataFile, (err, obj) => {
+    let matchingPokemonArr = obj[POKEMON].filter((element) => {
+      for (let i = 0; i < element.weaknesses.length; i++) {
+        return element.weaknesses[i].toLowerCase() === request.params.someweakness.toLowerCase();
+      }
+    });
+    response.send(matchingPokemonArr.map(element => element.name));
+  });
+});
+
 app.get("*", (request, response) => {
   response.send("Welcome to the online Pokedex!");
 });
