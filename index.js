@@ -30,11 +30,12 @@ app.get("/pokemon/:name", (request, response) => {
         for(let i = 0; i < pokemonCount; i++){
           if(obj.pokemon[i].name == pokeName){
             var pokeWeight = obj.pokemon[i].weight;
+            response.send(`You have chosen ${pokeName} and it weighs ${pokeWeight}`)
           }
         }
-        response.send(`You have chosen ${pokeName} and it weighs ${pokeWeight}`)
         const doneReading = (err) => {
-            console.log('done reading')
+            response.status(404)
+            response.send(`Could not find information about ${pokeName} - Is that a new pokemon? Gotta catch em' all!`)
         }
         jsonfile.writeFile(pokedex, obj, doneReading)
     };
