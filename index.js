@@ -44,6 +44,8 @@ app.get('/pokemon/:name', (req, res) => {
       "There seems to be more than one Pokemon with a name like that!\n" +
       "Did you want one of these?");
     res.send(results.join('<br>'));
+  } else if (results.length ===0) {
+    res.status(404).send(`Could not find information about ${req.params.name[0].toUpperCase()}${req.params.name.slice(1)} - is that a new Pokemon? Gotta catch 'em all!`);
   }
 
   let mon = results[0];
