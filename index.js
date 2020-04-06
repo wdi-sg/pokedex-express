@@ -30,7 +30,16 @@ app.get('/list', (req, res) => {
 });
 
 app.get('/pokemon/:name', (req, res) => {
-  res.send(`pokemon: ${req.params.name} ${req.path}`);
+  let mon = pokedex.filter((mon) => mon.name.toLowerCase() === req.params.name.toLowerCase());
+  mon = mon[0];
+  let monEvoFrom = mon.prev_evolution ? mon.prev_evolution : "";
+  let monEvoTo = mon.next_evolution ? mon.next_evolution : "";
+  let monFormat = [
+    `<img src=${mon.img}>`,
+    `This is Pokemon #${mon.num}, ${mon.name}!`,
+    `They are of type(s): ${[...mon.type].join(', ')}`,
+  ];
+  res.send(monFormat.join('<br>'));
 });
 
 app.get('*', (req, res) => {
