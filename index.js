@@ -27,12 +27,14 @@ const getPokeLinks = function(arr) {
 };
 
 //Returns an HTML list of items from an array.
-const generateUl = (arr) => {
+const generateUl = (arr, kind) => {
     let output = "<ul>";
     arr.forEach((item) => {
-        output += `<li> ${item}</li>`
+      if (kind===`type`) {
+        output += `<li><a href="/type/${item}">${item}</a></li>`
+      } else if (kind==='weakness')
+        output += `<li><a href="/weakness/${item}">${item}</a></li>`
     })
-
     output += "</ul>"
     return output;
 }
@@ -77,8 +79,8 @@ app.get('/pokemon/:name', (req, res) => {
             output = `<h1>${query}</h1> <img src="${result.img}"/> <p>${query} is ${result.height} tall and ${result.weight}! What a cutie.`
 
             //Generate lists of types/weaknesses.
-            const types = generateUl(result.type);
-            const weaknesses = generateUl(result.weaknesses)
+            const types = generateUl(result.type, `type`);
+            const weaknesses = generateUl(result.weaknesses, `weakness`)
             output += '<h3>Type</h3>' + types + '<h3>Weaknesses</h3>' + weaknesses
 
             //If there are previous evolutions, give the list.
