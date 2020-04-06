@@ -37,10 +37,14 @@ jsonfile.readFile(file, (err, obj) => {
 //   response.send(pokeName);
 
 // });
-
+app.get('/pokemon/', (request, response) => {
+  // send response with some data (a string)
+  response.send(`Welcome to the online Pokedex`);
+});
 app.get("/pokemon/:name", (request, response) => {
   var found = false;
   var foundId;
+ 
   for (id in pokemon) {
     // console.log(pokemon[id].name)
     if (pokemon[id].name.toLowerCase().includes(request.params.name)) {
@@ -51,8 +55,10 @@ app.get("/pokemon/:name", (request, response) => {
     continue;
   }
   if (found == true) {
-    var pokeName = pokemon[foundId].name;
-    response.send(pokeName);
+    var pokeName = pokemon[foundId].name + "\n";
+    var pokeWeight = pokemon[foundId].weight;
+
+    response.send(`${pokeName} weighs: ${pokeWeight}`);
   }
   else {
     var properName = toProperCase(request.params.name);
