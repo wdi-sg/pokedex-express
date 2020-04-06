@@ -61,7 +61,10 @@ jsonfile.readFile('pokedex.json', (err, data) => {
 		let name = req.params.name
 		let searched_pokemon = pokemon_list.find(pokemon => pokemon.name.toLowerCase() === name);
 		if (searched_pokemon && searched_pokemon.prev_evolution){
-			name_list = `This pokemon is ${name}.<br><img src=${searched_pokemon.img}><br>It evolves from:`;
+			name_list = 
+				`This pokemon is ${name}.<br>
+				<img src=${searched_pokemon.img}><br>
+				It evolves from:`;
 			searched_pokemon.prev_evolution.forEach(pokemon => name_list += `<br>${pokemon.name}`);
 			res.send(name_list);
 		} else if (searched_pokemon) {
@@ -75,7 +78,10 @@ jsonfile.readFile('pokedex.json', (err, data) => {
 		let name = req.params.name
 		let searched_pokemon = pokemon_list.find(pokemon => pokemon.name.toLowerCase() === name);
 		if (searched_pokemon && searched_pokemon.next_evolution){
-			name_list = `This pokemon is ${name}.<br><img src=${searched_pokemon.img}><br>It evolves into:`;
+			name_list = 
+				`This pokemon is ${name}.<br>
+				<img src=${searched_pokemon.img}><br>
+				It evolves into:`;
 			searched_pokemon.next_evolution.forEach(pokemon => name_list += `<br>${pokemon.name}`);
 			res.send(name_list);
 		} else if (searched_pokemon) {
