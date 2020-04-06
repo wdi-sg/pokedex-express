@@ -31,11 +31,11 @@ app.get('/pokemon', (request, response) => {
 app.get('/type', (request, response) => {
   response.send('Welcome to the online Pokdex!')
 });
-
+/*
 app.get('/weaknesses', (request, response) => {
   response.send('Welcome to the online Pokdex!')
 });
-
+*/
 app.get('/nextevolution', (request, response) => {
   response.send('Welcome to the online Pokdex!')
 });
@@ -43,7 +43,7 @@ app.get('/nextevolution', (request, response) => {
 app.get('/pokemon/:id', (request, response) => {
   // send response with some data (a string)
 
-  console.log("test");
+
   jsonfile.readFile(file, (err, obj) => {
     let pokemonCount=0;
     if(!isNaN(parseInt(request.params.id)))
@@ -90,21 +90,82 @@ app.get('/pokemon/:id', (request, response) => {
 app.get('/type/:typing', (request, response) => {
   // send response with some data (a string)
 
-  console.log("test");
+
   jsonfile.readFile(file, (err, obj) => {
     let pokemonCount=0;
+    let typeCount=0;
     let typing=false;
     let outputString=`<ol>Type: ${request.params.typing}`;
-    response.send(outputString);
-    for(pokemonCount=0;pokemonCount<obj.length;pokemonCount++)
+    //response.send(outputString);
+    for(pokemonCount=0;pokemonCount<obj["pokemon"].length;pokemonCount++)
     {
-        console.log("something happened");
+        //console.log("something happened");
+        for(typeCount=0;typeCount<obj["pokemon"][pokemonCount]["type"].length;typeCount++)
+        {
+            if(request.params.typing===obj["pokemon"][pokemonCount]["type"][typeCount])
+            {
+                outputString += `<li>${obj["pokemon"][pokemonCount]["name"]}</li>`;
+                typing=true;
+            }
+        }
+
+    }
+    if(typing){
+        outputString+=`</ol>`
+        response.send(outputString);
+        return;
     }
 
+    response.send("No pokemon has this type");
+                        return;
 
     });
 });
 
+
+app.get('/weaknesses/*', (request, response) => {
+  // send response with some data (a string)
+
+
+  jsonfile.readFile(file, (err, obj) => {
+    let pokemonCount=0;
+    let weaknessCount=0;
+    let pokemonWeaknessCount=0;
+    let weakType=false;
+    let outputString="";
+    let weaknessCollect=request.params[0].split("/");
+    console.log(weaknessCollect);
+    console.log(obj["pokemon"][1]["weaknesses"][1])
+    for(weaknessCount=0;weaknessCount<weaknessCollect.length;weaknessCount++)
+    {
+        outputString+=`<ol>${weaknessCollect[weaknessCount]}`
+
+            for(pokemonCount=0;pokemonCount<obj["pokemon"].length;pokemonCount++)
+            {
+        //console.log("something happened");
+                for(pokemonWeaknessCount=0;pokemonWeaknessCount<obj["pokemon"][pokemonCount]["weaknesses"].length;pokemonWeaknessCount++)
+                        {
+                            if(weaknessCollect[weaknessCount]===obj["pokemon"][pokemonCount]["weaknesses"][pokemonWeaknessCount])
+                            {
+                                outputString += `<li>${obj["pokemon"][pokemonCount]["name"]}</li>`;
+                                weakType=true;
+                            }
+                        }
+
+                }
+                outputString+=`</ol>`;
+        }
+        if(weakType){
+                response.send(outputString);
+                return;}
+                else
+                {
+                    response.send("There are no such weaknesses");
+                }
+
+
+    });
+});
 
 /**
  * ===================================
