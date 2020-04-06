@@ -23,8 +23,8 @@ const app = express();
 app.get('/list', (req, res) => {
   let results = [];
   for (let i = 0; i < pokedex.length; i++) {
-    let mon = pokedex[i].name;
-    results.push(`<a href="pokemon/${mon.toLowerCase()}">${mon}</a>`);
+    let mon = pokedex[i];
+    results.push(`<a href='pokemon/${mon.name.toLowerCase()}'>${mon.num}: ${mon.name}</a>`);
   }
   res.send(results.join("<br>"));
 });
