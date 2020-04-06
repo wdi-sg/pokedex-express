@@ -1,6 +1,6 @@
 const express = require('express');
-
-// const jsonfile = require('jsonfile');
+const jsonfile = require('jsonfile');
+const allPokemon = 'pokedex.json';
 
 /**
  * ===================================
@@ -17,9 +17,21 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
+app.get('/pokemon/:name', (request, response) => {
   // send response with some data (a string)
-  response.send(request.path);
+
+  jsonfile.readFile(allPokemon, (err, obj) => {
+    let i = 0;
+    let pokemonWeight;
+    while(i < obj.pokemon.length){
+      if(obj.pokemon[i].name.toLowerCase() === request.params.name){
+        pokemonWeight = obj.pokemon[i].weight;
+      }
+      i++
+    }
+    response.send("Weight of " + request.params.name + " = " + pokemonWeight);
+  });
+
 });
 
 /**
