@@ -30,8 +30,23 @@ app.get('/list', (req, res) => {
 });
 
 app.get('/pokemon/:name', (req, res) => {
-  let mon = pokedex.filter((mon) => mon.name.toLowerCase() === req.params.name.toLowerCase());
-  mon = mon[0];
+  let results = pokedex.filter(
+    (mon) =>
+      mon.name.toLowerCase().includes(req.params.name.toLowerCase())
+  );
+
+  if (results.length > 1) {
+    let results = [];
+    for (let mon of results) {
+      results.push(`<a href='${mon.name.toLowerCase()}'>${mon.num}: ${mon.name}</a>`);
+    }
+    results.unshift(
+      "There seems to be more than one Pokemon with a name like that!\n" +
+      "Did you want one of these?");
+    res.send(results.join('<br>'));
+  }
+
+  let mon = results[0];
   let monEvoFrom = mon.prev_evolution ? mon.prev_evolution : "";
   let monEvoTo = mon.next_evolution ? mon.next_evolution : "";
   let monFormat = [
