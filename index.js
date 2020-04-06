@@ -28,25 +28,37 @@ const app = express();
 //     }
 // });
 
+var allPokemonName = [];
+
+jsonfile.readFile(file, (err, obj) => {
+    for (let i = 0; i < obj.pokemon.length; i++) {
+        allPokemonName.push(obj.pokemon[i].name.toLowerCase());
+    };
+});
+
 app.get('/pokemon/:name', (request, response) => {
     jsonfile.readFile(file, (err, obj) => {
-        for (let i = 0; i < obj.pokemon.length; i++){
-            if (obj.pokemon[i].name.toLowerCase() === request.params.name.toLowerCase()) {
-                response.send("<h2 style='color: blue'>Pokemon Chosen</h2>" +
-                    "Name: " + obj.pokemon[i].name + "<br>" +
-                    "Weight: " + obj.pokemon[i].weight + "<br>" +
-                    "Height: " + obj.pokemon[i].height + "<br>" +
-                    "<img src='" + obj.pokemon[i].img + "'>" + "<br>" +
-                    "Type: " + obj.pokemon[i].type
-                    );
+        if(allPokemonName.indexOf(request.params.name.toLowerCase()) === -1) {
+            response.send("Status: 404. Could not find information about " +request.params.name + " - Is that a new pokemon? Gotta catch em' all!");
+        } else {
+            for (let i = 0; i < obj.pokemon.length; i++){
+                if (obj.pokemon[i].name.toLowerCase() === request.params.name.toLowerCase()) {
+                    response.send("<h2 style='color: blue'>Pokemon Chosen</h2>" +
+                        "Name: " + obj.pokemon[i].name + "<br>" +
+                        "Weight: " + obj.pokemon[i].weight + "<br>" +
+                        "Height: " + obj.pokemon[i].height + "<br>" +
+                        "<img src='" + obj.pokemon[i].img + "'>" + "<br>" +
+                        "Type: " + obj.pokemon[i].type
+                        );
+                };
             };
         };
     });
-
 });
 
+
 app.get('*', (request, response) => {
-    response.send(request.path);
+    response.send("not found");
 });
 
 
