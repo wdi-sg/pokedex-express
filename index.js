@@ -205,14 +205,19 @@ let someArray=[];
         for(pokemonCount=0;pokemonCount<obj["pokemon"].length;pokemonCount++)
             {
         //console.log("something happened");
+        let check=0;
                 for(pokemonWeaknessCount=0;pokemonWeaknessCount<obj["pokemon"][pokemonCount]["weaknesses"].length;pokemonWeaknessCount++)
                         {
                             let checkPoke=true;
-                            for(let innerloop=0; innerloop<someArray[outerloop].length; innerloop++)
+
+                            let innerloop=0;
+                            for(innerloop=0; innerloop<someArray[outerloop].length; innerloop++)
                                 {
                                     if(someArray[outerloop][innerloop]===obj["pokemon"][pokemonCount]["weaknesses"][pokemonWeaknessCount])
                                     {
                                         weakType=true;
+                                        checkPoke=true;
+                                        check++;
 
                                     }
                                     else
@@ -220,11 +225,12 @@ let someArray=[];
                                         checkPoke=false
                                     }
                                 }
-                                if(checkPoke){
+                                console.log(check);
+
+                        }
+                        if(check===someArray[outerloop].length){
                                     newOutputString += `<li>${obj["pokemon"][pokemonCount]["name"]}</li>`;
                                 }
-                        }
-
                 }
                 newOutputString+=`</ol>`
         console.log(newOutputString);
