@@ -22,17 +22,22 @@ app.get('/pokemon',(request,response) => {
 });
 
 app.get('/pokemon/:pokemon', (request, response) => {
-    // retrieving pokemon type parameter
-    pokemonName = request.params.pokemon;
+    // // retrieving pokemon type parameter
+    // pokemonName = request.params.pokemon;
+
+    // retrieve pokemon index from parameter
+    pokemonNum = parseInt(request.params.pokemon)-1;
 
     const file = './pokedex.json'
     // find the type of pokemon from pokedex
     jsonfile.readFile(file, (err, obj) => {
-        for (let i = 0; i < obj.pokemon.length; i++) {
-            if (obj.pokemon[i].name.toLowerCase() == pokemonName){
-                response.send(obj.pokemon[i].weight);
-            }
-        }
+        // for (let i = 0; i < obj.pokemon.length; i++) {
+        //     if (obj.pokemon[i].name.toLowerCase() == pokemonName){
+        //         response.send(obj.pokemon[i].weight);
+        //     }
+        // }
+
+        response.send(obj.pokemon[pokemonNum])
 
     })
 })
