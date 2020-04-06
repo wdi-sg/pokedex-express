@@ -1,6 +1,6 @@
 const express = require('express');
 
-// const jsonfile = require('jsonfile');
+const jsonfile = require('jsonfile');
 
 /**
  * ===================================
@@ -8,6 +8,7 @@ const express = require('express');
  * ===================================
  */
 
+const file = './pokedex.json';
 // Init express app
 const app = express();
 
@@ -17,11 +18,82 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
+app.get('/pokemon', (request, response) => {
+    response.send("Welcome to the online Pokdex!");
 });
 
+app.get('/pokemon/:name', (request, response) => {
+    jsonfile.readFile(file, function (err, obj) {
+        if (err) console.error(err);
+        let pokeName = request.params.name;
+        console.log(pokeName)
+        let foundPoke;
+        for (let i=0; i<obj["pokemon"].length; i++) {
+            if (obj["pokemon"][i]["name"] === pokeName) {
+                foundPoke = obj["pokemon"][i];
+            };
+        };
+        if (foundPoke === undefined) {
+// Set the status code to 404.
+            // response.status(404).send(`Could not find information about ${pokeName} - Is that a new pokemon? Gotta catch em' all!`);
+            response.status(404).send(`<html><body style="text-align: center;"><h1>ERROR 404</h1><img src="https://i.pinimg.com/originals/ed/ca/4b/edca4bc1f1c89aaf399e730f2ebf66d0.png"></body></html>`);
+        } else {
+// send response with some data (a string)
+            response.send(
+                `
+                    This is ${foundPoke["name"]}.
+                    It is ${foundPoke["type"]}.
+                    It is ${foundPoke["height"]}.
+                    It is ${foundPoke["weight"]}.
+                    It is ${foundPoke["weaknesses"]}.
+                `
+            );
+
+        }
+    })
+});
+
+app.get('/pokemon/type/:type', (request, response) => {
+    jsonfile.readFile(file, function (err, obj) {
+        if (err) console.error(err);
+        let pokeType = request.params.type;
+        let foundPoke = [];
+        for (let i=0; i<obj["pokemon"].length; i++) {
+            if (obj["pokemon"][i]["type"].includes(pokeType)) {
+                foundPoke.push(obj["pokemon"][i]["name"]);
+            };
+        };
+        response.send(foundPoke);
+    })
+});
+
+app.get('/pokemon/weaknesses/:weakness', (request, response) => {
+    jsonfile.readFile(file, function (err, obj) {
+        if (err) console.error(err);
+        let pokeWeakness = request.params.weakness;
+        let foundPoke = [];
+        for (let i=0; i<obj["pokemon"].length; i++) {
+            if (obj["pokemon"][i]["weaknesses"].includes(pokeWeakness)) {
+                foundPoke.push(obj["pokemon"][i]["name"]);
+            };
+        };
+        response.send(foundPoke);
+    })
+});
+
+app.get('/pokemon/nextevolution/:name', (request, response) => {
+    jsonfile.readFile(file, function (err, obj) {
+        if (err) console.error(err);
+        let pokeName = request.params.name;
+        let foundPoke = [];
+        for (let i=0; i<obj["pokemon"].length; i++) {
+            if (obj["pokemon"][i]["name"].includes(pokeName)) {
+                foundPoke.push(obj["pokemon"][i]["next_evolution"]);
+            };
+        };
+        response.send(foundPoke);
+    })
+});
 /**
  * ===================================
  * Listen to requests on port 3000
