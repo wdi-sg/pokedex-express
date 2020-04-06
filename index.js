@@ -1,6 +1,8 @@
 const express = require('express');
 
-// const jsonfile = require('jsonfile');
+const jsonfile = require('jsonfile');
+
+const file = 'pokedex.json'
 
 /**
  * ===================================
@@ -17,10 +19,21 @@ const app = express();
  * ===================================
  */
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
+jsonfile.readFile(file, (err, obj) => {
+    //error check
+    if (err){
+        console.log("error at read file");
+    }
+    app.get('/pokemon/:arrayPosition/', (request, response) => {
+        response.send("The Pokemon is " + obj["pokemon"][request.params.arrayPosition]["name"]);
+    });
+
+    app.get('*', (request, response) => {
+        response.send("whoops");
+    });
 });
+
+
 
 /**
  * ===================================
