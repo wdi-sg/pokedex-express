@@ -37,7 +37,13 @@ app.get('/pokemon/:name', (request, response) => {
     jsonfile.readFile(file, (err, obj) => {
         for (let i = 0; i < obj.pokemon.length; i++){
             if(obj.pokemon[i].name.toLowerCase() == request.params.name.toLowerCase()){
-                response.send("Weight: "+obj.pokemon[i].weight);
+                response.send(
+                    "Name: " + obj.pokemon[i].name + "<br>" +
+                    "Weight: " + obj.pokemon[i].weight + "<br>" +
+                    "Height: " + obj.pokemon[i].height + "<br>" +
+                    "<img src='" + obj.pokemon[i].img + "'>" + "<br>" +
+                    "Type: " + obj.pokemon[i].type
+                    );
             }
         };
     });
