@@ -49,6 +49,24 @@ app.get('/pokemon/weaknesses/:someweaknesses', (request, response) => {
   });
 });
 
+app.get('/pokemon/nextevolution/:somename', (request, response) => {
+  jsonfile.readFile(allPokemon, (err, obj) => {
+    let allPreviousEvolution = [];
+    for(let i = 0; i < obj.pokemon.length; i++){
+      if(obj.pokemon[i].name.toLowerCase() === request.params.somename){
+        if(obj.pokemon[i].prev_evolution !== undefined){
+          for(let j = 0; j < obj.pokemon[i].prev_evolution.length; j++){
+            allPreviousEvolution.push(obj.pokemon[i].prev_evolution[j].name);
+          }
+          response.send(allPreviousEvolution);
+        }else if(obj.pokemon[i].prev_evolution === undefined){
+          response.status(404).send("Could not find information about " + request.params.somename + "'s pre-evolution");
+        }
+      }
+    }
+  });
+});
+
 app.get('/pokemon/:name', (request, response) => {
   // send response with some data (a string)
 
