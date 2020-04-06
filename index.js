@@ -71,6 +71,7 @@ app.get('/type/:type', (req, res) => {
   results = results.map(function (mon) {
     return `<a href='../pokemon/${mon.name.toLowerCase()}'>${mon.num}: ${mon.name}</a>`;
   });
+  results.unshift(`These are all the Pokemon of ${req.params.type} type in the first 151!`);
   res.send(results.join('<br>'));
 });
 
