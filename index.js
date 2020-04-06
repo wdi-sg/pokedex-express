@@ -8,7 +8,8 @@ const app = express();
  * Configurations and set up
  * ===================================
  */
-//this part is to set up the reading of the pokedex.json.
+//this part is to set up the reading of the pokedex.json.\
+
 jsonfile.readFile(pokedex, (error, obj) => {
     console.log("error of pokedex reading is: =============");
     console.log(error);
@@ -17,8 +18,6 @@ jsonfile.readFile(pokedex, (error, obj) => {
         for (i=0;i<obj["pokemon"].length; i++){
             if(obj["pokemon"][i].name === request.params.pokemonName ){
                 response.send(obj["pokemon"][i]);
-            }else {
-                response.status(404).send("Could not find information about " + request.params.pokemonName + " - Is that a new pokemon? Gotta catch em' all!");
             }
         }
 
@@ -29,6 +28,7 @@ jsonfile.readFile(pokedex, (error, obj) => {
 app.get('/pokemon/', (request, response) => {
     response.send("Welcome to the online Pokedex");
 });
+
 
 
 /**
