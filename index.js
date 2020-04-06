@@ -75,6 +75,23 @@ app.get('/type/:type', (req, res) => {
   res.send(results.join('<br>'));
 });
 
+app.get('/weakness/:weak', (req, res) => {
+  let results = [];
+
+  for (let mon of pokedex) {
+    let monWeak = mon.weaknesses.map(ele => ele.toLowerCase());
+    console.log(monWeak);
+    if (monWeak.includes(req.params.weak.toLowerCase())) {
+      results.push(mon);
+    }
+  }
+
+  results = results.map(function (mon) {
+    return `<a href='../pokemon/${mon.name.toLowerCase()}'>${mon.num}: ${mon.name}</a>`;
+  });
+  results.unshift(`These are the Pokemon weak against ${req.params.weak} types!`);
+  res.send(results.join('<br>'));
+});
 app.get('*', (req, res) => {
   // send res with some data (a string)
   res.send("Welcome to the online Pokedex! You might want to try <a href='list'>browsing the main list</a>");
