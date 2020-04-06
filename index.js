@@ -1,6 +1,6 @@
 const express = require('express');
 
-// const jsonfile = require('jsonfile');
+const jsonfile = require('jsonfile');
 
 /**
  * ===================================
@@ -16,6 +16,27 @@ const app = express();
  * Routes
  * ===================================
  */
+
+app.get('/pokemon',(request,response) => {
+    console.log('pokemon index');
+});
+
+app.get('/pokemon/:pokemon', (request, response) => {
+    // retrieving pokemon type parameter
+    pokemonName = request.params.pokemon;
+
+    const file = './pokedex.json'
+    // find the type of pokemon from pokedex
+    jsonfile.readFile(file, (err, obj) => {
+        for (let i = 0; i < obj.pokemon.length; i++) {
+            if (obj.pokemon[i].name.toLowerCase() == pokemonName){
+                response.send(obj.pokemon[i].weight);
+            }
+        }
+
+    })
+})
+
 
 app.get('*', (request, response) => {
   // send response with some data (a string)
