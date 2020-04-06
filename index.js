@@ -38,7 +38,7 @@ jsonfile.readFile(file, (err, obj) => {
 
 app.get('/pokemon/:name', (request, response) => {
     jsonfile.readFile(file, (err, obj) => {
-        if(allPokemonName.indexOf(request.params.name.toLowerCase()) === -1) {
+        if (allPokemonName.indexOf(request.params.name.toLowerCase()) === -1) {
             response.send("Status: 404. Could not find information about " +request.params.name + " - Is that a new pokemon? Gotta catch em' all!");
         } else {
             for (let i = 0; i < obj.pokemon.length; i++){
@@ -58,7 +58,10 @@ app.get('/pokemon/:name', (request, response) => {
 
 
 app.get('*', (request, response) => {
-    response.send("not found");
+    if (request.path === "/pokemon/"+""){
+        response.send("Welcome to the online Pokedex!");
+    }
+
 });
 
 
