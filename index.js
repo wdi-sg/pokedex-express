@@ -19,7 +19,35 @@ const app = express();
 
 app.get('/pokemon', (request, response) =>{
   response.send("Welcome to the online Pokedex!");
-})
+});
+
+app.get('/pokemon/type/:sometype', (request, response) => {
+  jsonfile.readFile(allPokemon, (err, obj) => {
+    let allPokemonType = [];
+    for(let i = 0; i < obj.pokemon.length; i++){
+      for(let j = 0; j < obj.pokemon[i].type.length; j++){
+        if(obj.pokemon[i].type[j].toLowerCase() === request.params.sometype){
+          allPokemonType.push(obj.pokemon[i].name);
+        }
+      }
+    }
+    response.send(`All pokemon with ${request.params.sometype} type: ${allPokemonType}`);
+  });
+});
+
+app.get('/pokemon/weaknesses/:someweaknesses', (request, response) => {
+  jsonfile.readFile(allPokemon, (err, obj) => {
+    let allPokemonWithWeakness = [];
+    for(let i = 0; i < obj.pokemon.length; i++){
+      for(let j = 0; j < obj.pokemon[i].weaknesses.length; j++){
+        if(obj.pokemon[i].weaknesses[j].toLowerCase() === request.params.someweaknesses){
+          allPokemonWithWeakness.push(obj.pokemon[i].name);
+        }
+      }
+    }
+    response.send(`All pokemon with ${request.params.someweaknesses} weakness: ${allPokemonWithWeakness}`);
+  });
+});
 
 app.get('/pokemon/:name', (request, response) => {
   // send response with some data (a string)
@@ -41,8 +69,9 @@ app.get('/pokemon/:name', (request, response) => {
       response.send(`This is ${request.params.name}!, he weighs ${pokemonWeight} in weight! He has a type of ${pokemonType}`);
     }
   });
-
 });
+
+
 
 /**
  * ===================================
