@@ -12,8 +12,6 @@ const app = express();
 jsonfile.readFile(pokedex, (error, obj) => {
     console.log("error of pokedex reading is: =============");
     console.log(error);
-    console.log("pokedex entries: =============");
-    console.log(obj["pokemon"][0]); // this line retrieves pokemon by id, id = process.argv[2] - 1
     app.get('/pokemon/:pokemonName', (request, response) => {
       // send response with some data (a string)
         for (i=0;i<obj["pokemon"].length; i++){
