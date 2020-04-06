@@ -8,6 +8,10 @@ const dataFile = "pokedex.json";
 
 const POKEMON = "pokemon";
 
+// let dataObj = jsonFile.readFile(dataFile, (err, obj) => {
+//   return obj;
+// });
+
 app.get("/pokemon/:name", (request, response) => {
   jsonFile.readFile(dataFile, (err, obj) => {
     // console.log(request.params);
@@ -44,6 +48,23 @@ app.get("/weaknesses/:someweakness", (request, response) => {
       }
     });
     response.send(matchingPokemonArr.map(element => element.name));
+  });
+});
+
+app.get("/prevevolution/:somename", (request, response) => {
+  jsonFile.readFile(dataFile, (err, obj) => {
+    let matchingPokemonObj = obj[POKEMON].find((element) => {
+      return element.name.toLowerCase() === request.params.somename.toLowerCase();
+    });
+    if (!matchingPokemonObj) {
+      response.send(request.params.somename + " cannot be found");
+    }
+    else if (!matchingPokemonObj.prev_evolution) {
+      response.send(request.params.somename + " does not have a previous evolution");
+    }
+    else {
+      response.send(matchingPokemonObj.prev_evolution.map(element => element.name));
+    }
   });
 });
 
