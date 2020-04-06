@@ -1,3 +1,45 @@
+function swap(array, i, j) {
+    if (i != j) {
+        var swap = array[i];
+        array[i] = array[j];
+        array[j] = swap;
+    }
+}
+
+function permute_rec(res, str, array) {
+    if (array.length == 0) {
+        res.push(str);
+    } else {
+        for (var i = 0; i < array.length; i++) {
+            //swap(array, 0, i);
+            permute_rec(res, str + "_" +array[0], array.slice(1));
+
+            //swap(array, 0, i);
+        }
+    }
+}
+
+function xpermute_rec(res, sub, array) {
+    if (array.length == 0) {
+        if (sub.length > 0) permute_rec(res, "", sub);
+    } else {
+        xpermute_rec(res, sub, array.slice(1));
+        xpermute_rec(res, sub.concat(array[0]), array.slice(1));
+    }
+}
+
+function xpermute(array) {
+    var res = [];
+
+    xpermute_rec(res, [], array);
+    return res;
+}
+
+
+
+
+
+
 const express = require('express');
 
 // const jsonfile = require('jsonfile');
@@ -125,6 +167,9 @@ app.get('/type/:typing', (request, response) => {
 
 app.get('/weaknesses/*', (request, response) => {
   // send response with some data (a string)
+let something=[];
+let someArray=[];
+
 
 
   jsonfile.readFile(file, (err, obj) => {
@@ -132,11 +177,70 @@ app.get('/weaknesses/*', (request, response) => {
     let weaknessCount=0;
     let pokemonWeaknessCount=0;
     let weakType=false;
+    let checkPoke=true;
+    let newOutputString="";
     let outputString="";
     let weaknessCollect=request.params[0].split("/");
-    console.log(weaknessCollect);
-    console.log(obj["pokemon"][1]["weaknesses"][1])
-    for(weaknessCount=0;weaknessCount<weaknessCollect.length;weaknessCount++)
+    something=xpermute(weaknessCollect);
+    something=something.filter((item,index)=>something.indexOf(item)===index);
+    console.log(something);
+    for(let i=0; i<something.length;i++)
+    {
+        let somevalue=something[i].split("_");
+        somevalue.shift();
+        someArray.push(somevalue);
+
+    }
+    //console.log(someArray);
+
+    for(let outerloop=0; outerloop<someArray.length; outerloop++)
+    {
+        newOutputString+="<ol>Pokemons with weakness/es for "
+        for(let innerloop=0; innerloop<someArray[outerloop].length; innerloop++)
+        {
+            newOutputString +=someArray[outerloop][innerloop]+", ";
+        }
+
+
+        for(pokemonCount=0;pokemonCount<obj["pokemon"].length;pokemonCount++)
+            {
+        //console.log("something happened");
+                for(pokemonWeaknessCount=0;pokemonWeaknessCount<obj["pokemon"][pokemonCount]["weaknesses"].length;pokemonWeaknessCount++)
+                        {
+                            let checkPoke=true;
+                            for(let innerloop=0; innerloop<someArray[outerloop].length; innerloop++)
+                                {
+                                    if(someArray[outerloop][innerloop]===obj["pokemon"][pokemonCount]["weaknesses"][pokemonWeaknessCount])
+                                    {
+                                        weakType=true;
+
+                                    }
+                                    else
+                                    {
+                                        checkPoke=false
+                                    }
+                                }
+                                if(checkPoke){
+                                    newOutputString += `<li>${obj["pokemon"][pokemonCount]["name"]}</li>`;
+                                }
+                        }
+
+                }
+                newOutputString+=`</ol>`
+        console.log(newOutputString);
+    }
+
+    if(weakType){
+                response.send(newOutputString);
+                return;
+            }
+    else
+                {
+                    response.send("There are no such weaknesses");
+                }
+   // console.log(weaknessCollect);
+    //console.log(obj["pokemon"][1]["weaknesses"][1])
+  /*  for(weaknessCount=0;weaknessCount<weaknessCollect.length;weaknessCount++)
     {
         outputString+=`<ol>${weaknessCollect[weaknessCount]}`
 
@@ -161,7 +265,7 @@ app.get('/weaknesses/*', (request, response) => {
                 else
                 {
                     response.send("There are no such weaknesses");
-                }
+                }*/
 
 
     });
@@ -210,6 +314,10 @@ app.get('/nextevolution/:pokemon', (request, response) => {
         return;
     });
 });
+
+
+
+
 
 /**
  * ===================================
