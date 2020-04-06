@@ -53,6 +53,61 @@ app.get('/pokemon/:pokemon', (request, response) => {
     })
 })
 
+app.get('/type/:sometype', (request, response) => {
+    const pokemonType = request.params.sometype;
+
+    const file = './pokedex.json'
+    // find the type of pokemon from pokedex
+    jsonfile.readFile(file, (err, obj) => {
+        let pokemonArray = obj.pokemon;
+
+        let foundPokemon = false;
+
+        let showPokemonType = [];
+
+        for (let i = 0; i < pokemonArray.length; i++) {
+            for(let u=0; u<pokemonArray[i].type.length; u++){
+                if (pokemonArray[i].type[u].toLowerCase() == pokemonType){
+                   foundPokemon = true;
+
+                   showPokemonType.push(pokemonArray[i].name);
+
+                }
+            }
+        }
+
+        response.send(`The pokemons with ${pokemonType} type.
+         ${showPokemonType}`)
+    })
+})
+
+app.get('/weakness/:someweakness', (request, response) => {
+    const pokemonWeakness = request.params.someweakness;
+
+    const file = './pokedex.json'
+    // find the type of pokemon from pokedex
+    jsonfile.readFile(file, (err, obj) => {
+        let pokemonArray = obj.pokemon;
+
+        let foundPokemon = false;
+
+        let showPokemonWeakness = [];
+
+        for (let i = 0; i < pokemonArray.length; i++) {
+            for(let u=0; u<pokemonArray[i].weaknesses.length; u++){
+                if (pokemonArray[i].weaknesses[u].toLowerCase() == pokemonWeakness){
+
+                   showPokemonWeakness.push(pokemonArray[i].name);
+
+                }
+            }
+        }
+
+        response.send(`The pokemons with ${pokemonWeakness} weakness.
+         ${showPokemonWeakness}`)
+    })
+})
+
 
 app.get('/', (request,response) => {
    response.send('Welcome to the online pokedex');
