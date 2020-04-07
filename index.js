@@ -129,6 +129,38 @@ app.get("/nextevolution/:name", (request, response) => {
     console.log("file read called");
 });
 
+app.get("/prevevolution/:name", (request, response) => {
+    const readType = (err, obj) => {
+        let pokemonList = [];
+        let pokemonCount = obj.pokemon.length;
+        let pokeName = request.params.name;
+        pokeName = pokeName.substring(0, 1).toUpperCase() + pokeName.substring(1).toLowerCase();
+        for (let i = 0; i < pokemonCount; i++) {
+            if (obj.pokemon[i].name == pokeName) {
+                if (obj.pokemon[i].prev_evolution) {
+                    for (let j = 0; j < obj.pokemon[i].prev_evolution.length; j++) {
+                        pokemonList.push(`<li>${obj.pokemon[i].prev_evolution[j].name}</li>`)
+                    }
+                } else {
+                    response.send(`${pokeName} does not have an previous evolution!`)
+                    return;
+                }
+            }
+        }
+        if(pokemonList.length > 0){
+            response.send(`You have chosen ${pokeName} its previous evolution(s) are: \n ${pokemonList}`)
+        }
+        const doneReading = (err) => {
+            response.status(404)
+            response.send(`Could not find information about ${pokeName}!`)
+        }
+        jsonfile.writeFile(pokedex, obj, doneReading)
+    };
+
+    jsonfile.readFile(pokedex, readType);
+    console.log("file read called");
+});
+
 // app.get('*', (request, response) => {
 // send response with some data (a string)
 //     response.send(request.path);
