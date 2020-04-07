@@ -2,6 +2,7 @@
 const jsonfile = require('jsonfile');
 const file = 'pokedex.json';
 let pokedex = [];
+// yeah this will break badly if you need to write as well
 let filePromise = jsonfile.readFile(file).then((obj) => {
   console.log("get!");
   pokedex = obj.pokemon;
@@ -30,8 +31,10 @@ app.get('/pokemon/:name', (req, res) => {
 
   if (results.length > 1) {
     let monsters = [];
+    // for (let i =0; i < results.length; i++) {
+    // let mon = results[i];
     for (let mon of results) {
-      monsters.push(`<a href='${mon.name.toLowerCase()}'>${mon.num}: ` +
+      monsters.push(`<a href='../pokemon/${mon.name.toLowerCase()}'>${mon.num}: ` +
                    `${mon.name}</a>`);
     }
     monsters.unshift(
