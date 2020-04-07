@@ -12,7 +12,7 @@ app.get('/', (request, response) => {
 });
 
 app.get('/pokemon', (request, response) => {
-    response.send("Welcome to the Pokedex!\n Start by entering a number like so : pokemon/2");
+    response.send("Welcome to the online Pokedex!\n Start by entering a number like so : pokemon/2");
 });
 
 app.get("/pokemon/:name", (request, response) => {
@@ -115,7 +115,9 @@ app.get("/nextevolution/:name", (request, response) => {
                 }
             }
         }
-        response.send(`You have chosen ${pokeName} its next evolutions are: \n ${pokemonList}`)
+        if(pokemonList.length > 0){
+            response.send(`You have chosen ${pokeName} its next evolutions are: \n ${pokemonList}`)
+        }
         const doneReading = (err) => {
             response.status(404)
             response.send(`Could not find information about ${pokeName}!`)
