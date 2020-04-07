@@ -35,20 +35,21 @@ app.get('/', (req, res) => {
 
 app.post('/sort', (req, res) => {
 	let sort_method = Object.values(req.body)[0]
+	console.log(sort_method)
 	switch(sort_method){
-		case 'Id':
+		case 'id':
 			res.send('Page with pokemons sorted by Id!')
 			break;
-		case 'Num':
+		case 'num':
 			res.send('Page with pokemons sorted by Num!')
 			break;
-		case 'Name':
+		case 'name':
 			res.send('Page with pokemons sorted by Name!')
 			break;
-		case 'Height':
+		case 'height':
 			res.send('Page with pokemons sorted by Height!')
 			break;
-		case 'Weight':
+		case 'weight':
 			res.send('Page with pokemons sorted by Weight!')
 			break;
 	}
@@ -68,7 +69,6 @@ app.post('/pokemon', (req, res) => {
 		missing_msg.push(`${key} `);
 		};
 	};
-	console.log(`missing_info is: ${missing_info}`)
 	if (missing_info) {
 		res.render('form', {error: missing_msg})
 	} else {
@@ -76,12 +76,12 @@ app.post('/pokemon', (req, res) => {
 			//check for errors
 			let pokemon_list = data.pokemon
 			for (pokemon of pokemon_list ){
-				if (new_pokemon.name === pokemon.name){
-					return res.render('form', {error:  `Pokemon with name: ${pokemon.name} already exists! Please re-enter pokemon`})
+				if (new_pokemon.id === pokemon.id){
+					return res.render('form', {error:  `Pokemon id ${pokemon.id} already exists! Please re-enter pokemon`})
 				} else if (new_pokemon.num === pokemon.num){
 					return res.render('form', {error:  `Pokemon number ${pokemon.num} already exists! Please re-enter pokemon`})
-				} else if (new_pokemon.id === pokemon.id){
-					return res.render('form', {error:  `Pokemon id ${pokemon.id} already exists! Please re-enter pokemon`})
+				} else if (new_pokemon.name === pokemon.name){
+					return res.render('form', {error:  `Pokemon with name: ${pokemon.name} already exists! Please re-enter pokemon`})
 				};		
 			};
 			//no errors	

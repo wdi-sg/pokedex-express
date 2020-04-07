@@ -18,7 +18,7 @@ class Form extends React.Component {
 						<input type="text" name="height"/><br/><br/>						
 						<label htmlFor="id">Weight:</label>
 						<input type="text" name="weight"/><br/><br/>
-						<button type="submit">Find Pokemon</button>
+						<button type="submit">Add Pokemon</button>
 
 						<h2>{this.props.error}</h2>
 					</form>	
