@@ -122,20 +122,22 @@ app.get('/nextevolution/:end', (req, res) => {
   );
 
   if (results.length > 1) {
-    let results = [];
+    let monsters = [];
     for (let mon of results) {
-      results.push(`<a href='${mon.name.toLowerCase()}'>` +
+      monsters.push(`<a href='../nextevolution/${mon.name.toLowerCase()}'>` +
                    `${mon.num}: ${mon.name}</a>`);
     }
-    results.unshift(
+      monsters.unshift(
       "There seems to be more than one Pokemon named like that!\n" +
       "Did you want one of these?");
-    res.send(results.join('<br>'));
+    res.send(monsters.join('<br>'));
   }
 
   let mon = results[0];
   let evolvesFrom = mon.prev_evolution;
-  console.log(evolvesFrom);
+  if (!evolvesFrom) {
+    res.status(404).send("This Pokemon doesn't evolve from anything!");
+  }
 
   evolvesFrom = evolvesFrom.map(function (mon) {
     return `<a href='../pokemon/${mon.name.toLowerCase()}'>` +
