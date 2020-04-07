@@ -111,6 +111,7 @@ app.get("/nextevolution/:name", (request, response) => {
                     }
                 } else {
                     response.send(`${pokeName} does not have an evolution!`)
+                    return;
                 }
             }
         }
