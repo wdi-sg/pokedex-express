@@ -1,8 +1,4 @@
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
+// Config and setup
 const jsonfile = require('jsonfile');
 const file = 'pokedex.json';
 let pokedex = [];
@@ -14,11 +10,7 @@ let filePromise = jsonfile.readFile(file).then((obj) => {
 const express = require('express');
 const app = express();
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
+// Routes
 
 app.get('/list', (req, res) => {
   let results = [];
@@ -155,9 +147,5 @@ app.get('*', (req, res) => {
            "<a href='list'>browsing the main list</a>!");
 });
 
-/**
- * ===================================
- * Listen to requests on port 3000
- * ===================================
- */
+// Start server
 app.listen(3000, () => console.log('~~~ Tuning in to port 3000 ~~~'));
