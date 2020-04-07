@@ -48,12 +48,13 @@ app.get("/type/:typeName", (request, response) => {
         for (let i = 0; i < allTypes.length; i++) {
             if (pokeType == allTypes[i]) {
                 for (let j = 0; j < pokemonCount; j++) {
-                    for (let k = 0; k < obk.pokemon[j].type.length; k++) {
+                    for (let k = 0; k < obj.pokemon[j].type.length; k++) {
                         if (obj.pokemon[j].type[k] == pokeType) {
                             pokemonList.push(`<li>${obj.pokemon[j].name}</li>`)
                         }
                     }
                 }
+                pokemonList = pokemonList.join('');
                 response.send(`You have chosen ${pokeType} and the following pokemon has ${pokeType} as its type. \n ${pokemonList}`)
             }
         }
