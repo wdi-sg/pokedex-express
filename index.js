@@ -15,6 +15,32 @@ app.get("/pokemon", (request, response) => {
     response.send("Welcome to the online Pokedex!");
 })
 
+app.get("/pokemon/nextevolution/:name", (request, response) => {
+    let pokemonToFind = request.params.name.toLowerCase();
+    console.log(pokemonToFind);
+
+    let babyPokemon = null;
+    let fullyEvolvedPokemon = null;
+
+
+    //pokemon[4].next_evolution[0].name
+    for(let i = 0; i < pokedexObj.length; i++) {
+        for(let j = 0; j < pokedexObj[i].next_evolution.length; j++) {
+            if(pokemonToFind === pokedexObj[i].next_evolution[j].name.toLowerCase()) {
+                babyPokemon = pokedexObj[i].name;
+                fullyEvolvedPokemon = pokedexObj[i].next_evolution[j].name;
+            }
+        }
+    }
+
+    if(pokemonToFind === fullyEvolvedPokemon) {
+        response.send(fullyEvolvedPokemon + " was once actually " + babyPokemon);
+    } else {
+        response.send("There is no such Pokemon mate.");
+    }
+
+})
+
 app.get("/pokemon/type/:pokeType", (request, response) => {
     let typeToFind = request.params.pokeType.toLowerCase();
     console.log(typeToFind);
@@ -100,28 +126,7 @@ app.get("/pokemon/:name", (request, response) => {
 
 //pokemon[0].next_evolution[1].name
 
-app.get("/pokemon/nextevolution/:name", (request, response) => {
-    let pokemonToFind = request.params.name.toLowerCase();
-    console.log(pokemonToFind);
 
-    let babyPokemon = null;
-    let fullyEvolvedPokemon = null;
-
-    for(let i = 0; i < pokedexObj.length; i++) {
-        for(let j = 0; j < pokedexObj[i].next_evolution.length; j++) {
-            if(pokemonToFind === pokedexObj[i].next_evolution[j].name.toLowerCase()) {
-                babyPokemon = pokedexObj[i].name;
-                fullyEvolvedPokemon = pokedexObj[i].next_evolution[j].name;
-            }
-        }
-    }
-
-    if(pokemonToFind === fullyEvolvedPokemon) {
-        response.send(fullyEvolvedPokemon + " was once actually " + babyPokemon);
-    } else {
-        response.send("There is no such Pokemon mate.");
-    }
-})
 
 
 
