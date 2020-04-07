@@ -37,15 +37,15 @@ app.get('/pokemon/:name', (req, res) => {
   );
 
   if (results.length > 1) {
-    let results = [];
+    let monsters = [];
     for (let mon of results) {
-      results.push(`<a href='${mon.name.toLowerCase()}'>${mon.num}: ` +
+      monsters.push(`<a href='${mon.name.toLowerCase()}'>${mon.num}: ` +
                    `${mon.name}</a>`);
     }
-    results.unshift(
+    monsters.unshift(
       "There seems to be more than one Pokemon with a name like that!\n" +
       "Did you want one of these?");
-    res.send(results.join('<br>'));
+    res.send(monsters.join('<br>'));
   } else if (results.length ===0) {
     res.status(404)
       .send(`Could not find information about ` +
