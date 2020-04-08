@@ -240,4 +240,27 @@ app.get("/", (req, res) => {
  * Listen to requests on port 3000
  * ===================================
  */
+
+
+ let mon = results[0];
+  let evolvesFrom = mon.prev_evolution;
+  if (!evolvesFrom) {
+    res.status(404).send("This Pokemon doesn't evolve from anything!");
+  }
+
+  evolvesFrom = evolvesFrom.map(function (mon) {
+    return `<a href='../pokemon/${mon.name.toLowerCase()}'>` +
+      `${mon.num}: ${mon.name}</a>`;
+  });
+  evolvesFrom.unshift(
+    `These are the Pokemon that evolve into ` +
+    `${req.params.end[0].toUpperCase()}${req.params.end.slice(1)}!`);
+  res.send(evolvesFrom.join('<br>'));
+});
+
+app.get('*', (req, res) => {
+  // send res with some data (a string)
+  res.send("Welcome to the online Pokedex! You might want to try " +
+           "<a href='list'>browsing the main list</a>!");
+});
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
