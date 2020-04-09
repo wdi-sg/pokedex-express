@@ -2,6 +2,7 @@ const React = require('react');
 
 class Form extends React.Component {
 	render() {
+
 		return (
 			<html>
 				<body>
