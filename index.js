@@ -4,19 +4,24 @@ const app = express();
 const jsonfile = require('jsonfile');
 const reactEngine = require('express-react-views').createEngine();
 app.engine('jsx', reactEngine);
-
-app.set('views', __dirname + "/views");
 app.set('view engine', 'jsx');
+app.set('views', __dirname + "/views");
 
-app.get('/pokedex/:some-name', (req, res) => {
-  jsonfile.readFile('pokedex.json', (err, obj) => {
-    const data ={ 
-      name: obj.pokemon[req.params.some-name].name,
-      weight: obj.pokemon[req.params.some-name].weight
 
+app.get('/pokedex/:somename', (req, res) => {
+  jsonfile.readFile('./pokedex.json', (err, obj) => {
+  for(i=0; i<obj.pokemon.length; i++){
+        if(obj.pokemon[i].name.toLowerCase() === req.params.somename){
+            const data = {
+        name: obj.pokemon[i].name,
+        weight:obj.pokemon[i].weight
     }
-    res.render('pokedex',data)
-  })
+                res.render('pokemon', data);
+        }
+    }
+
+
+})
 })
 
 
