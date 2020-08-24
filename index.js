@@ -34,6 +34,7 @@ app.get("/type/:someType",(request,response)=>{
             if(obj.pokemon[i].type.includes(request.params.someType)){pokeArr.push(obj.pokemon[i].name)
             }
             }
+
             response.send(`The list of pokemon of type: ${request.params.someType} are ${pokeArr}`);
         })
 })
