@@ -51,6 +51,33 @@ app.get('/weaknesses/:someweakness', (req, res) => {
 
 })
 
+//get pokemon by next evolve
+
+app.get('/nextevolution/:evolve', (req, res) => {
+    let nameEvolve = req.params.evolve;
+    let evolveArr =[];
+    let matchEvolveArr =[];
+    jsonfile.readFile(file, (err, obj) =>{
+        for(i=0; i<obj.pokemon.length; i++){
+            if(obj.pokemon[i].next_evolution ==! undefined) {
+                evolveArr.push(obj.pokemon[i].next_evolution)
+            }
+        }
+        for(j=0; j< evolveArr.length; j++){
+            if(evolveArr[j].name.toLowerCase() === nameEvolve){
+                matchEvolveArr.push(nameEvolve)
+                const data ={
+            nextEvolve : nameEvolve,
+            pokemons: matchEvolveArr
+        }
+        res.render('next', data)
+            }
+        }
+
+    })
+
+})
+
 
 
 
