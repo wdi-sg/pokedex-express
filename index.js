@@ -28,6 +28,33 @@ app.get('/type/:sometype', (req, res) => {
     })
 
 })
+
+//get pokemon by weakness
+
+app.get('/weaknesses/:someweakness', (req, res) => {
+    let searchWeak = req.params.someweakness;
+    let matchWeakArr =[];
+    jsonfile.readFile(file, (err, obj) =>{
+        for(i=0; i<obj.pokemon.length; i++){
+            for(j=0; j<obj.pokemon[i].type.length; j++)
+                if (obj.pokemon[i].weaknesses[j].toLowerCase() === searchWeak){
+                    matchWeakArr.push(obj.pokemon[i].name)
+                }
+        }
+        const data ={
+            weakness : searchWeak,
+            pokemons: matchWeakArr
+        }
+        res.render('weaknesses', data)
+
+    })
+
+})
+
+
+
+
+
 //get pokemon by name + handle error
 app.get('/pokedex/:somename', (req, res) => {
     let searchName = req.params.somename;
