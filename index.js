@@ -1,13 +1,33 @@
 const express = require('express');
 const app = express();
-
+const file = 'pokedex.json'
 const jsonfile = require('jsonfile');
 const reactEngine = require('express-react-views').createEngine();
 app.engine('jsx', reactEngine);
 app.set('view engine', 'jsx');
 app.set('views', __dirname + "/views");
 
+//get pokemon by type
 
+app.get('/type/:sometype', (req, res) => {
+    let searchType = req.params.sometype;
+    let matchTypeArr =[];
+    jsonfile.readFile(file, (err, obj) =>{
+        for(i=0; i<obj.pokemon.length; i++){
+            for(j=0; j<obj.pokemon[i].type.length; j++)
+                if (obj.pokemon[i].type[j].toLowerCase() === searchType){
+                    matchTypeArr.push(obj.pokemon[i].name)
+                }
+        }
+        const data ={
+            type: searchType,
+            pokemons: matchTypeArr
+        }
+        res.render('type', data)
+
+    })
+
+})
 //get pokemon by name + handle error
 app.get('/pokedex/:somename', (req, res) => {
     let searchName = req.params.somename;
@@ -31,6 +51,8 @@ app.get('/pokedex/:somename', (req, res) => {
     }
 })
 })
+
+
 
 
 
