@@ -68,10 +68,12 @@ app.get("", (request, response) => {
 // })
 
 app.get("/nextevolution/:pokemon", (request, response) => {
+  let i = 0;
   jsonfile.readFile("pokedex.json", (err, obj) => {
     let nextEvo = [];
     obj.pokemon.forEach(poke => {
       if (poke.name.toLowerCase() === request.params.pokemon) {
+        i++
         if (poke.next_evolution) {
           poke.next_evolution.forEach(next => {
             nextEvo.push(next.name)
@@ -79,8 +81,10 @@ app.get("/nextevolution/:pokemon", (request, response) => {
         }
       }
     })
-    if (nextEvo.length === 0) {
+    if (nextEvo.length === 0 && i >= 1) {
       response.send(`It's at the max evolution!`)
+    } else if (nextEvo.length === 0 && i === 0) {
+      response.send(`No such pokemon!`)
     } else {
       response.send(nextEvo);
     }
