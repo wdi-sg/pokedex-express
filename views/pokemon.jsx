@@ -5,6 +5,9 @@ class Pokemon extends React.Component {
     const somename = this.props.name;
     const someweight = this.props.weight
     let message = `Were you looking for ${somename}? The pokemon is ${someweight}`;
+    if(this.props.name === undefined){
+        message = this.props;
+    }
 
     return (
       <html>

@@ -8,21 +8,43 @@ app.set('view engine', 'jsx');
 app.set('views', __dirname + "/views");
 
 
+
+// app.get('/pokedex/:somename', (req, res) => {
+//   jsonfile.readFile('./pokedex.json', (err, obj) => {
+//   for(i=0; i<obj.pokemon.length; i++){
+//         if(obj.pokemon[i].name.toLowerCase() === req.params.somename){
+//             const data = {
+//         name: obj.pokemon[i].name,
+//         weight:obj.pokemon[i].weight }
+//         res.render('pokemon', data);
+//         }
+// }
+// })
+// })
+
 app.get('/pokedex/:somename', (req, res) => {
+    let searchName = req.params.somename;
   jsonfile.readFile('./pokedex.json', (err, obj) => {
-  for(i=0; i<obj.pokemon.length; i++){
-        if(obj.pokemon[i].name.toLowerCase() === req.params.somename){
-            const data = {
-        name: obj.pokemon[i].name,
-        weight:obj.pokemon[i].weight
+    let pokemonarray = [];
+    for(i=0; i<obj.pokemon.length; i++){
+        if(obj.pokemon[i].name.toLowerCase() === searchName){
+        pokemonarray.push(obj.pokemon[i].name);
+
     }
-                res.render('pokemon', data);
+    if (pokemonarray.length < 1) {
+        const error = `Could not find information on ${searchName}. Is that a new pokemon? gotta catch em all!`
+        res.status(404).send(error);
+        res.render('pokemon', error)
+    } else {
+         const data = {
+        name: obj.pokemon[i].name,
+        weight:obj.pokemon[i].weight }
+        res.render('pokemon', data)
         }
     }
-
-
 })
 })
+
 
 
 
