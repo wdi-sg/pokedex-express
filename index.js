@@ -1,30 +1,25 @@
 const express = require('express');
-
-// const jsonfile = require('jsonfile');
-
-/**
- * ===================================
- * Configurations and set up
- * ===================================
- */
-
-// Init express app
 const app = express();
 
-/**
- * ===================================
- * Routes
- * ===================================
- */
+const jsonfile = require('jsonfile');
+const reactEngine = require('express-react-views').createEngine();
+app.engine('jsx', reactEngine);
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
-});
+app.set('views', __dirname + "/views");
+app.set('view engine', 'jsx');
 
-/**
- * ===================================
- * Listen to requests on port 3000
- * ===================================
- */
+app.get('/pokedex/:some-name', (req, res) => {
+  jsonfile.readFile('pokedex.json', (err, obj) => {
+    const data ={ 
+      name: obj.pokemon[req.params.some-name].name,
+      weight: obj.pokemon[req.params.some-name].weight
+
+    }
+    res.render('pokedex',data)
+  })
+})
+
+
+
+
 app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
