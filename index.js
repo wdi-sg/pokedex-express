@@ -59,20 +59,26 @@ app.get('/nextevolution/:evolve', (req, res) => {
     let matchEvolveArr =[];
     jsonfile.readFile(file, (err, obj) =>{
         for(i=0; i<obj.pokemon.length; i++){
-            if(obj.pokemon[i].next_evolution ==! undefined) {
-                evolveArr.push(obj.pokemon[i].next_evolution)
+            if(nameEvolve == obj.pokemon[i].name.toLowerCase() && obj.pokemon[i].next_evolution ) {
+                obj.pokemon[i].next_evolution.forEach(poke=>evolveArr.push(poke.name))
             }
         }
-        for(j=0; j< evolveArr.length; j++){
-            if(evolveArr[j].name.toLowerCase() === nameEvolve){
-                matchEvolveArr.push(nameEvolve)
-                const data ={
-            nextEvolve : nameEvolve,
-            pokemons: matchEvolveArr
-        }
-        res.render('next', data)
-            }
-        }
+
+let data = {
+    pokeArr : evolveArr
+}
+
+        res.render('nextevolution', data)
+        // for(j=0; j< evolveArr.length; j++){
+        //     if(evolveArr[j].name.toLowerCase() === nameEvolve){
+        //         matchEvolveArr.push(nameEvolve)
+        //         const data ={
+        //     nextEvolve : nameEvolve,
+        //     pokemons: matchEvolveArr
+        // }
+
+        //     }
+        // }
 
     })
 
