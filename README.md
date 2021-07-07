@@ -56,5 +56,3 @@ After that the deliverables have to do with looping over the pokedex and doing a
 * Expose a new route for `/weaknesses/some-weakness` that returns a message listing the names of all pokemon that have the specified weakness (eg. `/weakness/rock`).
 
 * Expose a new route for `/nextevolution/some-name` that returns a message listing the names of all pokemon that the pokemon evolves *from* (eg. `/nextevolution/charizard`).
-
-
