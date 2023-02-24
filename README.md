@@ -37,6 +37,8 @@ Use the data in `pokedex.json` and return a response with details about the requ
 ### How to start:
 Start by simply reading the pokedex json file (`jsonfile.readFile`), and then sending it in the response of the request. Remember that these are nested asynchronous callbacks, and that the order the code executes in is very important.
 
+A first version would be where the url is just the position of the pokemon in the array of pokemon  `http://127.0.0.1:3000/pokemon/1` ==> Ivysaur
+
 After that the deliverables have to do with looping over the pokedex and doing an action depending on a conditional- e.g., what is the name being requested.
 
 ### Further
