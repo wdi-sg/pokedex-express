@@ -1,6 +1,37 @@
 const express = require('express');
+const jsonfile = require('jsonfile');
+const file = "pokedex.json";
+const app = express();
 
-// const jsonfile = require('jsonfile');
+
+
+const doPokemon = (request,response) => {
+    jsonfile.readFile(file,(err,obj) =>{
+        if(err){
+            console.log(err);
+        }let checkPoke = false;
+        for(i = 0;i < obj.pokemon.length; i++){
+            const pokemonName = obj.pokemon[i].name;
+            const pokemonWeight= obj.pokemon[i].weight;
+
+                if(pokemonName === request.params.name){
+                    checkPoke = true;
+                    response.send("This is a " + pokemonName + ". It's weight is " + pokemonWeight)
+                }
+                }if (checkPoke === false){
+                    response.status(404).send("Could not find information about " + request.params.name)
+            }
+
+    })
+}
+
+
+
+
+
+
+
+
 
 /**
  * ===================================
@@ -9,18 +40,17 @@ const express = require('express');
  */
 
 // Init express app
-const app = express();
+
+
 
 /**
  * ===================================
  * Routes
  * ===================================
  */
-
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
-});
+app.get("/pokemon/:name/",doPokemon)
+  // response.send("Name: " + request.params.name + " ")
+// });
 
 /**
  * ===================================
