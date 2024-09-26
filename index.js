@@ -1,6 +1,5 @@
 const express = require('express');
-
-// const jsonfile = require('jsonfile');
+const jsonfile = require('jsonfile');
 
 /**
  * ===================================
@@ -10,16 +9,43 @@ const express = require('express');
 
 // Init express app
 const app = express();
-
+const file = "pokedex.json";
 /**
  * ===================================
  * Routes
  * ===================================
  */
 
-app.get('*', (request, response) => {
-  // send response with some data (a string)
-  response.send(request.path);
+// finding pokemon through number
+// app.get('/pokemon/:number', (request, response) => {
+//     jsonfile.readFile(file, (err, obj) => {
+//         if(err) {
+//             console.log("ERROR", err);
+//         }
+//         let i = parseInt(request.params.number);
+//         response.send("name :" + obj.pokemon[i].name)
+//         });
+//     });
+
+// finding pokemon name and weight through names
+app.get('/pokemon/:name', (request, response) =>{
+    jsonfile.readFile(file, (err, obj) => {
+        if(err){
+            console.log("ERROR", err);
+        }
+        let found = false;
+        for(i=0; i < obj.pokemon.length; i++){
+            const pokeName = obj.pokemon[i].name;
+            const pokeWeight = obj.pokemon[i].weight;
+            if(pokeName === request.params.name) {
+                found = true;
+                response.send("Name :" + pokeName + ", Weight :" + pokeWeight)
+            }
+        }
+        if(found === false){
+            response.status(404).send(request.params.name + " could not be found. Think Rayquaza ate it...")
+            }
+    });
 });
 
 /**
